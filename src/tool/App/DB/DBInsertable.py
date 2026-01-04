@@ -76,7 +76,7 @@ class DBInsertable():
 
         _id = 0
         # Gets linked items from links list, _db is not set yet
-        if flush_linked == True and link_current_depth < link_max_depth:
+        if flush_linked == True and link_current_depth < link_max_depth and hasattr(self, 'getLinkedItems'):
             try:
                 for link in self.getLinkedItems():
                     if link.item.hasDb():
