@@ -2,8 +2,8 @@ from App.Objects.Test import Test
 from Data.Random.GetRandomInt import GetRandomInt
 from App.DB.Search import Search
 from App import app
-from App.DB.Adapters.Search.Condition import Condition
-from App.DB.Adapters.Search.Sort import Sort
+from App.DB.Query.Condition import Condition
+from App.DB.Query.Sort import Sort
 
 class SearchTest(Test):
     async def implementation(self, i):

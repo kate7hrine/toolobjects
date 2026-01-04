@@ -4,7 +4,7 @@ from App.Objects.Relations.Link import Link as CommonLink
 from typing import Any, Generator
 from App.Objects.Object import Object
 from abc import ABC, abstractmethod
-from App.DB.Adapters.Representation.AbstractAdapter import AbstractAdapter
+from App.DB.Representation.AbstractAdapter import AbstractAdapter
 from App.Objects.Misc.UnknownObject import UnknownObject
 import json
 
@@ -33,6 +33,16 @@ class ObjectAdapter(AbstractAdapter):
 
     def _parseJson(self) -> dict:
         return JSON().fromText(self.content).data
+
+    def get_permission_to_flush(self, item: Object):
+        _storage = self._adapter._storage_item
+        if _storage.allowed_objects != None:
+            assert item.getClassNameJoined() in _storage.allowed_objects, 'object is not allowed to flush'
+
+        if _storage.forbidden_objects != None:
+            assert item.getClassNameJoined() not in _storage.forbidden_objects, 'object with this type is forbidden in this db'
+
+        return True
 
     def toPython(self):
         _object_name = None

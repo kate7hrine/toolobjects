@@ -55,7 +55,7 @@ class Manager(Object):
             name = name
         )
         _item._manager_link = self
-        _item._constructor()
+        _item._init_hook()
 
         self.queue.append(_item)
 
@@ -63,7 +63,7 @@ class Manager(Object):
 
     def _check(self):
         if self.session == None:
-            self._constructor()
+            self._init_hook()
 
     def getSession(self):
         import aiohttp
@@ -72,7 +72,7 @@ class Manager(Object):
             timeout = self.timeout,
         )
 
-    def _constructor(self):
+    def _init_hook(self):
         '''
         bc it loads before loop creates
         '''

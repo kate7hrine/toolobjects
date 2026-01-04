@@ -32,10 +32,10 @@ class Logger(Object):
             return
 
         logger = cls(
+            log_to_console = app.Config.get('logger.print.console'),
             hidden_categories = app.Config.get("logger.print.exclude"),
         )
-        logger._constructor()
-        logger.log_to_console = logger.getOption('logger.print.console')
+        logger._init_hook()
 
         #if cls.getOption("logger.print.file") == True:
         #    logger.log_file = LogFile.autoName(logs_dir)
@@ -85,7 +85,7 @@ class Logger(Object):
 
         return True
 
-    def _constructor(self):
+    def _init_hook(self):
         def print_log(to_print, check_categories):
             if self.log_to_console == False:
                 return
@@ -104,7 +104,8 @@ class Logger(Object):
                 try:
                     to_print.flush(app.Storage.get('logs'))
                 except Exception as e:
-                    self.log_raw(e)
+                    pass
+                    #self.log_raw(e)
 
         self.addHook('log', print_to_db)
 

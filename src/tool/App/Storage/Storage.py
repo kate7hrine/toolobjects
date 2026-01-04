@@ -33,12 +33,12 @@ class Storage(Object):
         default_items = [
             StorageItem(
                 name = 'common',
-                db_type = 'sqlite',
+                db_type = 'App.DB.Adapters.SQLite',
                 db = {}
             ),
             StorageItem(
                 name = 'tmp',
-                db_type = 'sqlite',
+                db_type = 'App.DB.Adapters.SQLite',
                 db = {
                     'content': ':memory:'
                 }
@@ -46,7 +46,7 @@ class Storage(Object):
             StorageItem(
                 name = 'logs',
                 allowed_objects = ['App.Logger.Log'],
-                db_type = 'sqlite',
+                db_type = 'App.DB.Adapters.SQLite',
                 db = {
                     #'auto_commit': False
                     'auto_commit': True

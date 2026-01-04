@@ -22,7 +22,7 @@ class TextToFile(Convertation):
     def implementation(self, i):
         _orig = i.get('orig')
         _storage = app.Storage.get('tmp')
-        _unit = _storage.getStorageUnit()
+        _unit = _storage.get_storage_adapter().getStorageUnit()
 
         _file = open(str(_unit.getDir().joinpath('text.txt')), 'w', encoding='utf-8')
         _file.write(_orig.value)

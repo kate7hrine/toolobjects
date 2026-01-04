@@ -9,7 +9,7 @@ from Data.JSON import JSON
 from aiohttp import web
 from App import app
 from pathlib import Path
-from App.DB.Adapters.Search.Condition import Condition
+from App.DB.Query.Condition import Condition
 from App.Storage.StorageUnit import StorageUnit
 import asyncio, traceback
 
@@ -81,7 +81,7 @@ class Server(View):
 
             storage = app.Storage.get(_storage)
 
-            _query = storage.getAdapter().getQuery()
+            _query = storage.get_db_adapter().getQuery()
             _query.addCondition(Condition(
                 val1 = 'uuid',
                 operator = '==',
@@ -191,7 +191,7 @@ class Server(View):
             if file == None:
                 raise web.HTTPNotAcceptable(text="not passed file")
 
-            storage_unit = storage.getStorageUnit()
+            storage_unit = storage.get_storage_adapter().getStorageUnit()
             filename = storage_unit.hash + '.oct'
             file_path = storage_unit.getDir().joinpath(filename)
 

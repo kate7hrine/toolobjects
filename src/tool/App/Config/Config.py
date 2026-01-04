@@ -1,7 +1,7 @@
 from App.Objects.Object import Object
 from App.Objects.Arguments.ArgumentValues import ArgumentValues
 from App.Objects.Arguments.ListArgument import ListArgument
-from App.Storage.ConfigItem import ConfigItem
+from App.Config.ConfigItem import ConfigItem
 
 from pathlib import Path
 from pydantic import Field

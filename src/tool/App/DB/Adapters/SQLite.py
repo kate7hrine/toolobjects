@@ -1,5 +1,5 @@
-from App.DB.Adapters.Connection.SQLAlchemy import SQLAlchemy
-from App.DB.Adapters.Search.Condition import Condition
+from App.DB.Adapters.SQLAlchemy import SQLAlchemy
+from App.DB.Query.Condition import Condition
 from pydantic import Field
 
 class SQLite(SQLAlchemy):
@@ -20,4 +20,4 @@ class SQLite(SQLAlchemy):
         if self.content != None:
             return str(self.content)
         else:
-            return str(self._storage_item.getDir().joinpath(self.name + '.db'))
+            return str(self._storage_item.get_storage_adapter().getDir().joinpath(self.name + '.db'))

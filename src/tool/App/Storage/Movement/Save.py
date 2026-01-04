@@ -48,7 +48,7 @@ class Save(Act):
         for storage in i.get('storage'):
             _storage_name = i.getCompare('storage').inputs[_i]
             assert storage != None, f"storage {_storage_name} not found"
-            assert storage.hasAdapter(), f"storage {storage.name} does not contains db connection"
+            assert storage.has_db_adapter(), f"storage {storage.name} does not contains db connection"
 
             for item in i.get('items').getItems():
                 item.flush(storage, link_max_depth = i.get('link_max_depth'))

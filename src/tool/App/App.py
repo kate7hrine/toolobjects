@@ -81,7 +81,7 @@ class App(Object):
             ignore_dirs = ['Custom'],
             load_before = [
                 LoadedObject(
-                    path = 'App\\Storage\\Config.py'
+                    path = 'App\\Config\\Config.py'
                 ),
                 LoadedObject(
                     path = 'App\\ACL\\AuthLayer.py'
