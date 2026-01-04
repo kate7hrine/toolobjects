@@ -191,7 +191,7 @@ class Server(View):
             if file == None:
                 raise web.HTTPNotAcceptable(text="not passed file")
 
-            storage_unit = storage.get_storage_adapter().getStorageUnit()
+            storage_unit = storage.get_storage_adapter().get_storage_unit()
             filename = storage_unit.hash + '.oct'
             file_path = storage_unit.getDir().joinpath(filename)
 

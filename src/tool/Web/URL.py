@@ -10,5 +10,8 @@ class URL(Object):
 
     def get_filename(self) -> str:
         _path = self.get_path().split('/')
+        _name = _path[-1]
+        if len(_name.split('.')) == 1:
+            return None
 
-        return _path[-1]
+        return _name

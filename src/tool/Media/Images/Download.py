@@ -6,6 +6,7 @@ from Data.String import String
 from Data.Boolean import Boolean
 from Media.Images.Image import Image
 from Media.Images.List import List
+from Media.Images.MakeImageThumbnail import MakeImageThumbnail
 from App.Objects.Misc.Source import Source
 from Web.URL import URL
 from App import app
@@ -48,11 +49,13 @@ class Download(Extractor):
         gallery = i.get('gallery')
         if filename == None:
             filename = _url.get_filename()
+            if filename == None:
+                filename = 'image.jpg'
 
         image = Image()
 
         if i.get('download') == True:
-            _unit = app.Storage.get('tmp').get_storage_adapter().getStorageUnit()
+            _unit = app.Storage.get('tmp').get_storage_adapter().get_storage_unit()
 
             item = app.DownloadManager.addURL(_url.value, _unit, filename)
             await item.start()
@@ -64,13 +67,14 @@ class Download(Extractor):
 
             if i.get('make_thumbnail') == True:
                 try:
-                    thumb = image._make_thumbnail(_read)
-
-                    image.link(thumb.obj, role = ['thumbnail'])
-                    image.obj.add_thumbnail(thumb)
+                    _resp = await MakeImageThumbnail().execute({
+                        'image': image
+                    })
+                    image.obj.add_thumbnails(_resp.getItems())
                 except Exception as e:
                     self.log_error(e, role = ['thumbnail'], exception_prefix = 'Error when making thumbnail: ')
 
+        image._reset_file()
         image.obj.make_public()
         image.obj.set_common_source(Source(
             obj = _url

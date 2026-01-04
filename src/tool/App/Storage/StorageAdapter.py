@@ -8,5 +8,13 @@ class StorageAdapter(Object, Protocol):
     _storage_item: Any = None
 
     @abstractmethod
-    def getStorageUnit(self) -> StorageUnit:
+    def get_storage_unit(self) -> StorageUnit:
+        ...
+
+    @abstractmethod
+    def copy_storage_unit(self, unit: StorageUnit, change_common: bool = True):
+        ...
+
+    @abstractmethod
+    def clear(self, unit: StorageUnit, change_common: bool = True):
         ...

@@ -8,5 +8,5 @@ class StorageUnitLink(BaseModel, DBInsertable, Section):
     path: str = Field()
     insertion: LinkInsertion = Field()
 
-    def getStorageUnit(self):
+    def get_storage_unit(self):
         return self._get('insertion')
