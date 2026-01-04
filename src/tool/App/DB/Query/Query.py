@@ -51,6 +51,8 @@ class Query(ABC):
     def limit(self, limit: int) -> Self:
         self._limit = limit
 
+        return self
+
     def getLimit(self) -> int:
         return self._limit
 
