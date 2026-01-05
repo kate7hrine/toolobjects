@@ -5,7 +5,7 @@ from pydantic import Field
 class SQLite(SQLAlchemy):
     protocol_name = 'sqlite'
     content: str = Field(default = None)
-    delimiter: str = Field(default = '://')
+    delimiter = ':///'
 
     def _get_sqlalchemy_connection_string(self):
         if self.content != None:

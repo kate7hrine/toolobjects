@@ -13,6 +13,9 @@ class MySQL(SQLAlchemy):
     db_name: str = Field(default = None)
     charset: str = Field(default = 'utf8mb4')
 
+    def _get_sqlalchemy_connection_string(self):
+        return "{0}:{1}@{2}:{3}/{4}".format(self.username, self.password, self.host, self.port, self.db_name)
+
     def _before_init_models(self):
         from sqlalchemy_utils import database_exists, create_database
 

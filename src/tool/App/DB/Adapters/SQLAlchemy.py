@@ -9,7 +9,7 @@ from App.Objects.Relations.Link import Link as CommonLink
 from App.Objects.Requirements.Requirement import Requirement
 from App.Objects.Misc.UnknownObject import UnknownObject
 from Data.Increment import Increment
-from typing import Any, Generator
+from typing import Any, Generator, ClassVar
 from pydantic import Field
 import json
 
@@ -279,7 +279,7 @@ class SQLAlchemy(ConnectionAdapter):
         # self._links_count = Increment(value = self._session.query(self.LinkAdapter).count())
 
     def _get_sqlalchemy_connection_string(self):
-        return "{0}:{1}@{2}:{3}/{4}".format(self.username, self.password, self.host, self.port, self.db_name)
+        return ""
 
     def _get_sqlalchemy_connection_string_with_protocol(self) -> str:
         return self.protocol_name + self.delimiter + self._get_sqlalchemy_connection_string()
@@ -299,4 +299,4 @@ class SQLAlchemy(ConnectionAdapter):
 
     _engine: Any = None
     _session: Any = None
-    delimiter: str = Field(default = '://')
+    delimiter: ClassVar[str] = '://'
