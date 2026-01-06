@@ -4,6 +4,6 @@ from ..Argument import Argument
 class NotNoneAssertion(Assertion):
     def check(self, argument: Argument):
         if argument.default == None:
-            assert argument.inputs != None, f"{argument.name} {argument.not_passed_message}"
+            assert argument.inputs != None, argument.not_passed_message.format(argument.name)
 
-        assert argument.current != None, f"{argument.name} with value {argument.inputs} {argument.none_message}"
+        assert argument.current != None, argument.none_message.format(argument.name, argument.inputs)

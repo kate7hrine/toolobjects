@@ -20,6 +20,10 @@ class ListArgument(Argument):
         if val == None:
             return []
 
+        if type(val) != list:
+            self.log("list argument but not list passed")
+            val = [val]
+
         for item in val:
             #yield self.implementation(val = item)
             results.append(self.implementation(val = item))

@@ -30,12 +30,13 @@ class Save(Act):
             ),
             ListArgument(
                 name = 'link_to',
+                default = None,
                 orig = StorageUUID
             ),
             Argument(
                 name = 'link_max_depth',
+                default = cls.getOption('app.db.linking.depth.default'),
                 orig = Int,
-                default = cls.getOption('app.db.linking.depth.default')
             ),
             Argument(
                 name = 'ignore_flush_hooks',

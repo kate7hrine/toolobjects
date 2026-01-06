@@ -7,6 +7,7 @@ from Data.String import String
 from Data.Boolean import Boolean
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App.Storage.Item.Create import Create
+from App.Storage.Movement.Save import Save
 from App.Storage.Item.Zip import Zip
 from App.Objects.Relations.Submodule import Submodule
 
@@ -65,8 +66,10 @@ class Export(Act):
         export_storage = _create_items.items[0]
         export_storage.is_export = True
 
-        for item in i.get('items').getItems():
-            item.flush(export_storage)
+        await Save().execute({
+            'items': i.get('items'),
+            'storage': [export_storage]
+        })
 
         if i.get('as_zip') == True:
             await Zip().execute(i.update_values({
