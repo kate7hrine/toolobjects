@@ -113,7 +113,6 @@ class LoadedObject(NameContainable):
 
     def is_name_equals(self, name: str) -> str:
         _parts = self.getTitleWithClass()
-        _name_parts = name.split('.')
         _common = name == '.'.join(_parts)
 
         # If the directory of plugin is equals to its name, return it like main plugin of this dir (__init__.py or something)

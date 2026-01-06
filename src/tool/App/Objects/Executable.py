@@ -62,27 +62,21 @@ class Executable(Object, Variableable, Validable):
         else:
             i.modified = True
 
-        self.log(f"Calling {self.getClassNameJoined()}", role = ['execute_called'])
+        self.log(f"Calling {self.getClassNameJoined()}", role = ['executable.call'])
 
         if app.ExecutablesList != None:
             app.ExecutablesList.add(self)
 
-        if app.AuthLayer.getOption('app.auth.every_call_permission_check') == True and skip_user_check == False:
-            _name = ''
-            _auth = i.get('auth', same=True)
-            if _auth != None:
-                _name = _auth.name
+        if skip_user_check == False:
+            if app.AuthLayer.getOption('app.auth.every_call_permission_check') == True:
+                _name = ''
+                _auth = i.get('auth', same=True)
+                if _auth != None:
+                    _name = _auth.name
 
-            assert self.canBeUsedBy(_auth), "access denied (executable={0}, every_call_permission_check=true, user={1})".format(self.getClassNameJoined(), _name)
+                assert self.canBeUsedBy(_auth), "access denied (executable={0}, every_call_permission_check=true, user={1})".format(self.getClassNameJoined(), _name)
 
-        args = self.getArguments()
-        vals = i.toDict()
-        passing = args.compareWith(
-            inputs = vals,
-            check_arguments = check_arguments,
-            raise_on_assertions = raise_on_assertions,
-        )
-        passing.check()
+        passing = self._compare(i.toDict(), check_arguments = check_arguments, raise_on_assertions = raise_on_assertions)
 
         await self.awaitTriggerHooks('before_execute', i = passing)
 
@@ -99,6 +93,19 @@ class Executable(Object, Variableable, Validable):
             return NoneResponse()
 
         return response
+
+    def _compare(self, vals, check_arguments: bool = True, raise_on_assertions: bool = True, check_assertions: bool = True):
+        args = self.getArguments()
+        values = args.compareWith(
+            inputs = vals,
+            check_arguments = check_arguments,
+            raise_on_assertions = raise_on_assertions,
+        )
+
+        if check_assertions:
+            values.check()
+
+        return values
 
     def integrate(self, args):
         '''

@@ -104,7 +104,7 @@ class ArgumentValues(Object):
 
         return False
 
-    def getValues(self, exclude: list[str]) -> dict:
+    def getValues(self, exclude: list[str] = list()) -> dict:
         vals = dict()
 
         for key, val in self.values.items():
@@ -114,3 +114,17 @@ class ArgumentValues(Object):
             vals[key] = val
 
         return vals
+
+    def change_for(self, class_object, exclude: list[str] = ['i']):
+        _new = ArgumentValues()
+        _new.values = self.getValues(exclude = exclude)
+
+        for arg in class_object.getArguments():
+            _new.compare.append(arg)
+
+        return _new
+
+    def update_values(self, values: dict):
+        self.values.update(values)
+
+        return self

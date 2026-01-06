@@ -1,5 +1,5 @@
 from App.Objects.Test import Test
-from App.Storage.StorageItem import StorageItem
+from App.Storage.Item.StorageItem import StorageItem
 from Data.Random.GetRandomInt import GetRandomInt
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App import app

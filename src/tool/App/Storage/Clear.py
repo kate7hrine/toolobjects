@@ -1,7 +1,7 @@
 from App.Objects.Act import Act
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Storage.StorageItem import StorageItem
+from App.Storage.Item.StorageItem import StorageItem
 
 class Clear(Act):
     @classmethod

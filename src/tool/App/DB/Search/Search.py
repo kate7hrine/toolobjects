@@ -7,7 +7,7 @@ from App.Objects.Arguments.ListArgument import ListArgument
 from Data.Int import Int
 from App.DB.Query.Condition import Condition
 from App.DB.Query.Sort import Sort
-from App.Storage.StorageItem import StorageItem
+from App.Storage.Item.StorageItem import StorageItem
 from App.Storage.StorageUUID import StorageUUID
 
 class Search(Act):

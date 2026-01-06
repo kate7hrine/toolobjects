@@ -1,6 +1,7 @@
 from App.Storage.StorageAdapter import StorageAdapter
 from App.Storage.StorageUnit import StorageUnit
 from pydantic import Field
+from typing import Optional
 from pathlib import Path
 from App import app
 import secrets
@@ -9,7 +10,7 @@ import shutil
 class DoubleDividedHashDirs(StorageAdapter):
     protocol_name = 'double_divided_hash_dirs'
     storage_dir_name: str = Field(default = 'storage')
-    directory: str = Field(default = None)
+    directory: Optional[str] = Field(default = None)
     _path: str = None
 
     def _init_hook(self):
