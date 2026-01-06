@@ -297,6 +297,10 @@ class SQLAlchemy(ConnectionAdapter):
     def commit(self):
         self.getSession().commit()
 
+    def destroy(self):
+        self.getSession().close()
+        self._engine.dispose()
+
     _engine: Any = None
     _session: Any = None
     delimiter: ClassVar[str] = '://'

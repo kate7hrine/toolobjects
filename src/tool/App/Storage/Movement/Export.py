@@ -7,7 +7,8 @@ from Data.String import String
 from Data.Boolean import Boolean
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App.Storage.Item.Create import Create
-from App.Storage.Item.PackToZip import PackToZip
+from App.Storage.Item.Zip import Zip
+from App.Objects.Relations.Submodule import Submodule
 
 class Export(Act):
     @classmethod
@@ -32,7 +33,25 @@ class Export(Act):
                 default = False,
                 orig = Boolean
             ),
+            Argument(
+                name = 'remove',
+                default = True,
+                orig = Boolean
+            )
         ])
+
+    @classmethod
+    def _submodules(cls) -> list:
+        return [
+            Submodule(
+                item = Create,
+                role = ['usage']
+            ),
+            Submodule(
+                item = Zip,
+                role = ['usage']
+            )
+        ]
 
     async def implementation(self, i):
         export_name = i.get("name")
@@ -44,13 +63,21 @@ class Export(Act):
             'dir': i.get('dir')
         })
         export_storage = _create_items.items[0]
+        export_storage.is_export = True
 
         for item in i.get('items').getItems():
             item.flush(export_storage)
 
         if i.get('as_zip') == True:
-            await PackToZip().execute(i.change_for(PackToZip).update_values({
-                'remove_dir': True
-            }))
+            await Zip().execute(i.update_values({
+                'item': export_storage,
+                'save_zip_to': i.get('dir')
+            }).getValues())
+
+        try:
+            if i.get('remove'):
+                export_storage.destroy()
+        except Exception as e:
+            self.log_error(e)
 
         return _create_items

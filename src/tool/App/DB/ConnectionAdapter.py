@@ -5,6 +5,7 @@ from pydantic import Field
 from typing import Any, ClassVar
 from snowflake import SnowflakeGenerator
 from App.Logger.LogPrefix import LogPrefix
+from abc import abstractmethod
 
 class ConnectionAdapter(Object, Protocol):
     '''
@@ -43,3 +44,7 @@ class ConnectionAdapter(Object, Protocol):
             name = 'storage',
             id = self._storage_item.name
         )
+
+    @abstractmethod
+    def destroy(self):
+        ...

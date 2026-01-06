@@ -18,7 +18,7 @@ class App(Object):
     cwd: str = None
     src: str = None
     storage: str = None
-    acl: str = None
+    exports: str = None
 
     # Args
     argv: dict = None
@@ -39,6 +39,8 @@ class App(Object):
         self.src = self.cwd.parent # "tool", "storage", "venv" and update scripts
         self.storage = self.src.joinpath('storage') # default storage
         self.storage.mkdir(exist_ok = True)
+        self.exports = self.storage.joinpath('exports')
+        self.exports.mkdir(exist_ok = True)
         self.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.loop)
 

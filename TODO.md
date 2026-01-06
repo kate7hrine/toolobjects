@@ -49,40 +49,38 @@ db and storage:
 - [x] VirtualPath
 - [x] DisplayType (?) submodule=displayment
 - [x] App.DB.Search
-- [ ] App.Storage.Movement.Export and App.Storage.Movement.Import with zip
-- [ ] App.Storage.Movement.ExportAsFiles
-- [ ] objectlist adapter
+- [x] App.Storage.Movement.Export and App.Storage.Movement.Import with zip
+- [x] App.Storage.Movement.ExportAsFiles
+- [x] objectlist adapter
 - [x] link after save
 - [x] search in linked
 - [x] Web.DownloadManager.Manager
-- [ ] storageunit generates hash randomly but maybe hash the common file?
-- [ ] storageunit flush_hook and getCommonDir(): pathlib parts are duplicated and its better to move to HashDir class
-- [ ] links order
+- [x] storageunit flush_hook and getCommonDir(): pathlib parts are duplicated and its better to move to HashDir class (StorageAdapter)
+- [x] links order
 - [ ] links are not optimized and paginated
 - [ ] multifile config
 - [x] link to storageunit file (StorageUnitLink)
-- [ ] remove console and to_json differences
 - [ ] advanced Conditions (val1 % val2 > 0 or smth)
-- [ ] storage item.commit()
+- [x] storage item.commit()
 
-- [ ] VirtualPath
+- [x] VirtualPath
 
 auth:
 
 - [x] App.ACL.AuthLayer
-- [ ] ItemPermission for dbs
+- [x] ItemPermission for dbs
 - [ ] ~~tokens~~
 
 modules:
 
 - [x] Data.XML
 - [x] Media.Files.FileManager.Navigate
-- [ ] move File.FileTypes.Image
+- [x] move File.FileTypes.Image
 - [ ] App.Config.Set
-- [ ] App.Config.Get
-- [ ] App.Logger.List
-- [ ] App.Logger.GetFile
-- [ ] Web.RSS.GetFeed
+- [x] App.Config.Get
+- [ ] ~~App.Logger.List~~
+- [ ] ~~App.Logger.GetFile~~
+- [x] Web.RSS.GetFeed
 - [x] Media.Text.Text
 - [x] Abstract.TODO or Abstract.Checkmarks
 
@@ -97,7 +95,7 @@ web:
 others:
 
 - [ ] Remove Arguments and Variable functions and move them to submodules system with role=validation or role=variable
-- [ ] custom object can contain "source" and "meta" fields in it and replace the original, so name it differently?
+- [x] ~~custom object can contain "source" and "meta" fields in it and replace the original, so name it differently?~~
 - [ ] object that can contain self subtypes, for example File can be imagined as Image with file field. ObjectsList.findByMRO
 - [ ] there is similar functions: Configurable.getAllSettings, Validable.getAllArguments, Submodulable.getAllSubmodules, Variableable.getAllVariables, no functions to skip one of mro's item. maybe move it to MROThing
 - [ ] env variables and arguments are separate but theyre similar by usage. Argument should contain 'env' field, and if value is not passed, take value from env
@@ -113,3 +111,5 @@ others:
 - [ ] App.Storage.Movement* acts logically should belong to App.DB*
 - [ ] link with parent=None to link to the db (there is `root_uuid` anyway, this solution is ненаглядно)
 - [ ] LinkInsertion must be changed after flushing from db (but i did workaround with self._get() function)
+- [ ] remove console and to_json differences
+- [ ] storageunit generates hash randomly but maybe hash the common file?

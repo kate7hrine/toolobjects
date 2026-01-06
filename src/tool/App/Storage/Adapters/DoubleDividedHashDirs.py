@@ -61,14 +61,32 @@ class DoubleDividedHashDirs(StorageAdapter):
             unit.log_error(e, exception_prefix = 'Error when moving storage unit: ')
             pass
 
-    def clear(self):
+    def _check_name(self):
         assert self._storage_item.name == 'tmp' and self.getStorageDir().relative_to(app.app.storage) != None, "clear it manually"
 
+    def clear(self, recreate: bool = True):
+        self._check_name()
+
         shutil.rmtree(self.getStorageDir())
-        self.getStorageDir().mkdir(exist_ok = True)
+
+        if recreate == True:
+            self.getStorageDir().mkdir(exist_ok = True)
+
+    def destroy(self):
+        if self._storage_item.is_export == False:
+            self._check_name()
+
+        shutil.rmtree(self.getDir())
 
     def getStorageDir(self):
         return self._path.joinpath(self.storage_dir_name)
 
     def getDir(self):
         return self._path
+
+    def get_all_files(self):
+        for file in self.getDir().rglob("*"):
+            yield file
+
+    def get_relative_path(self, path: Path):
+        return path.relative_to(self.getDir())

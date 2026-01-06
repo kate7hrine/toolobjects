@@ -76,6 +76,8 @@ class Storage(Object):
                 self.append(item)
 
     def append(self, item: StorageItem):
+        self.log('Mounted {0}'.format(item.name), role = ['storage.item.mount'])
+
         self.items.append(item)
 
     def remove(self, item: StorageItem):

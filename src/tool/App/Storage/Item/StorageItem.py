@@ -2,6 +2,7 @@ from App.Objects.Object import Object
 from App.DB.ConnectionAdapter import ConnectionAdapter
 from App.Storage.StorageAdapter import StorageAdapter
 from pydantic import Field
+from typing import Optional
 from App import app
 
 class StorageItem(Object):
@@ -16,24 +17,26 @@ class StorageItem(Object):
 
     name: str = Field()
     unused: bool = Field(default = False)
+    is_export: bool = Field(default = False)
 
     # input
     storage_type: str = Field(default = 'App.Storage.Adapters.DoubleDividedHashDirs')
     storage: dict = Field(default = {}, repr = False)
 
-    db_type: str = Field(default = None)
+    db_type: Optional[str] = Field(default = None)
     db: dict = Field(default = {}, repr = False)
     # /input
 
-    root_uuid: int = Field(default = None)
-    allowed_objects: list[str] = Field(default = None)
-    forbidden_objects: list[str] = Field(default = None)
+    root_uuid: Optional[int] = Field(default = None)
+    allowed_objects: Optional[list[str]] = Field(default = None)
+    forbidden_objects: Optional[list[str]] = Field(default = None)
 
     # display_name: str = Field(default = None)
 
     # Internal usage only
-    adapter: ConnectionAdapter = Field(default = None, exclude = True)
-    storage_adapter: StorageAdapter = Field(default = None, exclude = True)
+    adapter: Optional[ConnectionAdapter] = Field(default = None, exclude = True)
+    storage_adapter: Optional[StorageAdapter] = Field(default = None, exclude = True)
+    _unserializable = ['storage_adapter', 'adapter', '']
 
     def get_db_adapter(self) -> ConnectionAdapter:
         assert self.has_db_adapter(), "storage item {0} does not has db connection".format(self.name)
@@ -50,6 +53,10 @@ class StorageItem(Object):
 
     def has_storage_adapter(self) -> bool:
         return self.storage_adapter != None
+
+    def destroy(self):
+        self.adapter.destroy()
+        self.storage_adapter.destroy()
 
     def _init_hook(self):
         if self.storage_type != None:

@@ -9,6 +9,8 @@ class Submodule(Link):
 
     roles:
 
+    usage: This object is used in implementation() and the all arguments should take from this too
+
     object: Object class related to current Object
 
     wheel: used by App.Executables.Wheel
@@ -16,7 +18,7 @@ class Submodule(Link):
     convertation: will be used for convertTo
     '''
 
-    role: list[Literal['action', 'object_in', 'object_out', 'object', 'thumbnail', 'common', 'wheel', 'convertation', 'test'] | str] = Field(default = ['common'])
+    role: list[Literal['usage', 'action', 'object_in', 'object_out', 'object', 'thumbnail', 'common', 'wheel', 'convertation', 'test'] | str] = Field(default = ['common'])
 
     @field_serializer('item')
     def get_item(self, item) -> str:
