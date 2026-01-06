@@ -21,7 +21,7 @@ class Validable:
         return ArgumentDict(items = [])
 
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def getArguments(cls, include_usage: bool = False) -> ArgumentDict:
         '''
         Joins ArgumentDicts from all extended classes
         '''
@@ -37,5 +37,9 @@ class Validable:
                     continue
 
                 _list.join(new_arguments)
+
+        if include_usage == True:
+            for submodule in cls.getSubmodules(with_role = ['usage']):
+                _list.join(submodule.getArguments())
 
         return _list

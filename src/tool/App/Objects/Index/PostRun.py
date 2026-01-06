@@ -1,7 +1,7 @@
 from App.Objects.Object import Object
 from App import app
 from App.ACL.User import User
-from App.ACL.Acts.GetHash import GetHash
+from App.ACL.GetHash import GetHash
 
 class PostRun(Object):
     @classmethod

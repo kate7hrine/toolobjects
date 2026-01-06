@@ -2,10 +2,10 @@ from App.ACL.Permissions.Permission import Permission
 
 class Limitable():
     @classmethod
-    def canBeUsedBy(self, user):
+    def canBeUsedBy(cls, user):
         if user == None:
             return Permission.check(Permission(
-                object_name = self.getClassNameJoined(),
+                object_name = cls.getClassNameJoined(),
                 user = None,
                 action = 'call',
                 allow = True
@@ -15,4 +15,4 @@ class Limitable():
         if user.name == 'root':
             return True
 
-        return user.can('call', self)
+        return user.can('call', cls)

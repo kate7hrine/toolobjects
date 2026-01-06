@@ -7,6 +7,7 @@ from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
 from App.Objects.Responses.ObjectsList import ObjectsList
 
 from App.Objects.Locale.Documentation import Documentation
+from App.Objects.Locale.ObjectDocumentation import ObjectDocumentation
 from App.Objects.Locale.Key import Key
 
 class ExecuteById(Act):
@@ -39,7 +40,7 @@ class ExecuteById(Act):
 
     @classmethod
     def _documentation(cls) -> Documentation:
-        return Documentation(
+        return ObjectDocumentation(
             name = Key(
                 value = 'Execute by ID',
                 id = cls._get_locale_key('name')

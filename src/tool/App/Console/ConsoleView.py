@@ -23,19 +23,11 @@ class ConsoleView(View):
     async def implementation(self, i: ArgumentValues = {}):
         self.log("Some arguments cannot be passed in console.")
 
-        i.set('auth', self._auth(i.get('auth_username'), i.get('auth_password')))
-
+        self._auth(i)
         pre_i = i.get('pre_i')()
         results = await pre_i.execute(i)
 
         self._print_call(results, i)
-
-    def _auth(self, username, password):
-        return app.AuthLayer.login(
-            name = username,
-            password = password,
-            login_from = 'console'
-        )
 
     def _print_call(self, results, i):
         if i.get('console.print') == True:
@@ -55,6 +47,16 @@ class ConsoleView(View):
                 self.log_raw(i.get('console.print.divider').join(_displays))
             else:
                 self.log_raw(JSON(data = results.to_json()).dump(indent = 4))
+
+    def _auth(self, i):
+        if i.get('auth') != None:
+            i.set('auth', app.AuthLayer.byToken(i.get('auth')))
+        else:
+            i.set('auth', app.AuthLayer.getUserByName('root'))
+
+    @classmethod
+    def canBeUsedBy(self, user):
+        return False
 
     @classmethod
     def _arguments(cls) -> ArgumentDict:
@@ -80,15 +82,10 @@ class ConsoleView(View):
                 default = '\n'
             ),
             Argument(
-                name = 'auth_username',
-                orig = String,
-                default = 'root'
-            ),
-            Argument(
-                name = 'auth_password',
-                orig = String,
-                default = 'root'
-            ),
+                name = 'auth',
+                # orig = String, Do not comparing
+                default = None
+            )
         ],
             missing_args_inclusion = True
         )

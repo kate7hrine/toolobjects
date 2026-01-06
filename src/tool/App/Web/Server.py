@@ -112,11 +112,7 @@ class Server(View):
         async def _call_shortcut(pre_i, args):
             _json = JSON(data = {})
             results = None
-            args['auth'] = app.AuthLayer.login(
-                name = args.get('username'),
-                password = args.get('password'),
-                login_from = 'web'
-            )
+            args['auth'] = app.AuthLayer.byToken(args.get('auth'))
 
             try:
                 results = await pre_i.execute(args)
