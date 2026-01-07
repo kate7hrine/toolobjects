@@ -36,7 +36,7 @@ class Item(Object):
 
     async def start(self) -> asyncio.Task:
         async with self._manager_link.getSession() as session:
-            self.log(f"started download. URL: {self.url}")
+            self.log(f"URL: {self.url}")
             self.started_at = datetime.datetime.now()
             self.resume()
             self._task = await asyncio.create_task(self.download(session))
@@ -47,7 +47,8 @@ class Item(Object):
         async with self._manager_link.semaphore:
             request = session.get(self.url,
                                        allow_redirects=self._manager_link.getOption('download_manager.allow_redirects'), 
-                                       headers=self._manager_link.getHeaders())
+                                       headers=self._manager_link.getHeaders(),
+                                       timeout = self._manager_link.timeout)
 
             async with request as response:
                 status = response.status

@@ -5,6 +5,7 @@ from pydantic import Field
 from typing import Generator
 from App.ACL.User import User
 from App.ACL.Permissions.Permission import Permission
+from App.ACL.Tokens.Token import Token
 from App.DB.Query.Condition import Condition
 from App import app
 from Data.Boolean import Boolean
@@ -34,12 +35,7 @@ class AuthLayer(Object):
     def byToken(self, token: str):
         _storage = app.Storage.get('users')
         _query = _storage.adapter.getQuery()
-        _query.addCondition(Condition(
-            val1 = 'content',
-            operator = '==',
-            val2 = 'App.ACL.Tokens.Token',
-            json_fields = ['obj', 'saved_via', 'object_name']
-        ))
+        _query.where_object(Token)
         _query.addCondition(Condition(
             val1 = 'content',
             operator = '==',
@@ -59,12 +55,7 @@ class AuthLayer(Object):
     def getUsers(self) -> Generator[User]:
         _storage = app.Storage.get('users')
         _query = _storage.adapter.getQuery()
-        _query.addCondition(Condition(
-            val1 = 'content',
-            operator = '==',
-            val2 = 'App.ACL.User',
-            json_fields = ['obj', 'saved_via', 'object_name']
-        ))
+        _query.where_object(User)
 
         for user in _query.getAll():
             yield user.toPython()

@@ -8,13 +8,13 @@ from Data.Int import Int
 from Data.Boolean import Boolean
 from Data.String import String
 from pydantic import Field
-from typing import Type
+from typing import Any
 import asyncio#, aiohttp
 
 class Manager(Object):
     class DownloadManagerItems(Object):
         items: list = None
-        downloads: Type[Increment] = None
+        downloads: Any = None
 
         def init_hook(self):
             self.items = []
@@ -33,9 +33,9 @@ class Manager(Object):
 
     max_kbps_speed: int = None
     queue: DownloadManagerItems = None
-    semaphore: Type[asyncio.Semaphore] = None
-    #timeout: Type[aiohttp.ClientTimeout] = None
-    session: Type = None
+    semaphore: Any = None
+    timeout: Any = None
+    session: Any = None
 
     def addURL(self, url: str, dir: StorageUnit | str = None, name: str = None) -> Item:
         self._check()
@@ -68,9 +68,10 @@ class Manager(Object):
     def getSession(self):
         import aiohttp
 
-        return aiohttp.ClientSession(
-            timeout = self.timeout,
-        )
+        if self.timeout == None:
+            self.timeout = aiohttp.ClientTimeout(total = self.getOption("download_manager.timeout_seconds"))
+
+        return aiohttp.ClientSession(timeout = self.timeout)
 
     def _init_hook(self):
         '''
@@ -81,14 +82,12 @@ class Manager(Object):
     @classmethod
     def mount(cls):
         from App import app
-        import aiohttp
 
         manager = cls()
         manager.queue = cls.DownloadManagerItems(
             max_kbps_speed = cls.getOption('download_manager.max_concurrent_downloads')
         )
         manager.semaphore = asyncio.Semaphore(manager.queue.max_kbps_speed)
-        manager.timeout = aiohttp.ClientTimeout(total = cls.getOption("download_manager.timeout_seconds"))
 
         app.mount('DownloadManager', manager)
 
@@ -112,7 +111,12 @@ class Manager(Object):
                 orig = Int
             ),
             Argument(
-                name = "download_manager.timeout_seconds",
+                name = "download_manager.total_timeout",
+                default = 0,
+                orig = Int
+            ),
+            Argument(
+                name = "download_manager.timeout",
                 default = 100,
                 orig = Int
             ),
