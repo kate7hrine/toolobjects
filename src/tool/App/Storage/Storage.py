@@ -27,15 +27,18 @@ class Storage(Object):
         #dbs_dir.mkdir(exist_ok=True)
 
         for item in self.getOption('storage.items'):
-            if item.unused == True:
-                self.log('storage item {0} is disabled'.format(item.name), role = ['storage.item.loading'])
-                continue
+            try:
+                if item.unused == True:
+                    self.log('storage item {0} is disabled'.format(item.name), role = ['storage.item.loading'])
+                    continue
 
-            _names.append(item.name)
+                _names.append(item.name)
 
-            item._init_hook()
-            self.append(item)
-            self.log('loaded custom storage item {0}'.format(item.name), role = ['storage.item.loading'])
+                item._init_hook()
+                self.append(item)
+                self.log('loaded custom storage item {0}'.format(item.name), role = ['storage.item.loading'])
+            except Exception as e:
+                self.log_error(e)
 
         default_items = [
             StorageItem(
@@ -70,10 +73,13 @@ class Storage(Object):
         ]
 
         for item in default_items:
-            self.default_names.append(item.name)
-            if item.name not in _names:
-                item._init_hook()
-                self.append(item)
+            try:
+                self.default_names.append(item.name)
+                if item.name not in _names:
+                    item._init_hook()
+                    self.append(item)
+            except Exception as e:
+                self.log_error(e)
 
     def append(self, item: StorageItem):
         self.log('Mounted {0}'.format(item.name), role = ['storage.item.mount'])
