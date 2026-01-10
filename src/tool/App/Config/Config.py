@@ -17,12 +17,12 @@ class Config(Object):
     def mount(cls):
         _pre = [
             ConfigItem(
-                path = app.app.storage.joinpath("config"),
+                path = app.app.src.joinpath("config"),
                 role = 'config',
                 name = 'config.json',
             ),
             ConfigItem(
-                path = app.app.storage.joinpath("config"),
+                path = app.app.src.joinpath("config"),
                 role = 'env',
                 name = 'env.json'
             )

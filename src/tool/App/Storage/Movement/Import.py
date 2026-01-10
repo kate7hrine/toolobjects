@@ -47,12 +47,16 @@ class Import(Executable):
         path = Path(i.get('path'))
         _dir = path
         _tmp = i.get('tmp_extract')
+
+        _exports = app.app.src.joinpath('exports')
+        _exports.mkdir(exist_ok = True)
+
         if i.get('as_zip') == True:
             if _tmp == None:
                 # _tmp_name = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-                _tmp_name = path.name
                 #_tmp = app.app.storage.joinpath('tmp').joinpath(datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S'))
-                _tmp = app.app.exports.joinpath(_tmp_name)
+                _tmp_name = path.name
+                _tmp = _exports.joinpath(_tmp_name)
 
             if _tmp.exists() == False:
                 _tmp.mkdir(exist_ok = True)
