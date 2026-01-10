@@ -181,11 +181,11 @@ class HookThread():
 
                 try:
                     if asyncio.iscoroutinefunction(hook_func):
-                        self.running_loop.run_until_complete(hook_func(*args, **kwargs))
+                        self.running_loop.create_task(hook_func(*args, **kwargs))
                     else:
                         hook_func(*args, **kwargs)
                 except Exception as e:
-                    pass
+                    print(e)
                 finally:
                     self.task_queue.task_done()
             except queue.Empty:

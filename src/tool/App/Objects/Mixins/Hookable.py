@@ -54,7 +54,10 @@ class Hookable():
         self.checkEventType(category)
 
         for hook in self._hooks.get(category):
-            self.runHook(hook, *args, **kwargs)
+            try:
+                self.runHook(hook, *args, **kwargs)
+            except Exception as e:
+                self.log_error(e, exception_prefix = 'hook caused error: ')
 
     # TODO
     async def awaitTriggerHooks(self, category: str, *args, **kwargs) -> None:

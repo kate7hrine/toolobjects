@@ -12,9 +12,13 @@ from App.Locale.Documentation import Documentation
 from App.Locale.Key import Key
 from Data.String import String
 from Data.Boolean import Boolean
+from pydantic import Field
+from typing import Coroutine
 from App import app
 
 class DefaultExecutorWheel(Act):
+    ev_hooks: list = Field(default = [])
+
     async def implementation(self, i: ArgumentValues):
         force_flush = i.get('force_flush')
         executable = i.get('i')
@@ -29,6 +33,11 @@ class DefaultExecutorWheel(Act):
 
             _item = executable()
             _item.integrate(i.values)
+
+            if hasattr(_item, 'getVariables') and 'var_update' in _item.getClassEventTypes():
+                for hook in self.ev_hooks:
+                    _item.addHook('var_update', hook)
+
             results = await _item.execute(i = i)
         else:
             _vals = i.getValues(exclude = app.app.view.getCompareKeys() + self.getCompareKeys() + ['auth'])
@@ -65,6 +74,9 @@ class DefaultExecutorWheel(Act):
                 })
 
         return results
+
+    def add_variables_hook(self, hook: Coroutine):
+        self.ev_hooks.append(hook)
 
     @classmethod
     def _arguments(cls) -> ArgumentDict:

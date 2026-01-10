@@ -1,7 +1,7 @@
 from App.Objects.Executable import Executable
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App.Objects.Object import Object
-from App.Objects.Arguments.Argument import Argument
+from App.Objects.Arguments.Variable import Variable
 
 class Extractor(Executable):
     '''
@@ -11,14 +11,19 @@ class Extractor(Executable):
     @classmethod
     def _variables(cls):
         return [
-            Argument(
+            Variable(
                 name = 'items',
-                default = ObjectsList(unsaveable = False)
+                value = ObjectsList(unsaveable = False)
             )
         ]
 
+    @classmethod
+    def getClassEventTypes(cls):
+        return super().getClassEventTypes() + ['var_update']
+
     def append(self, out: Object):
-        self.variables.get("items").current.append(out)
+        self._instance_variables.get('items').value.append(out)
+        self.trigger_variables()
 
     async def implementation(self, i = {}) -> None:
         '''
@@ -32,4 +37,4 @@ class Extractor(Executable):
 
         await self.implementation(i)
 
-        return self.variables.get("items").current
+        return self._instance_variables.get("items").current
