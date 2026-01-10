@@ -37,4 +37,4 @@ class Extractor(Executable):
 
         await self.implementation(i)
 
-        return self._instance_variables.get("items").current
+        return self._instance_variables.get("items").value
