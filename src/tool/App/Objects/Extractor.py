@@ -2,6 +2,7 @@ from App.Objects.Executable import Executable
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App.Objects.Object import Object
 from App.Objects.Arguments.Variable import Variable
+import asyncio
 
 class Extractor(Executable):
     '''
@@ -35,6 +36,9 @@ class Extractor(Executable):
     async def implementation_wrap(self, i = {}) -> ObjectsList:
         self.init_vars()
 
-        await self.implementation(i)
+        if asyncio.iscoroutinefunction(self.implementation):
+            await self.implementation(i)
+        else:
+            self.implementation(i)
 
         return self._instance_variables.get("items").value

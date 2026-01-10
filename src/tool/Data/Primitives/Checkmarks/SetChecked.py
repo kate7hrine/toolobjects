@@ -2,7 +2,7 @@ from App.Objects.Act import Act
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Responses.ObjectsList import ObjectsList
-from Data.Checkmarks.Checkmark import Checkmark
+from Data.Primitives.Checkmarks.Checkmark import Checkmark
 from Data.Boolean import Boolean
 
 class SetChecked(Act):

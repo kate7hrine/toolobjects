@@ -2,8 +2,8 @@ from App.Objects.Act import Act
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Responses.ObjectsList import ObjectsList
-from Data.Checkmarks.Checkmark import Checkmark
-from Data.Checkmarks.List import List
+from Data.Primitives.Checkmarks.Checkmark import Checkmark
+from Data.Primitives.Checkmarks.List import List
 from Data.String import String
 
 class AddCheckmark(Act):
@@ -18,7 +18,7 @@ class AddCheckmark(Act):
             Argument(
                 name = 'label',
                 default = False,
-                literally = True,
+                # literally = True,
                 orig = String
             )
         ])
@@ -29,7 +29,7 @@ class AddCheckmark(Act):
 
         checkmark = Checkmark()
         checkmarks.link(checkmark)
-        checkmark.label = checkmark.link(_label).toInsert()
+        checkmark.label = checkmark.link(String(value = _label)).toInsert()
         checkmark.save()
 
         return ObjectsList(items = [checkmarks])
