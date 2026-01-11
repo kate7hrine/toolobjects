@@ -1,7 +1,7 @@
 from .Assertion import Assertion
 from ..Argument import Argument
 
-class NotNoneAssertion(Assertion):
+class NotNone(Assertion):
     def check(self, argument: Argument):
         if argument.default == None:
             assert argument.inputs != None, argument.not_passed_message.format(argument.name)

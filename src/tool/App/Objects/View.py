@@ -3,7 +3,7 @@ from typing import Any
 from App.App import App
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 
 class View(Executable):
     '''
@@ -47,7 +47,7 @@ class View(Executable):
                 orig = Executable,
                 default = 'App.Objects.Operations.DefaultExecutorWheel',
                 assertions = [
-                    NotNoneAssertion()
+                    NotNone()
                 ]
             ),
         ])

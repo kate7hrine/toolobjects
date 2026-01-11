@@ -53,7 +53,7 @@ class Item(Object):
             async with request as response:
                 status = response.status
 
-                assert status not in [404, 403], '404'
+                assert status not in [404, 403], '{0} error'.format(status)
 
                 content_length = int(response.headers.get("Content-Length", 0))
                 if content_length != None:

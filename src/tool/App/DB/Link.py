@@ -5,7 +5,7 @@ from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.LiteralArgument import LiteralArgument
 from App.Objects.Arguments.ListArgument import ListArgument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Storage.StorageUUID import StorageUUID
 
 class Link(Act):
@@ -15,12 +15,12 @@ class Link(Act):
             Argument(
                 name = 'owner',
                 orig = StorageUUID,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             ListArgument(
                 name = 'items',
                 orig = StorageUUID,
-                assertions = [NotNoneAssertion()],
+                assertions = [NotNone()],
                 default = []
             ),
             LiteralArgument(
@@ -32,7 +32,7 @@ class Link(Act):
             ListArgument(
                 name = 'role',
                 orig = String,
-                assertions = [NotNoneAssertion()],
+                assertions = [NotNone()],
                 default = []
             ),
         ])

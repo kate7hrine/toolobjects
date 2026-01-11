@@ -2,7 +2,7 @@ from Web.Pages.Download.Downloader import Downloader
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.ListArgument import ListArgument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from Data.String import String
 from Web.Crawler.Crawler import Crawler
 
@@ -32,6 +32,6 @@ class ByURL(Downloader):
             ListArgument(
                 name = 'url',
                 orig = String,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             )
         ])

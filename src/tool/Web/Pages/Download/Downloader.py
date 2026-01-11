@@ -5,7 +5,7 @@ from App.Objects.Arguments.ListArgument import ListArgument
 from Data.Boolean import Boolean
 from Data.String import String
 from Web.Crawler.Webdrivers.Webdriver import Webdriver
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from Web.Pages.Page import Page
 from App import app
 
@@ -62,7 +62,7 @@ class Downloader(Act):
                 name = 'webdriver',
                 orig = Webdriver,
                 id_allow = True,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             )
         ])
 

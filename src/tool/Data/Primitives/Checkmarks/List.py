@@ -1,11 +1,11 @@
-from App.Objects.Object import Object
 from App.Objects.Displayments.StringDisplayment import StringDisplayment
 from Data.Primitives.Checkmarks.Checkmark import Checkmark
 from App.Objects.Act import Act
 from typing import Generator
 from App.Objects.Relations.Submodule import Submodule
+from Data.Primitives.Collections.Collection import Collection
 
-class List(Object):
+class List(Collection):
     @classmethod
     def _submodules(cls):
         return [

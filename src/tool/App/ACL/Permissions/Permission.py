@@ -12,7 +12,6 @@ class Permission(BaseModel, DBInsertable):
     action: Literal['view', 'delete', 'edit', 'link', 'call'] = Field(default = 'call')
     allow: bool = Field(default = True)
 
-    # TODO: rewrite
     @classmethod
     def getPermissions(cls, likeness: BaseModel = None):
         _storage = app.Storage.get('users')

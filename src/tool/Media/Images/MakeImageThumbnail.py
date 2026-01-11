@@ -2,7 +2,7 @@ from App.Objects.Act import Act
 from Media.Images.Image import Image
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Responses.ObjectsList import ObjectsList
 from Data.Float import Float
 
@@ -13,7 +13,7 @@ class MakeImageThumbnail(Act):
             Argument(
                 name = 'image',
                 orig = Image,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             Argument(
                 name = 'percentage',

@@ -1,7 +1,7 @@
 from App.Objects.Act import Act
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.ACL.GetHash import GetHash
 from App.ACL.User import User
 from App import app
@@ -12,11 +12,11 @@ class CreateUser(Act):
         return ArgumentDict(items = [
             Argument(
                 name = 'name',
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             Argument(
                 name = 'password',
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             )
         ])
 

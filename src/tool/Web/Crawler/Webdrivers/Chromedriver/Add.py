@@ -1,7 +1,7 @@
 from App.Objects.Act import Act
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from Data.String import String
 from Web.Crawler.Webdrivers.Chromedriver.Chromedriver import Chromedriver
 from App.Storage.StorageUnit import StorageUnit
@@ -26,12 +26,12 @@ class Add(Act):
             Argument(
                 name = 'driver_zip',
                 orig = String,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             Argument(
                 name = 'shell_zip',
                 orig = String,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
         ])
 

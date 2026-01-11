@@ -2,7 +2,7 @@ from App.Objects.Act import Act
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ListArgument import ListArgument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App.Objects.Responses.AnyResponse import AnyResponse
 from App.Storage.Item.StorageItem import StorageItem
@@ -25,7 +25,7 @@ class Save(Act):
             ),
             ListArgument(
                 name = 'storage',
-                assertions = [NotNoneAssertion()],
+                assertions = [NotNone()],
                 orig = StorageItem
             ),
             ListArgument(

@@ -1,7 +1,7 @@
 from App.Objects.Act import Act
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Responses.ObjectsList import ObjectsList
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ListArgument import ListArgument
 from Data.Int import Int
@@ -17,7 +17,7 @@ class Search(Act):
             Argument(
                 name = 'storage',
                 orig = StorageItem,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             ListArgument(
                 name = 'conditions',

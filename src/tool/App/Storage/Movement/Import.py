@@ -3,7 +3,7 @@ from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from Data.String import String
 from Data.Boolean import Boolean
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Storage.Item.StorageItem import StorageItem
 from App.Storage.Item.Mount import Mount
 from App.Objects.Responses.AnyResponse import AnyResponse
@@ -22,7 +22,7 @@ class Import(Executable):
         return ArgumentDict(items = [
             Argument(
                 name = 'path',
-                assertions = [NotNoneAssertion()],
+                assertions = [NotNone()],
                 default = None,
                 orig = String
             ),

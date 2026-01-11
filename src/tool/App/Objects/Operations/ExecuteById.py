@@ -3,7 +3,7 @@ from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from Data.Boolean import Boolean
 from App.Storage.StorageUUID import StorageUUID
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Responses.ObjectsList import ObjectsList
 
 from App.Locale.Documentation import Documentation
@@ -57,7 +57,7 @@ class ExecuteById(Act):
             Argument(
                 name = 'item',
                 orig = StorageUUID,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             Argument(
                 name = 'link',

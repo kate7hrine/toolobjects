@@ -1,6 +1,6 @@
 from App.Objects.Extractor import Extractor
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from Data.Int import Int
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 import random
@@ -14,7 +14,7 @@ class GetRandomInt(Extractor):
                 default = 0,
                 orig = Int,
                 assertions = [
-                    NotNoneAssertion()
+                    NotNone()
                 ]
             ),
             Argument(
@@ -22,7 +22,7 @@ class GetRandomInt(Extractor):
                 default = 100,
                 orig = Int,
                 assertions = [
-                    NotNoneAssertion()
+                    NotNone()
                 ]
             )
         ])

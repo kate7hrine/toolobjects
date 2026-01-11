@@ -1,7 +1,7 @@
 from App.Objects.Act import Act
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App.ACL.Tokens.Token import Token
 from Data.String import String
@@ -15,12 +15,12 @@ class Get(Act):
             Argument(
                 name = 'username',
                 orig = String,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             Argument(
                 name = 'password',
                 orig = String,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             )
         ])
 

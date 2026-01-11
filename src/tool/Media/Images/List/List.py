@@ -1,21 +1,19 @@
-from App.Objects.Client import Client
+from Data.Primitives.Collections.Collection import Collection
 from App.Objects.Relations.Submodule import Submodule
-from Media.Images.Image import Image
-from Media.Images.AddImages import AddImages
 
-class List(Client):
+class List(Collection):
     @classmethod
     def _submodules(cls) -> list:
+        from Media.Images.List.Add import Add
+        from Media.Images.Image import Image
+
         return [
             Submodule(
                 item = Image,
                 role = ['object']
             ),
             Submodule(
-                item = AddImages,
+                item = Add,
                 role = ['action']
             )
         ]
-
-    async def implementation(self, i):
-        pass

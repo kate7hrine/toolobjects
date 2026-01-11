@@ -3,7 +3,7 @@ from App.Objects.Object import Object
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ListArgument import ListArgument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from Data.String import String
 from Data.Boolean import Boolean
 
@@ -15,23 +15,23 @@ class Edit(Act):
                 name = 'object',
                 orig = Object,
                 id_allow = True,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             ListArgument(
                 name = 'key',
                 orig = String,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             Argument(
                 name = 'val',
                 orig = None,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             Argument(
                 name = 'update',
                 default = True,
                 orig = Boolean,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             )
         ])
 

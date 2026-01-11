@@ -1,10 +1,9 @@
-from Media.Files.FileType import FileType
-from pydantic import Field
+from Media.Media import Media
 from App.Objects.Requirements.Requirement import Requirement
 from App.Objects.Misc.Thumbnail import Thumbnail
 from pathlib import Path
 
-class Image(FileType):
+class Image(Media):
     _img = None
 
     @classmethod

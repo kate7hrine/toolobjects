@@ -2,7 +2,7 @@ from App.Objects.Act import Act
 from App.Objects.Object import Object
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from Data.String import String
 
 class Navigate(Act):
@@ -13,7 +13,7 @@ class Navigate(Act):
                 name = 'with',
                 orig = Object,
                 default = 'Media.Files.Explorer', # App.Storage.VirtualPath.Navigate
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             Argument(
                 name = 'path',
