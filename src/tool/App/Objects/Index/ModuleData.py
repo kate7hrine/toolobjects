@@ -16,7 +16,7 @@ class ModuleData(BaseModel):
                     include_requirements: bool = False,
                     include_variables: bool = False):
         _dt = ModuleData()
-        _dt.name = module.getNameJoined()
+        _dt.name = module._getNameJoined()
 
         # TODO rewrite
         if include_subs:

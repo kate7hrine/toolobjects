@@ -97,7 +97,7 @@ class Query(ABC):
             val1 = 'content',
             json_fields = ['obj', 'saved_via', 'object_name'],
             operator = '==',
-            val2 = obj.getClassNameJoined(),
+            val2 = obj._getClassNameJoined(),
         ))
 
         return self

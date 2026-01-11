@@ -29,17 +29,17 @@ class Model(PydanticBaseModel):
         pass
 
     def isInstance(self, object: PydanticBaseModel) -> bool:
-        return self.getClassNameJoined() == object.getClassNameJoined()
+        return self._getClassNameJoined() == object._getClassNameJoined()
 
     @classmethod
     def isInMRO(cls, object: PydanticBaseModel) -> bool:
         for item in cls.getMRO():
-            if item.getNameJoined() == object.getNameJoined():
+            if item._getNameJoined() == object._getNameJoined():
                 return True
 
     @classmethod
     def isSame(cls, object: PydanticBaseModel) -> bool:
-        return cls.getNameJoined() == object.getNameJoined()
+        return cls._getNameJoined() == object._getNameJoined()
 
     @classmethod
     def getMRO(cls) -> list:
@@ -50,37 +50,37 @@ class Model(PydanticBaseModel):
         return hasattr(cls, 'execute')
 
     @classmethod
-    def getClassName(cls):
+    def _getClassName(cls):
         '''
         Path to the current class + class name:
 
         a.b.c.d.d or something
         '''
 
-        return cls.getName() + [cls.getModuleName()]
+        return cls._getName() + [cls._getModuleName()]
 
     @classmethod
-    def getModuleName(cls):
+    def _getModuleName(cls):
         return cls.__name__
 
     @classmethod
-    def getNameJoined(self):
-        return ".".join(self.getName())
+    def _getNameJoined(self):
+        return ".".join(self._getName())
 
     @classmethod
-    def getClassNameJoined(cls, last_names_doubling: bool = False):
+    def _getClassNameJoined(cls, last_names_doubling: bool = False):
         '''
-        getClassName() but joined
+        _getClassName() but joined
         '''
 
-        _name = cls.getClassName()
+        _name = cls._getClassName()
         if last_names_doubling == False:
             _name = _name[:-1]
 
         return ".".join(_name)
 
     @classmethod
-    def getName(self) -> list:
+    def _getName(self) -> list:
         _class = self.__mro__[0]
         _module = _class.__module__
         _parts = _module.split('.')
@@ -89,7 +89,7 @@ class Model(PydanticBaseModel):
         return _parts
 
     @classmethod
-    def getClassModule(cls) -> str:
+    def _getClassNameJoined(cls) -> str:
         return cls.__module__
 
     @classmethod
@@ -175,7 +175,7 @@ class Model(PydanticBaseModel):
         return value
 
     @classmethod
-    def getFieldsNames(cls, include_computed: bool = True) -> list[str]:
+    def _getFieldsNames(cls, include_computed: bool = True) -> list[str]:
         names = list()
         for name in cls.model_fields:
             names.append(name)
@@ -251,7 +251,7 @@ class Model(PydanticBaseModel):
                     except Exception as e:
                         self.log_error(e, exception_prefix = 'Can\'t include field {0}'.format(key))
         except Exception as _e:
-            self.log_error(e, exception_prefix='Error loading model {0}: '.format(self.getClassNameJoined()))
+            self.log_error(e, exception_prefix='Error loading model {0}: '.format(self._getClassNameJoined()))
 
             if True:
                 raise _e
