@@ -99,7 +99,7 @@ class ObjectsList(ConnectionAdapter):
             uuid: int = None
             owner: int = None
             target: int = None
-            role: list[str] = []
+            data: dict[str] = []
             order: int = None
 
             def reorder(self, order: int = 0):
@@ -127,8 +127,8 @@ class ObjectsList(ConnectionAdapter):
 
                 self.owner = owner.uuid
                 self.target = link.item.getDbId()
-                if len(link.role) > 0:
-                    self.role = link.role
+                if len(link.data.role) > 0:
+                    self.data = link.data
 
                 link.setDb(self)
                 self_adapter.log(f"flushed link with target uuid {link.item.getDbId()}")
@@ -141,7 +141,7 @@ class ObjectsList(ConnectionAdapter):
                     self_adapter.commit()
 
             def _parseRoles(self) -> list:
-                return self.role
+                return self.data.get('role')
 
             # no pydantic today
             @staticmethod
@@ -150,7 +150,7 @@ class ObjectsList(ConnectionAdapter):
                 _obj.uuid = data.get('uuid')
                 _obj.owner = data.get('owner')
                 _obj.target = data.get('target')
-                _obj.role = data.get('role')
+                _obj.data = data.get('data')
                 _obj.order = data.get('order')
 
                 return _obj
@@ -160,7 +160,7 @@ class ObjectsList(ConnectionAdapter):
                     'uuid': self.uuid,
                     'owner': self.owner,
                     'target': self.target,
-                    'role': self.role,
+                    'data': self.data,
                     'order': self.order,
                 }
 
