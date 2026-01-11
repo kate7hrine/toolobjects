@@ -4,6 +4,8 @@ from Web.Feeds.Elements.Feed import Feed
 from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
+from App.Objects.Misc.Source import Source
+from Web.URL import URL
 
 from App.Objects.Responses.ObjectsList import ObjectsList
 
@@ -31,5 +33,10 @@ class Get(Extractor):
         assert _type != None, 'unknown type of feed'
 
         channels = await _type().parse(root)
-
-        return ObjectsList(items = channels)
+        for channel in channels:
+            channel.obj.set_common_source(Source(
+                obj = URL(
+                    value = url
+                )
+            ))
+            self.append(channel)

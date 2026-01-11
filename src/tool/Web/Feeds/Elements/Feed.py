@@ -1,6 +1,6 @@
 from App.Objects.Object import Object
-from Web.Feeds.RSS import RSS
-from Web.Feeds.Atom import Atom
+from Web.Feeds.Protocols.RSS import RSS
+from Web.Feeds.Protocols.Atom import Atom
 import xml.etree.ElementTree as ET
 
 class Feed(Object):

@@ -237,11 +237,11 @@ class SQLAlchemy(ConnectionAdapter):
 
                 return _query
 
-            def addLink(self, link: CommonLink):
+            def addLink(self, link: CommonLink, no_commit: bool = False):
                 _link = _LinkAdapter()
                 _link.toDB(self, link, self.get_order_index())
 
-                if self_adapter.auto_commit == True:
+                if self_adapter.auto_commit == True and no_commit == False:
                     self_adapter.commit()
 
                 return _link

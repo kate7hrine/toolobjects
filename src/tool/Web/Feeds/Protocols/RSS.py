@@ -1,7 +1,8 @@
+from Web.Feeds.Protocols.FeedProtocol import FeedProtocol
 from App.Objects.Object import Object
 import xml.etree.ElementTree as ET
 
-class RSS(Object):
+class RSS(FeedProtocol):
     async def parse(self, data: ET):
         channels = list()
 

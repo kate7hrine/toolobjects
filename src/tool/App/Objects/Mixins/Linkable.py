@@ -108,11 +108,11 @@ class Linkable():
         '''
         return self.getLinkedItems()
 
-    def getLinked(self) -> Generator[Link]:
+    def getLinked(self, ignore_virtual: bool = False) -> Generator[Link]:
         '''
         Return dynamic links or real links
         '''
-        if self.dynamic_links == True:
+        if self.dynamic_links == True and ignore_virtual == False:
             return self.getVirtualLinkedItems()
         else:
             return self.getLinkedItems()
