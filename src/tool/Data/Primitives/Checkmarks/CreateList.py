@@ -20,6 +20,6 @@ class CreateList(Extractor):
 
     def _implementation(self, i):
         _list = List()
-        _list.obj.original_name = i.get('name')
+        _list.obj.name = i.get('name')
 
         self.append(_list)

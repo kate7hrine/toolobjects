@@ -25,6 +25,6 @@ class Create(Act):
 
         _obj = app.ObjectsList.getByName(self.type_that_creates)
         collection = _obj.getModule()()
-        collection.obj.original_name = name
+        collection.obj.name = name
 
         return ObjectsList(items = [collection])

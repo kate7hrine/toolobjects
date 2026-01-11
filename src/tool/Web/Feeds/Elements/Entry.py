@@ -9,4 +9,4 @@ class Entry(Object):
     guid: Optional[str] = Field(default = None)
 
     def set_pubdate(self, date: datetime.datetime):
-        self.obj.declared_created_at = date
+        self.obj.created_at = date

@@ -1,5 +1,6 @@
 from typing import Any
 from App.Objects.Misc.ObjectMeta import ObjectMeta
+from App.Objects.Misc.LocalObjectMeta import LocalObjectMeta
 from App.Objects.Misc.SavedVia import SavedVia
 from App.Objects.Mixins.Section import Section
 from App.Objects.Mixins.Model import Model
@@ -7,6 +8,7 @@ from pydantic import Field, model_validator
 
 class BaseModel(Model, Section):
     obj: ObjectMeta = Field(default = ObjectMeta())
+    local_obj: LocalObjectMeta = Field(default = LocalObjectMeta())
 
     @model_validator(mode='after')
     def _saved_via(self):

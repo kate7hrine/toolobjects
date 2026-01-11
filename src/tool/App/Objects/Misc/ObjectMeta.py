@@ -3,43 +3,26 @@ from App.Objects.Mixins.Model import Model
 from datetime import datetime
 from typing import Optional
 from .Source import Source
-from .Thumbnail import Thumbnail
 from .SavedVia import SavedVia
 
 class ObjectMeta(Model):
     saved_via: SavedVia = Field(default = None)
-    custom_saved_via: Optional[list[SavedVia]] = Field(default = [])
 
     name: Optional[str] = Field(default=None)
-    original_name: Optional[str] = Field(default=None)
-
     description: Optional[str] = Field(default=None)
-    shadow_description: Optional[str] = Field(default=None)
-    original_description: Optional[str] = Field(default=None)
-
-    role: Optional[list[str]] = Field(default = [])
 
     collection: Optional[bool] = Field(default=False)
-    public: Optional[bool] = Field(default=False)
+    role: Optional[list[str]] = Field(default = [])
 
     source: list[Source] = Field(default = [], repr = False)
-    thumbnail: Optional[list[Thumbnail]] = Field(default = [])
 
     created_at: Optional[datetime] = Field(default_factory=lambda: datetime.now())
     edited_at: Optional[datetime] = Field(default=None)
-    declared_created_at: Optional[datetime] = Field(default_factory=lambda: datetime.now())
 
     # other fields
-    width: int = Field(default = None)
-    height: int = Field(default = None)
+    width: Optional[int] = Field(default = None)
+    height: Optional[int] = Field(default = None)
     duration: Optional[int] = Field(default = None)
-
-    @property
-    def any_name(self):
-        if self.name == None:
-            return self.original_name
-
-        return self.name
 
     def set_common_source(self, source: Source):
         source.is_common = True
@@ -48,16 +31,6 @@ class ObjectMeta(Model):
 
     def add_source(self, source: Source):
         self.source.append(source)
-
-    def add_thumbnail(self, thumb: Thumbnail):
-        self.thumbnail.append(thumb)
-
-    def add_thumbnails(self, thumbs: list[Thumbnail]):
-        for thumb in thumbs:
-            self.thumbnail.append(thumb)
-
-    def make_public(self):
-        self.public = True
 
     def get_common_source(self):
         for source in self.source:

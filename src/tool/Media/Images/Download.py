@@ -70,12 +70,12 @@ class Download(Extractor):
                     _resp = await MakeImageThumbnail().execute({
                         'image': image
                     })
-                    image.obj.add_thumbnails(_resp.getItems())
+                    image.local_obj.add_thumbnails(_resp.getItems())
                 except Exception as e:
                     self.log_error(e, role = ['thumbnail'], exception_prefix = 'Error when making thumbnail: ')
 
         image._reset_file()
-        image.obj.make_public()
+        image.local_obj.make_public()
         image.obj.set_common_source(Source(
             obj = _url
         ))
