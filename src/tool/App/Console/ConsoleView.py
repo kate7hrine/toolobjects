@@ -45,7 +45,7 @@ class ConsoleView(View):
                 _displays = list()
                 for item in results.getItems():
                     if hasattr(item, 'displayAsString') == False:
-                        self.log_raw('[item without displayment]')
+                        self.log_raw('[item without displayAsString]')
                         continue
 
                     _displays.append(item.displayAsString(show_id = i.get('console.print.display_ids')))

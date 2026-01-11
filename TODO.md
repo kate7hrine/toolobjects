@@ -47,7 +47,7 @@ db and storage:
 - [x] db flush: export between dbs
 - [x] argument: default env val
 - [x] VirtualPath
-- [x] DisplayType (?) submodule=displayment
+- [x] ~~DisplayType (?) submodule=displayment~~
 - [x] App.DB.Search
 - [x] App.Storage.Movement.Export and App.Storage.Movement.Import with zip
 - [x] App.Storage.Movement.ExportAsFiles
@@ -62,6 +62,7 @@ db and storage:
 - [x] link to storageunit file (StorageUnitLink)
 - [ ] advanced Conditions (val1 % val2 > 0 or smth)
 - [x] storage item.commit()
+- [x] remove displayments
 
 - [x] VirtualPath
 

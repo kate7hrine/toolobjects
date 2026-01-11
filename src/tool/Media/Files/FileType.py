@@ -2,7 +2,6 @@ from App.Objects.Act import Act
 from App.Objects.Object import Object
 from App.Storage.StorageUnit import StorageUnit
 from App.Storage.StorageUnitLink import StorageUnitLink
-from App.Objects.Displayments.StringDisplayment import StringDisplayment
 from Media.Files.File import File
 from Web.URL import URL
 from pydantic import Field
@@ -53,14 +52,5 @@ class FileType(Object):
 
         return _common_source.obj.value
 
-    @classmethod
-    def _displayments(cls):
-        class DisplayAsString(Act):
-            def _implementation(self, i):
-                orig = i.get('orig')
-                return str(orig.get_url())
-
-        return [StringDisplayment(
-            role = ['str'],
-            value = DisplayAsString
-        )]
+    def _display_as_string(self):
+        return str(self.get_url())

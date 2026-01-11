@@ -5,7 +5,6 @@ class ModuleData(BaseModel):
     name: str = Field(default = None)
     arguments: list = Field(default = [])
     submodules: list = Field(default = [])
-    displayments: list = Field(default = [])
     requirements: list = Field(default = [])
     settings: list = Field(default = [])
 
@@ -22,8 +21,6 @@ class ModuleData(BaseModel):
         if include_subs:
             for submodule in module.getSubmodules():
                 _dt.submodules.append(submodule)
-            for displayment in module.getDisplayments():
-                _dt.displayments.append(displayment)
 
         if include_args:
             if hasattr(module, 'getArguments'):
