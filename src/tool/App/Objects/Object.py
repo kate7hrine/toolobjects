@@ -12,7 +12,7 @@ from pydantic import ConfigDict
 from App import app
 
 class Object(BaseModel, 
-             Linkable, 
+             Linkable,
              ModuleRequireable, 
              Submodulable, 
              Hookable, 

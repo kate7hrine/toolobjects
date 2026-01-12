@@ -7,17 +7,15 @@ from Data.String import String
 from Data.Int import Int
 from Data.Boolean import Boolean
 from Data.JSON import JSON
+import random
 
 from pydantic import Field
 from App.Storage.StorageUnit import StorageUnit
 
 from App.DB.Query.Condition import Condition
 
-from pathlib import Path
-
 import asyncio, traceback
 import socket
-from concurrent.futures import ThreadPoolExecutor
 from App.Objects.Threads.ExecutionThread import ExecutionThread
 
 from typing import Optional, Coroutine
@@ -28,10 +26,43 @@ from App import app
 class Server(View):
     ws_connections: list = Field(default = list())
     pre_i: Object = Field(default = None)
+        
+    @classmethod
+    def _settings(cls) -> list:
+        return [
+            Argument(
+                name = 'web.options.host',
+                default = '127.0.0.1',
+                orig = String
+            ),
+            Argument(
+                name = 'web.options.port',
+                # default = 18283,
+                orig = Int
+            ),
+            Argument(
+                name = 'web.aiohttp.debug',
+                default = True,
+                orig = Boolean
+            ),
+            Argument(
+                name = 'app.name',
+                default = 'toolobjects',
+                orig = String
+            )
+        ]
+
+    def _get_random_port(self):
+        return random.randint(1024, 49151)
 
     async def _implementation(self, i):
         _host = self.getOption("web.options.host")
         _port = self.getOption("web.options.port")
+
+        if _port == None:
+            self.log('port is not passed, so it will be chosen randomly')
+            _port = self._get_random_port()
+
         _app = web.Application()
 
         self._register_default_routes(_app, i)
@@ -215,7 +246,7 @@ class Server(View):
         async def _ws(request):
             ws = web.WebSocketResponse()
             await ws.prepare(request)
-            self.log('websocket connection')
+            self.log('WebSocket connection created')
 
             self.ws_connections.append(ws)
 
@@ -292,28 +323,3 @@ class Server(View):
             ('/api/upload/{storage}', _upload_storage_unit, 'post'),
         ]:
             getattr(server_app.router, 'add_' + route[2])(route[0], route[1])#(route[0], getattr(self, route[1]))
-
-    @classmethod
-    def _settings(cls) -> list:
-        return [
-            Argument(
-                name = 'web.options.host',
-                default = '127.0.0.1',
-                orig = String
-            ),
-            Argument(
-                name = 'web.options.port',
-                default = '22222',
-                orig = Int
-            ),
-            Argument(
-                name = 'web.aiohttp.debug',
-                default = True,
-                orig = Boolean
-            ),
-            Argument(
-                name = 'app.name',
-                default = 'toolobjects',
-                orig = String
-            )
-        ]

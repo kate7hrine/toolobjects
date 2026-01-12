@@ -28,8 +28,9 @@ class Model(PydanticBaseModel):
     def init_hook(self):
         pass
 
-    def isInstance(self, object: PydanticBaseModel) -> bool:
-        return self._getClassNameJoined() == object._getClassNameJoined()
+    @classmethod
+    def isInstance(cls, object: PydanticBaseModel) -> bool:
+        return cls._getClassNameJoined() == object._getClassNameJoined()
 
     @classmethod
     def isInMRO(cls, object: PydanticBaseModel) -> bool:
@@ -93,7 +94,7 @@ class Model(PydanticBaseModel):
         return cls.__module__
 
     @classmethod
-    def getAllowedViews(cls) -> list:
+    def _allowed_views(cls) -> list:
         '''
         Get View classes where. if None > allowed everywhere
         '''
