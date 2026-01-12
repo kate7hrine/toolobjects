@@ -32,7 +32,9 @@ class DefaultExecutorWheel(Act):
         if force_flush == False:
             assert item_class.canBeExecuted(), 'object does not contains execution interface'
 
-            item_class = item_class()
+            if callable(item_class):
+                item_class = item_class()
+
             item_class.integrate(i.values)
 
             # Hooks from websockets workaround
@@ -49,7 +51,11 @@ class DefaultExecutorWheel(Act):
 
             # isinstance(executable, Executable wont work with cls (
             if hasattr(item_class, 'integrate') and i.get('as_args'):
-                item_that_executed = item_class(args = _vals)
+                if callable(item_class):
+                    item_that_executed = item_class(args = _vals)
+                else:
+                    item_that_executed = item_class
+                    item_that_executed.args = _vals
             else:
                 _keys = dict()
                 # outside arguments can get there, so saving only values from fields
@@ -59,21 +65,27 @@ class DefaultExecutorWheel(Act):
 
                     _keys[key] = _vals.get(key)
 
-                item_that_executed = item_class(**_keys)
+                if callable(item_class):
+                    item_that_executed = item_class(**_keys)
+                else:
+                    item_that_executed = item_class
 
             results.append(item_that_executed)
 
-        if isinstance(results, ObjectsList) and results.should_be_saved() == True:
-            save_to = i.get('save_to')
-            if save_to != None and len(save_to) > 0:
-                _save = Save()
-                await _save.execute({
-                    'items': results,
-                    'storage': save_to,
-                    'ignore_flush_hooks': i.get('ignore_flush_hooks', results.ignore_flush_hooks),
-                    'link_to': i.get('link_to'),
-                    'auth': i.get('auth')
-                })
+        if results.isInstance(ObjectsList):
+            if results.should_be_saved() == True:
+                save_to = i.get('save_to')
+                if save_to != None and len(save_to) > 0:
+                    _save = Save()
+                    await _save.execute({
+                        'items': results,
+                        'storage': save_to,
+                        'ignore_flush_hooks': i.get('ignore_flush_hooks', results.ignore_flush_hooks),
+                        'link_to': i.get('link_to'),
+                        'auth': i.get('auth')
+                    })
+            else:
+                self.log('result cannot be saved')
 
         return results
 

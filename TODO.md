@@ -9,8 +9,8 @@ core:
 - [x] hooks need to be refactored (its impossible to debug this)
 - [x] switchextractor
 - [x] queue
-- [ ] queue: repeat (or Queue's settings)
-- [ ] App.Queue.ValueWithReplaces
+- [x] queue: repeat (or Queue's settings)
+- [x] App.Queue.ValueWithReplaces
 - [x] App.Storage.StorageUnit
 - [x] App.Storage.StorageUnitStorage
 - [x] App.Objects.Client

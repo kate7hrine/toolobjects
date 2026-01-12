@@ -1,5 +1,11 @@
 from App.Objects.Object import Object
+from App.ACL.User import User
 from App.Objects.Responses.Responses import Responses
+from App.Queue.Item import Item
+from App.Queue.OutputItem import OutputItem
+from App.Objects.Operations.DefaultExecutorWheel import DefaultExecutorWheel
+from Data.Increment import Increment
+from pydantic import Field
 
 class Queue(Object):
     '''
@@ -11,34 +17,47 @@ class Queue(Object):
     items - Items that will be executed as main process
     output - Queue output format
 
-    The results will be stored at the variables "prestart" and "items".
     You can reference results by "$" for prestart and "#" for items
     '''
-    prestart: list = []
-    items: list = []
-    output: list = []
 
-    def convertArguments(self):
-        pass
+    prestart: list[Item] = []
+    items: list[Item] = []
+    output: list[OutputItem] = []
+    repeat: int = Field(default = 1)
+    return_index: int = Field(default = None)
 
-    def getOutput(self) -> Responses:
-        items = Responses()
+    async def run(self, auth: User):
+        _prestart = list()
+        _items = list()
+
+        responses = Responses()
+        iterator = Increment()
+
+        for prestart_item in self.prestart:
+            _item = prestart_item.get_predicate()
+            _prestart.append(_item(**prestart_item.get_build_arguments(_prestart, _items)))
+
+        _wheel = DefaultExecutorWheel()
+
+        for iter in range(0, self.repeat):
+            if self.repeat > 1:
+                self.log('cycle {0}'.format(iter))
+
+            for item in self.items:
+                item.id = iterator.getCount()
+
+                try:
+                    _items.append(await item.run(_prestart, _items, _wheel, auth))
+                except Exception as e:
+                    self.log_error(e, exception_prefix='queue item {0} caused error: '.format(item.id))
+                    self.fatal(e)
+
+                iterator.increment()
 
         for out_class in self.output:
-            items.append(out_class.apply(self.prestart, self.items))
+            responses.append(out_class.apply(_prestart, _items))
 
-        return items
+        if self.return_index != None:
+            return responses.responses[self.return_index]
 
-    async def run(self, prestart: list, items: list):
-        for item in prestart:
-            _item = item.getPredicate()
-            self.prestart.append(_item(**item.getBuildArguments()))
-
-        iterator = 0
-        for item in items:
-            item._queue = self
-            item._id = iterator
-
-            self.items.append(await item.run())
-
-            iterator += 1
+        return responses

@@ -1,38 +1,23 @@
 from App.Objects.Act import Act
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.ListArgument import ListArgument
-from .Item import Item
-from .OutputItem import OutputItem
-from .Queue import Queue
-from App.Objects.Responses.Response import Response
+from App.Queue.Queue import Queue
+from App.ACL.User import User
+from Data.Int import Int
 
 class Run(Act):
-    '''
-    Queue's entrypoint
-    '''
-
     @classmethod
     def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items=[
-            ListArgument(
-                name = 'prestart',
-                orig = Item
+            Argument(
+                name = 'queue',
+                orig = Queue
             ),
-            ListArgument(
-                name = 'items',
-                orig = Item
-            ),
-            ListArgument(
-                name = 'output',
-                orig = OutputItem
+            Argument(
+                name = 'auth',
+                orit = User
             )
         ])
 
     async def _implementation(self, i):
-        queue = Queue()
-        queue.output = i.get('output')
-
-        await queue.run(i.get('prestart'), i.get('items'))
-
-        return queue.getOutput()
+        return await i.get('queue').run(i.get('auth'))

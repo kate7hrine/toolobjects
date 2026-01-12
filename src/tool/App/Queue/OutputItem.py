@@ -1,17 +1,14 @@
 from App.Objects.Object import Object
 from App.Queue.LinkValue import LinkValue
+from pydantic import Field
 from App import app
 
 class OutputItem(Object):
-    key: str = None
-    response: str = None
+    response_name: str = Field(default = 'App.Objects.Responses.ObjectsList')
+    value: str = None
 
     def apply(self, prestart: list, items: list):
-        obj = app.ObjectsList.getByName(self.response)
-
-        '''
-        It passes key as *args, so add repr=True to common field
-        '''
-        vals = LinkValue(value = self.key)
+        obj = app.ObjectsList.getByName(self.response_name)
+        vals = LinkValue(value = self.value)
 
         return obj.getModule().fromItems(vals.toString(prestart, items))

@@ -75,5 +75,5 @@ class ExecutionThread(Object):
             self.cancelled = True
             raise
         except Exception as e:
-            self.log(f"Task raised exception: {e}")
+            self.log(f"Task raised exception")
             raise
