@@ -3,7 +3,7 @@ from App.Objects.Index.ObjectsList import ObjectsList
 from App.Objects.Responses.AnyResponse import AnyResponse
 from App import app
 
-class ReloadModules(Act):
+class ReloadAll(Act):
     def _implementation(self, i):
         for namespace in app.ObjectsList.namespaces:
             namespace.unload()
