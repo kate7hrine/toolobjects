@@ -9,17 +9,7 @@ class Query(ABC):
     conditions: list[Condition] = []
     sorts: list[Sort] = []
     _limit: int = None
-    operators: ClassVar[dict] = {
-        '==': '_op_equals',
-        '!=': '_op_not_equals',
-        'in': '_op_in',
-        'not_in': '_op_not_in',
-        '<': '_op_lesser',
-        '>': '_op_greater',
-        '<=': '_op_lesser_or_equal',
-        '>=': '_op_greater_or_equal',
-        'contains': '_op_contains',
-    }
+    operators: ClassVar[list] = []
 
     @abstractmethod
     def _applyCondition(self, condition) -> Self:
@@ -27,10 +17,6 @@ class Query(ABC):
 
     @abstractmethod
     def _applySort(self, condition) -> Self:
-        ...
-
-    @abstractmethod
-    def _op_equals(self, condition: Condition):
         ...
 
     @abstractmethod
@@ -91,6 +77,13 @@ class Query(ABC):
         self._applyConditions()
         self._applySorts()
         self._applyLimits()
+
+    def __init_subclass__(cls):
+        cls._init_operators()
+
+    @classmethod
+    def _init_operators(cls):
+        pass
 
     def where_object(self, obj: Object) -> Self:
         self.addCondition(Condition(

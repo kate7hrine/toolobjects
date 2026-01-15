@@ -9,6 +9,7 @@ from App.Objects.Relations.Link import Link as CommonLink
 from App.Objects.Requirements.Requirement import Requirement
 from App.Objects.Misc.UnknownObject import UnknownObject
 from App.Objects.Misc.Increment import Increment
+from App.DB.Query.Operator import Operator
 from typing import Any, Generator, ClassVar
 from pydantic import Field
 import json
@@ -17,87 +18,6 @@ class SQLAlchemy(ConnectionAdapter):
     _engine: Any = None
     _session: Any = None
     delimiter: ClassVar[str] = '://'
-
-    class QueryAdapter(Query):
-        _model: Any = None
-        _query: Any = None
-
-        def _getComparement(self, condition: Condition):
-            from sqlalchemy import func
-
-            if condition.json_fields != None:
-                _fields = '.'.join(condition.json_fields)
-                return func.json_extract(getattr(self._model, condition.getFirst()), '$.' + _fields)
-
-            return getattr(self._model, condition.getFirst())
-
-        def _op_equals(self, condition):
-            return self._query.filter(self._getComparement(condition) == condition.getLast())
-
-        def _op_not_equals(self, condition):
-            return self._query.filter(self._getComparement(condition) != condition.getLast())
-
-        def _op_in(self, condition):
-            return self._query.filter(self._getComparement(condition).in_(condition.getLast()))
-
-        def _op_not_in(self, condition):
-            return self._query.filter(self._getComparement(condition).not_in(condition.getLast()))
-
-        def _op_lesser(self, condition):
-            return self._query.filter(self._getComparement(condition) < condition.getLast())
-
-        def _op_greater(self, condition):
-            return self._query.filter(self._getComparement(condition) > condition.getLast())
-
-        def _op_lesser_or_equal(self, condition):
-            return self._query.filter(self._getComparement(condition) <= condition.getLast())
-
-        def _op_greater_or_equal(self, condition):
-            return self._query.filter(self._getComparement(condition) >= condition.getLast())
-
-        def _op_contains(self, condition):
-            return self._query.filter(self._getComparement(condition).contains(condition.getLast()))
-
-        def _applyCondition(self, condition):
-            for key, val in self.operators.items():
-                if condition.operator == key:
-                    self._query = getattr(self, val)(condition)
-
-                    return self
-
-            self._query = getattr(self, condition.operator)(condition)
-            return self
-
-        def _applySort(self, sort: Sort):
-            from sqlalchemy import desc
-
-            if sort.descend == True:
-                self._query = self._query.order_by(self._getComparement(sort.condition))
-            else:
-                self._query = self._query.order_by(desc(self._getComparement(sort.condition)))
-
-            return self
-
-        def _applyLimits(self):
-            self._query = self._query.limit(self.getLimit())
-
-            return self._query
-
-        def first(self):
-            self._apply()
-
-            return self._query.first()
-
-        def count(self):
-            self._apply()
-
-            return self._query.count()
-
-        def getAll(self):
-            self._apply()
-
-            for item in self._query:
-                yield item
 
     # OK, its very bad code, but however
     def _get_content_column(self):
@@ -294,6 +214,118 @@ class SQLAlchemy(ConnectionAdapter):
         self_adapter.LinkAdapter = _LinkAdapter
 
         Base.metadata.create_all(self_adapter._engine)
+
+    class QueryAdapter(Query):
+        _model: Any = None
+        _query: Any = None
+
+        @classmethod
+        def _init_operators(_cls):
+            class Equals(Operator):
+                operator = '=='
+
+                def _implementation(self, query, db_query, condition):
+                    return db_query.filter(query._getComparement(condition) == condition.getLast())
+
+            class NotEquals(Operator):
+                operator = '!='
+
+                def _implementation(self, query, db_query, condition):
+                    return db_query.filter(query._getComparement(condition) != condition.getLast())
+
+            class In(Operator):
+                operator = 'in'
+
+                def _implementation(self, query, db_query, condition):
+                    return db_query.filter(query._getComparement(condition).in_(condition.getLast()))
+
+            class NotIn(Operator):
+                operator = 'not_in'
+
+                def _implementation(self, query, condition):
+                    return db_query.filter(query._getComparement(condition).not_in(condition.getLast()))
+
+            class Lesser(Operator):
+                operator = '<'
+
+                def _implementation(self, query, db_query, condition):
+                    return db_query.filter(query._getComparement(condition) < condition.getLast())
+
+            class Greater(Operator):
+                operator = '>'
+
+                def _implementation(self, query, db_query, condition):
+                    return db_query.filter(query._getComparement(condition) > condition.getLast())
+
+            class LesserOrEqual(Operator):
+                operator = '<='
+
+                def _implementation(self, query, db_query, condition):
+                    return db_query.filter(query._getComparement(condition) <= condition.getLast())
+
+            class GreaterOrEqual(Operator):
+                operator = '>='
+
+                def _implementation(self, query, db_query, condition):
+                    return db_query.filter(query._getComparement(condition) >= condition.getLast())
+
+            class Contains(Operator):
+                operator = 'contains'
+
+                def _implementation(self, query, db_query, condition):
+                    return db_query.filter(query._getComparement(condition).contains(condition.getLast()))
+
+            _cls.operators = [Equals, NotEquals, In, NotIn, Lesser, Greater, LesserOrEqual, GreaterOrEqual, Contains]
+
+        def _getComparement(self, condition: Condition):
+            from sqlalchemy import func
+
+            if condition.json_fields != None:
+                _fields = '.'.join(condition.json_fields)
+                return func.json_extract(getattr(self._model, condition.getFirst()), '$.' + _fields)
+
+            return getattr(self._model, condition.getFirst())
+
+        def _applyCondition(self, condition):
+            for val in self.operators:
+                if condition.operator == val.operator:
+                    self._query = val()._implementation(self, self._query, condition)
+
+                    return self
+
+            self._query = getattr(self, condition.operator)(condition)
+            return self
+
+        def _applySort(self, sort: Sort):
+            from sqlalchemy import desc
+
+            if sort.descend == True:
+                self._query = self._query.order_by(self._getComparement(sort.condition))
+            else:
+                self._query = self._query.order_by(desc(self._getComparement(sort.condition)))
+
+            return self
+
+        def _applyLimits(self):
+            self._query = self._query.limit(self.getLimit())
+
+            return self._query
+
+        def first(self):
+            self._apply()
+
+            return self._query.first()
+
+        def count(self):
+            self._apply()
+
+            return self._query.count()
+
+        def getAll(self):
+            self._apply()
+
+            for item in self._query:
+                yield item
 
     @classmethod
     def _requirements(cls):

@@ -10,6 +10,7 @@ from pathlib import Path
 from App.DB.Query.Condition import Condition
 from App.DB.Query.Sort import Sort
 from App.DB.Query.Query import Query
+from App.DB.Query.Operator import Operator
 import json
 
 class ObjectsList(ConnectionAdapter):
@@ -39,26 +40,36 @@ class ObjectsList(ConnectionAdapter):
 
                 return item.get(condition.getFirst(), None)
 
-            def _op_equals(self, condition):
-                _new = list()
-                for item in self._items:
-                    if self._getComparement(item, condition) == condition.getLast():
-                        _new.append(item)
+            @classmethod
+            def _init_operators(_cls):
+                class Equals(Operator):
+                    operator = '=='
 
-                return _new
+                    def _implementation(self, query, condition):
+                        _new = list()
+                        for item in self._items:
+                            if query._getComparement(item, condition) == condition.getLast():
+                                _new.append(item)
 
-            def _op_in(self, condition):
-                _new = list()
-                for item in self._items:
-                    if self._getComparement(item, condition) in condition.getLast():
-                        _new.append(item)
+                        return _new
 
-                return _new
+                class In(Operator):
+                    operator = 'in'
+
+                    def _implementation(self, query, condition):
+                        _new = list()
+                        for item in self._items:
+                            if query._getComparement(item, condition) in condition.getLast():
+                                _new.append(item)
+
+                        return _new
+
+                _cls.operators = [Equals, In]
 
             def _applyCondition(self, condition):
-                for key, val in self.operators.items():
-                    if condition.operator == key:
-                        self._items = getattr(self, val)(condition)
+                for val in self.operators:
+                    if condition.operator == val.operator:
+                        self._items = val()(self, condition)
                         return self
 
                 return self
