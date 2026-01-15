@@ -101,7 +101,7 @@ class DefaultExecutorWheel(Act):
                 orig = Object,
                 assertions = [
                     NotNone(),
-                    InputNotInValues(values=['App.Console.ConsoleView', 'App.Console.ConsoleView.ConsoleView'])
+                    InputNotInValues(values=['App.Console.Console', 'App.Console.Console.Console'])
                 ],
                 documentation = Documentation(
                     name = Key(

@@ -62,7 +62,7 @@ class App(Object):
         tmp_view.setAsCommon()
 
         self.loadObjects()
-        view_name = self.argv.get('view', 'App.Console.ConsoleView')
+        view_name = self.argv.get('view', 'App.Console.Console')
         view_class = self.objects.getByName(view_name)
         _view: View = view_class
 

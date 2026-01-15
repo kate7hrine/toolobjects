@@ -1,10 +1,10 @@
-from App.Console.ConsoleView import ConsoleView
+from App.Console.Console import Console
 from App.Objects.Responses.NoneResponse import NoneResponse
 from App.Objects.Arguments.ArgumentValues import ArgumentValues
 from App import app
 import traceback
 
-class InteractiveView(ConsoleView):
+class Interactive(Console):
     async def _implementation(self, i):
         self._auth(i)
 
