@@ -25,16 +25,30 @@ class Get(Extractor):
         self.log(f"downloading feed url: {url}")
 
         response_xml = await Feed.download(url)
+        print(response_xml)
         root = ET.fromstring(response_xml)
         _type = Feed.detect_type(root)
 
         assert _type != None, 'unknown type of feed'
 
-        channels = await _type().parse(root)
+        protocol = _type()
+        channels = protocol._get_channels(root)
+
         for channel in channels:
+            _new_time = None
+            for entry in protocol._get_entries(channel, root):
+                if _new_time == None:
+                    _new_time = entry.obj.created_at
+                else: 
+                    if entry.obj.created_at > _new_time:
+                        _new_time = entry.obj.created_at
+
+                channel.link(entry)
+
             channel.obj.set_common_source(Source(
                 obj = URL(
                     value = url
                 )
             ))
+            channel.local_obj.updated_at = _new_time
             self.append(channel)

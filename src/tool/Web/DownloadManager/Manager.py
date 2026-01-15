@@ -10,6 +10,7 @@ from Data.Types.String import String
 from pydantic import Field
 from typing import Any
 import asyncio#, aiohttp
+import ua_generator
 
 class Manager(Object):
     class DownloadManagerItems(Object):
@@ -96,6 +97,8 @@ class Manager(Object):
     def getHeaders(self) -> dict:
         _headers = Headers()
         _headers.user_agent = self.getOption("download_manager.user_agent")
+        if _headers.user_agent == None:
+            _headers.user_agent = ua_generator.generate(device='desktop', browser=['chrome', 'edge'])
 
         return _headers.to_minimal_json()
 
@@ -124,7 +127,7 @@ class Manager(Object):
             ),
             Argument(
                 name = "download_manager.user_agent",
-                default = "",
+                default = None,
                 orig = String
             ),
             Argument(

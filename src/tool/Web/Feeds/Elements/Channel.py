@@ -2,7 +2,7 @@ from App.Objects.Object import Object
 from Web.Feeds.Elements.Element import Element
 from pydantic import Field
 from typing import Optional
-import xml
+from datetime import datetime
 import xml.etree.ElementTree as ET
 
 class Channel(Element):
@@ -13,11 +13,5 @@ class Channel(Element):
     language: str | None = Field(default = None)
     ttl: int | None = Field(default = None)
 
-    @classmethod
-    def fromElement(cls, element: ET):
-        channel = cls()
-        for key in ['title', 'description', 'link', 'generator', 'copyright', 'language']:
-            if element.find(key) != None:
-                setattr(channel, key, element.find(key).text)
-
-        return channel
+    def get_original_url(self):
+        return self.obj.source[0].obj.get('value')

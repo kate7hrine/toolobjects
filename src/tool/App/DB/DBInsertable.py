@@ -83,8 +83,8 @@ class DBInsertable():
         _id = 0
         # Gets linked items from links list, _db is not set yet
         if flush_linked == True and link_current_depth < link_max_depth and hasattr(self, 'getLinkedItems'):
-            try:
-                for link in self.getLinkedItems():
+            for link in self.getLinkedItems():
+                try:
                     if link.item.hasDb():
                         self.log('flush, links: the link item is already flushed')
 
@@ -97,13 +97,14 @@ class DBInsertable():
                                     set_db = set_db,
                                     ignore_flush_hooks = ignore_flush_hooks)
 
-                    self.log('flushed link with id {0} order {1}'.format(link.getDbId(), _id))
                     if _set_db == True:
                         link.setDb(_db_item.addLink(link = link))
 
+                    self.log('flushed link with id {0} order {1}'.format(link.getDbId(), _id))
+
                     _id += 1
-            except Exception as e:
-                self.log_error(e)
+                except Exception as e:
+                    self.log_error(e)
 
         _db_item.flush_content(self)
         if _set_db == True:
@@ -136,10 +137,11 @@ class DBInsertable():
             return True
 
         self.getDb().flush_content(self)
+        if self._db._adapter.auto_commit == False:
+            self._db._adapter.commit()
 
         return True
 
-    # hookable and hooks system are too complicated so just declaring functions ^_^
     def flush_hook(self, into: Type) -> None:
         pass
 
