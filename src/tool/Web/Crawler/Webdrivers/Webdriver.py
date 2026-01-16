@@ -18,6 +18,6 @@ class Webdriver(Object):
     def get_useragent(self) -> str:
         _passed = self.getOption('web.crawler.user_agent')
         if _passed == None:
-            return ua_generator.generate(device='desktop', browser=['chrome', 'edge'])
+            return ua_generator.generate(device='desktop', browser=['chrome', 'edge']).text
 
         return _passed

@@ -5,3 +5,4 @@ from pydantic import Field
 class Sort(BaseModel):
     condition: Condition = Field()
     descend: bool = Field(default = False)
+    applied: bool = Field(default = False)

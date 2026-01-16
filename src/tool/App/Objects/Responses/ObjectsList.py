@@ -29,6 +29,9 @@ class ObjectsList(Response):
     def getCount(self) -> int:
         return len(self.items)
 
+    def getTotalCount(self) -> int:
+        return self.total_count
+
     def getItems(self) -> Generator[Object]:
         for item in self.items:
             yield item

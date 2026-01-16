@@ -80,6 +80,7 @@ class Run(View):
 
         self._register_default_routes(i)
         self._register_routes(i)
+        self._before_run(i)
 
         runner = web.AppRunner(self._app)
         await runner.setup()
@@ -110,6 +111,9 @@ class Run(View):
 
         while True:
             await asyncio.sleep(3600)
+
+    def _before_run(self, i):
+        pass
 
     def _get_random_port(self):
         return random.randint(1024, 49151)
@@ -225,7 +229,7 @@ class Run(View):
         return web.FileResponse(str(file))
 
     def _auth(self, args: dict):
-        args['auth'] = app.AuthLayer.byToken(args.get('auth'))
+        args['auth'] = self._auth_middleware(args.get('auth'))
 
         if args.get('auth') != None:
             self.log('auth as {0}'.format(args.get('auth').name))
@@ -233,6 +237,9 @@ class Run(View):
             return args.get('auth')
         else:
             pass
+
+    def _auth_middleware(self, token: str):
+        return app.AuthLayer.byToken(token)
 
     async def _call_shortcut(self, pre_i, args: dict, event_index: int, on_event: Optional[Coroutine] = None):
         _json = JSON(data = {})

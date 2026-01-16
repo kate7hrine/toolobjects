@@ -62,7 +62,7 @@ class Query(ABC):
             item.applied = True
 
     def _applySorts(self) -> Self:
-        for item in self.conditions:
+        for item in self.sorts:
             if item.applied == True:
                 continue
 

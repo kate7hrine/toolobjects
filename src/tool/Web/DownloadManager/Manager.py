@@ -98,7 +98,7 @@ class Manager(Object):
         _headers = Headers()
         _headers.user_agent = self.getOption("download_manager.user_agent")
         if _headers.user_agent == None:
-            _headers.user_agent = ua_generator.generate(device='desktop', browser=['chrome', 'edge'])
+            _headers.user_agent = ua_generator.generate(device='desktop', browser=['chrome', 'edge']).text
 
         return _headers.to_minimal_json()
 

@@ -34,14 +34,20 @@ class StorageUUID(Object):
         if isinstance(string, str) == False:
             return False
 
-        return len(string.split('_')) == 2
+        _vals = string.split('_')
+        try:
+            _int = int(_vals[-1])
+
+            return True
+        except Exception:
+            return False
 
     @classmethod
     def fromString(cls, string: str) -> Self:
-        _ids = string.split('_', 1)
+        _ids = string.split('_')
         return cls(
-            storage = _ids[0],
-            uuid = _ids[1]
+            storage = '_'.join(_ids[:-1]),
+            uuid = _ids[-1]
         )
 
     def getId(self):

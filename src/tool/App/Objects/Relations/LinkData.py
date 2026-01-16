@@ -10,14 +10,14 @@ class LinkData(BaseModel, DBInsertable):
     @computed_field
     @property
     def is_common(self) -> bool:
-        return 'common' in self.data.role
+        return 'common' in self.role
 
     @computed_field
     @property
     def is_internal(self) -> bool:
-        return 'external' not in self.data.role
+        return 'external' not in self.role
 
     @computed_field
     @property
     def is_external(self) -> bool:
-        return 'external' in self.data.role
+        return 'external' in self.role
