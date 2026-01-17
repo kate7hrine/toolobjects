@@ -1,0 +1,37 @@
+from App.Objects.Extractor import Extractor
+from App.Objects.Arguments.ArgumentDict import ArgumentDict
+from App.Objects.Arguments.Assertions.NotNone import NotNone
+from App.Objects.Arguments.Argument import Argument
+from App.Storage.StorageUnit import StorageUnit
+from Media.Images.Image import Image
+from Data.Types.String import String
+from pathlib import Path
+from App import app
+import shutil
+
+class ByPath(Extractor):
+    @classmethod
+    def _arguments(cls) -> ArgumentDict:
+        return ArgumentDict(items = [
+            Argument(
+                name = 'path',
+                orig = String,
+                assertions = [NotNone()]
+            )
+        ])
+
+    async def _implementation(self, i):
+        _path = Path(i.get('path'))
+        assert _path.is_dir() == False, 'is dir'
+        assert _path.exists() == True, 'not exists'
+
+        _unit = app.Storage.get('tmp').get_storage_adapter().get_storage_unit()
+        _new_dir = _unit.get_root()
+        shutil.copy(str(_path), str(_new_dir))
+        _new_file = _new_dir.joinpath(_path.name)
+
+        _unit.setCommonFile(_new_file)
+        image = Image()
+        image.set_storage_unit(_unit)
+
+        self.append(image)

@@ -66,8 +66,13 @@ class Wheel(Executable):
             decl = ArgumentValues(compare = item.item.getArguments(), values = values.getValues())
             _vals.append(decl.diff())
 
+        # Find more compare values
         for id, item in enumerate(_vals):
             if item > max_value:
                 max_index, max_value = id, item
+
+        # If nothing found
+        if max_value == 0:
+            return None
 
         return items[max_index]

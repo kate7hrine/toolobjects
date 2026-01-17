@@ -3,6 +3,7 @@ from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Arguments.Argument import Argument
 from App.Storage.StorageUnit import StorageUnit
+from Media.Images.Image import Image
 
 class ByStorageUnit(Extractor):
     @classmethod
@@ -13,18 +14,11 @@ class ByStorageUnit(Extractor):
                 by_id = True,
                 orig = StorageUnit,
                 assertions = [NotNone()]
-            ),
-            Argument(
-                name = 'list',
-                by_id = True,
-                orig = Collection
-            ),
-            Argument(
-                name = 'make_thumbnail',
-                default = False,
-                orig = Boolean
             )
         ])
 
     async def _implementation(self, i):
-        pass
+        image = Image()
+        image.set_storage_unit(i.get('storage_unit'))
+
+        self.append(image)

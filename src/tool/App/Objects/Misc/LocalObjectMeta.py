@@ -1,12 +1,14 @@
 from pydantic import Field
 from App.Objects.Mixins.Model import Model
-from .SavedVia import SavedVia
+from App.Objects.Misc.SavedVia import SavedVia
+from App.Objects.Misc.Thumbnail import Thumbnail
 from typing import Optional
 from datetime import datetime
-from .Thumbnail import Thumbnail
+from App.Objects.Relations.Link import Link
 
 class LocalObjectMeta(Model):
     saved_via: Optional[list[SavedVia]] = Field(default = [])
+    links: list[Link] = Field(default=[], exclude = True, repr = False)
 
     name: Optional[str] = Field(default=None)
     description: Optional[str] = Field(default=None)

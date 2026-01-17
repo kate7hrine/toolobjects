@@ -16,7 +16,8 @@ class Model(PydanticBaseModel):
         'only_class_fields': False,
         'exclude_none': False,
         'exclude_defaults': False,
-        'by_alias': False
+        'by_alias': False,
+        'exclude_that_excluded': True,
     }
 
     # we can't use __init__ because of fields initialization, so we creating second constructor
@@ -135,7 +136,7 @@ class Model(PydanticBaseModel):
         include_extra: include "model_computed_fields"
         '''
 
-        excludes = ['internal_toolobjects_link_items']
+        excludes = ['links']
         if exclude_internal == True:
             for _exclude in self._internal_fields:
                 excludes.append(_exclude)
@@ -215,9 +216,15 @@ class Model(PydanticBaseModel):
 
                 if field_name in self.__class__.model_fields:
                     _val_key = self.__class__.model_fields.get(field_name)
+                    _exclude = getattr(_val_key, 'exclude', None)
 
                     if getattr(_val_key, 'alias', None) != None and Model._dump_options.get('by_alias') == True:
                         field_name_key = _val_key.alias
+
+                    if Model._dump_options.get('exclude_that_excluded'):
+                        if _exclude == True:
+                            continue
+
                 try:
                     if Model._dump_options['excludes'] != None and field_name in Model._dump_options['excludes']:
                         continue
@@ -226,7 +233,6 @@ class Model(PydanticBaseModel):
                         continue
 
                     value = getattr(self, field_name)
-                    _field_name = None
                     _res = None
 
                     if isinstance(value, LinkInsertion):
