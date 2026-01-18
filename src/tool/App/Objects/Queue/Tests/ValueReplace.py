@@ -21,7 +21,7 @@ class ValueReplace(Test):
             }],
             items = [
                 {
-                    'predicate': 'Data.Random.GetRandomInt',
+                    'predicate': 'Data.Random.GetInt',
                     'arguments': {
                         'min': 0,
                         'max': 62
