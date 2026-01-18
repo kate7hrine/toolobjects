@@ -94,6 +94,10 @@ class LoadedObject(NameContainable):
         except TypeError:
             raise NotAnObjectError(f"{module_name} is not a class")
 
+        if getattr(common_object, 'is_migration', False) == True:
+            if common_object._getName() != common_object.migrated_to:
+                return common_object.get_migrated_to()
+
         return common_object
 
     def unloadModule(self):
