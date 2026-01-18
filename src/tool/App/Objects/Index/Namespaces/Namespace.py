@@ -22,7 +22,7 @@ class Namespace(Object):
     load_before: list = Field(default = [])
     load_after: list = Field(default = [])
     ignore_dirs: list = Field(default = [])
-    load_once: bool = Field(default = True)
+    load_once: bool = Field(default = False)
     load_submodules: bool = Field(default = True)
 
     items: DictList = Field(default = None)
