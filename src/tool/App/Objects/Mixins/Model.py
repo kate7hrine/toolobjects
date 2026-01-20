@@ -102,9 +102,10 @@ class Model(PydanticBaseModel):
     @classmethod
     def _allowed_views(cls) -> list:
         '''
-        Get View classes where. if None > allowed everywhere
+        Views where object can be executed. If zero > will be available everywhere
         '''
-        return None
+
+        return cls.getSubmodules(with_role = ['allowed_view'])
 
     def to_minimal_json(self):
         return self.to_json(only_class_fields=True, by_alias=True, exclude_defaults = True)
@@ -199,7 +200,6 @@ class Model(PydanticBaseModel):
         Function for json convertation. It exists because we need to convert LinkInsertions
         '''
 
-        # ???
         result = dict()
         _field_names = list()
         _defaults = dict()

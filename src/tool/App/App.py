@@ -8,6 +8,7 @@ from pathlib import Path
 from pydantic import ConfigDict
 from typing import Any
 from importlib.metadata import distributions
+from App import app
 import queue
 import asyncio
 import threading
@@ -63,7 +64,7 @@ class App(Object):
 
         self.loadObjects()
         view_name = self.argv.get('view', 'App.Console.Console')
-        view_class = self.objects.getByName(view_name)
+        view_class = app.ObjectsList.getByName(view_name)
         _view: View = view_class
 
         assert _view != None, 'no such view'
