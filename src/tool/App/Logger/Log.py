@@ -1,5 +1,5 @@
 from App.Objects.Object import Object
-from . import LogSection, LogPrefix
+from App.Logger import LogSection, LogPrefix
 from pydantic import Field
 from datetime import datetime
 from typing import Literal, Any
@@ -32,7 +32,13 @@ class Log(Object):
 
         parts.append(self.ConsoleColors.section + self.section.toString() + RESET)
         if self.prefix != None:
-            parts.append(self.ConsoleColors.prefix + self.prefix.toString() + RESET)
+            prefix_string = None
+            try:
+                prefix_string = self.prefix.toString()
+            except AttributeError:
+                prefix_string = LogPrefix.LogPrefix.model_validate(self.prefix).toString()
+            finally:
+                parts.append(self.ConsoleColors.prefix + prefix_string + RESET)
 
         if show_role == True:
             if len(self.role) > 0:

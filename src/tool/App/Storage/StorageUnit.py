@@ -109,7 +109,5 @@ class StorageUnit(Object):
     def isIndexed(self) -> bool:
         return len(self.files) > 0
 
-    def save(self):
+    def save_hook(self):
         self.files = list(self.genFilesList())
-
-        return super().save()

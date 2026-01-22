@@ -11,7 +11,7 @@ from typing import ClassVar
 from pydantic import ConfigDict
 from App import app
 
-class Object(BaseModel, 
+class Object(BaseModel,
              Linkable,
              ModuleRequireable, 
              Submodulable, 
@@ -48,3 +48,14 @@ class Object(BaseModel,
 
     def asArgumentAsInstance(self, val: str) -> BaseModel:
         return self.asArgument(val)
+
+    @property
+    def append_prefix(self):
+        ids = 0
+        if self.hasDb():
+            ids = self.getDbIds()
+
+        return {
+            'name': 'uuid',
+            'id': ids
+        }
