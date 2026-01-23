@@ -57,7 +57,7 @@ class App(Object):
         '''
         Firstly it creates temp view that allows to mount globals without errors.
         Then it loads ObjectsList. Then it finds needed view and sets is as a common. Then it executes the action of this view.
-        The globals are left cuz they are mounted to Wrap.
+        The globals are left because they have been mounted to Wrap.
         '''
         tmp_view = View(app = self)
         tmp_view.setAsCommon()
@@ -78,45 +78,32 @@ class App(Object):
         return view
 
     def loadObjects(self):
+        load_before = list()
+        load_after = list()
+        for path_name in ['App\\Config\\Config.py', 'App\\Logger\\Logger.py']:
+            load_before.append(LoadedObject(
+                path = path_name
+            ))
+
+        for path_name in ['App\\Objects\\Index\\ObjectsList.py',
+                     'App\\Objects\\Threads\\ThreadsList.py',
+                     'App\\Storage\\Storage.py',
+                     'App\\ACL\\AuthLayer.py',
+                     'Web\\DownloadManager\\Manager.py',
+                     'App\\Objects\\Autostart\\List.py',
+                     'App\\Locale\\Locales.py',
+                     'App\\Objects\\Index\\PostRun.py']:
+            load_after.append(LoadedObject(
+                path = path_name
+            ))
+
         self.objects = Namespace(
             name = 'common',
             root = str(self.cwd),
             load_once = False,
             ignore_dirs = ['Custom'],
-            load_before = [
-                LoadedObject(
-                    path = 'App\\Config\\Config.py'
-                ),
-                LoadedObject(
-                    path = 'App\\Logger\\Logger.py'
-                )
-            ],
-            load_after = [
-                LoadedObject(
-                    path = 'App\\Objects\\Index\\ObjectsList.py'
-                ),
-                LoadedObject(
-                    path = 'App\\Objects\\Threads\\ThreadsList.py'
-                ),
-                LoadedObject(
-                    path = 'App\\Storage\\Storage.py'
-                ),
-                LoadedObject(
-                    path = 'App\\ACL\\AuthLayer.py'
-                ),
-                LoadedObject(
-                    path = 'Web\\DownloadManager\\Manager.py'
-                ),
-                LoadedObject(
-                    path = 'App\\Objects\\Index\\PostRun.py'
-                ),
-                LoadedObject(
-                    path = 'App\\Objects\\Autostart\\List.py'
-                ),
-                LoadedObject(
-                    path = 'App\\Locale\\Locales.py'
-                )
-            ]
+            load_before = load_before,
+            load_after = load_after
         )
         self.objects.load()
 
@@ -155,7 +142,7 @@ class App(Object):
                     else:
                         _key_dict = 'args'
 
-                        # Arguments like part1.part2 are incorrectly parsed by shell. User may pass argument with two dashes, but it won't be recognized by arguments validator. So if it starts with two dashes and not recognized as config override, it will remove first dash character
+                        # Arguments like part1.part2 are incorrectly parsed by shell when there is a single dash. User may pass argument with two dashes, but it won't be recognized by arguments validator. So if it starts with two dashes and not recognized as config override, it will remove first dash character
                         if _key[0] == '-':
                             _key = _key[1:]
             else:

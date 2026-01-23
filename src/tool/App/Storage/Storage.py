@@ -41,6 +41,8 @@ class Storage(Object):
                 self.log_error(e)
 
         default_items = [
+            # Some types of objects
+
             StorageItem(
                 name = 'common',
                 db_type = 'App.DB.Adapters.SQLite',
@@ -54,6 +56,9 @@ class Storage(Object):
                     'check_same_thread': False
                 }
             ),
+
+            # App usage
+
             StorageItem(
                 name = 'logs',
                 allowed_objects = ['App.Logger.Log'],
@@ -69,6 +74,12 @@ class Storage(Object):
                 name = 'users',
                 db_type = 'App.DB.Adapters.SQLite',
                 allowed_objects = ['App.ACL.User', 'App.ACL.Tokens.Token', 'App.ACL.Permissions.Permission'],
+                db = {}
+            ),
+            StorageItem(
+                name = 'scheduled_tasks',
+                db_type = 'App.DB.Adapters.SQLite',
+                allowed_objects = ['App.Objects.ScheduledTasks.Task'],
                 db = {}
             )
         ]

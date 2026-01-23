@@ -30,31 +30,28 @@ class List(Object):
         _pre_i = pre_i()
 
         for item in self.items:
-            if item.unused:
+            if item.deactivated:
                 continue
 
             try:
-                _copied = item.args.copy()
-                if _copied.get('auth') == 'root' and as_root:
-                    _copied['auth'] = app.AuthLayer.getUserByName('root')
-                else:
-                    _copied['auth'] = app.AuthLayer.byToken(_copied.get('auth'))
-
-                thread = ExecutionThread(id = -1)
-                thread.set_name('autostart_item ' + str(_iterator))
-                thread.set(_pre_i.execute(_copied))
-
-                app.ThreadsList.add(thread)
+                item.run(_pre_i, 'autostart_item ' + str(_iterator), as_root)
 
                 _iterator += 1
             except Exception as e:
                 self.log_error(e)
+
+                item.end()
 
     @classmethod
     def _settings(cls):
         return [
             Argument(
                 name = 'app.autostart.as_root',
+                default = False,
+                orig = Boolean
+            ),
+            Argument(
+                name = 'app.scheduled_tasks.as_root',
                 default = False,
                 orig = Boolean
             ),

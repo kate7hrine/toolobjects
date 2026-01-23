@@ -8,8 +8,8 @@ Experimental framework that provides object system.
 * Objects
 * Links
 * ObjectsList + Namespaces
-* Executables
 * Validation
+* Executables
 * Config
 * Storage
 * Logger
@@ -38,7 +38,7 @@ Experimental framework that provides object system.
 * VirtualPath, Explorer
 * Data.Types
 * Data.Collections
-* Media.Images.Download
+* Media.Get
 * Web.Feeds
 * Web.Pages
 * Namespaces installation
