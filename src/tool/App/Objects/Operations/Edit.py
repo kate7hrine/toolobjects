@@ -52,4 +52,5 @@ class Edit(Act):
                 _link = getattr(_link, key, None)
 
         if i.get('update') == True:
+            _obj.local_obj.set_edited()
             _obj.save()

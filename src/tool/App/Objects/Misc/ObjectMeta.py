@@ -22,7 +22,7 @@ class ObjectMeta(Model):
     updated_at: Optional[datetime] = Field(default=None)
 
     # other fields
-    geo: Optional[Geo] = Field(default = None) # Why?????? Why not
+    geo: Optional[list[Geo]] = Field(default = None) # Why?????? Why not
     width: Optional[float] = Field(default = None)
     height: Optional[float] = Field(default = None)
     duration: Optional[float] = Field(default = None)
