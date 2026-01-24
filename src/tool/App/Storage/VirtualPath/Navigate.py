@@ -36,5 +36,6 @@ class Navigate(ExplorerProtocol):
         _vals.update(i.values)
 
         _vals['storage'] = path.get_root().name
+        _vals['public'] = True
 
         return await Search().execute(_vals)

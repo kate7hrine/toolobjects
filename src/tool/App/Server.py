@@ -70,12 +70,12 @@ class Server(View):
             Argument(
                 name = 'port',
                 orig = String,
-                default = False
+                default = None
             ),
             Argument(
                 name = 'host',
                 orig = String,
-                default = False
+                default = None
             )
         ])
 
@@ -160,8 +160,13 @@ class Server(View):
 
         return ip
 
-    def _register_routes(self, i):
+    def _getCustomRoutes(self):
         pass
+
+    def _register_routes(self, i):
+        for route in self._getCustomRoutes():
+            for add_type in route[2]:
+                getattr(self._app.router, 'add_' + add_type)(route[0], route[1])
 
     def _register_default_routes(self, i):
         for route in [
@@ -172,7 +177,7 @@ class Server(View):
             ('/rpc', self._ws, 'get'),
             ('/api/upload/{storage}', self._upload_storage_unit, 'post'),
         ]:
-            getattr(self._app.router, 'add_' + route[2])(route[0], route[1])#(route[0], getattr(self, route[1]))
+            getattr(self._app.router, 'add_' + route[2])(route[0], route[1])
 
     def _index(self, request):
         return web.Response(
@@ -188,7 +193,7 @@ class Server(View):
         )
 
     def _get_asset(self, request):
-        _user = self._auth(dict(request.rel_url.query))
+        _user = self._auth(dict(request.rel_url.query), request)
         if _user == None:
             raise web.HTTPForbidden(reason="access denied")
 
@@ -207,11 +212,14 @@ class Server(View):
 
         self.log(_msg)
 
-        return web.FileResponse(static_file)
+        _response = web.FileResponse(static_file)
+        _response.headers['Cache-Control'] = 'max-age=0'
+
+        return _response
 
     def _get_storage_unit(self, request):
         if self.protect_storage_units == True:
-            _user = self._auth(dict(request.rel_url.query))
+            _user = self._auth(dict(request.rel_url.query), request)
             if _user == None:
                 raise web.HTTPForbidden(reason="access denied")
 
@@ -253,7 +261,7 @@ class Server(View):
 
         return web.FileResponse(str(file))
 
-    def _auth(self, args: dict):
+    def _auth(self, args: dict, request = None):
         args['auth'] = self._auth_middleware(args.get('auth'))
 
         if args.get('auth') != None:
@@ -354,7 +362,7 @@ class Server(View):
         _old_auth = request.rel_url.query.get('auth')
         _save_name = request.rel_url.query.get('save_name')
         _i_after = request.rel_url.query.get('i_after')
-        _user = self._auth(dict(request.rel_url.query))
+        _user = self._auth(dict(request.rel_url.query), request)
 
         if _user == None:
             raise web.HTTPForbidden(reason="access denied")

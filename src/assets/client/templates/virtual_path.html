@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+Browse
+{% endblock %}
+
+{% block body %}
+    <div id='storages'>
+        {% for item in items.getItems() %}
+            <div>
+                <a href="">
+                    <span>{{ item.obj.name or 'Untitled' }}</span>
+                    <span class="object_name">{{ item.obj.saved_via.object_name }}</span>
+                </a>
+
+                <a href="?i=App.Storage.VirtualPath.Navigate&path={{ path + '/' + item.getDbId(True) }}/">
+                    (linked)
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

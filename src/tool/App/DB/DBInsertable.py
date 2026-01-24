@@ -36,7 +36,10 @@ class DBInsertable():
 
         return self._db
 
-    def getDbId(self):
+    def getDbId(self, as_str: bool = False):
+        if as_str:
+            return str(self._db.uuid)
+
         return self._db.uuid
 
     def getDbName(self):

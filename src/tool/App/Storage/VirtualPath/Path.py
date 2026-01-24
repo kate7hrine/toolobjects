@@ -16,7 +16,7 @@ class Path(Object):
 
         _paths = _root_and_other[1]
         if len(_paths) > 0:
-            for item in _paths.split(_path.divider):
+            for item in _paths[1:].split(_path.divider):
                 _path.parts.append(item)
 
         return _path
@@ -45,11 +45,11 @@ class Path(Object):
         for part in self.parts:
             if len(part) == 0:
                 return {
-                    'linked_to': root_name + '_' + cursor
+                    'linked_to': root_name + '_' + str(cursor)
                 }
 
             cursor = part
 
         return {
-            'uuids': [root_name + '_' + cursor]
+            'uuids': [root_name + '_' + str(cursor)]
         }
