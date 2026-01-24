@@ -2,6 +2,7 @@ from App.Objects.Executable import Executable
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App.Objects.Object import Object
 from App.Objects.Arguments.Variable import Variable
+from typing import Generator
 import asyncio
 
 class Extractor(Executable):
@@ -28,6 +29,10 @@ class Extractor(Executable):
     def append(self, out: Object):
         self._instance_variables.get('items').value.append(out)
         self.trigger_variables()
+
+    def get_items(self) -> Generator[Object]:
+        for item in self._instance_variables.get('items').value:
+            yield item
 
     def set_total_count(self, count: int):
         self._instance_variables.get('items').value.total_count = count

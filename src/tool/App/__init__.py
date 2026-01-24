@@ -17,7 +17,7 @@ class _Wrap:
                 self.Logger.log("{0} already mounted".format(name), role = ['objects.loading', 'objects_mounting'])
                 return
 
-            self.Logger.log(msg, role = ['objects.loading', 'objects_mounting'])
+            self.Logger.log(msg, section = ['App', 'Globals'], role = ['objects.loading', 'objects_mounting'])
         except:
             pass
 
