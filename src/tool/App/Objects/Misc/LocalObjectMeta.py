@@ -10,6 +10,7 @@ from App.Objects.Misc.Geo import Geo
 class LocalObjectMeta(Model):
     saved_via: Optional[list[SavedVia]] = Field(default = [])
     links: list[Link] = Field(default=[], exclude = True, repr = False)
+    dynamic_links: bool = Field(default = False)
 
     name: Optional[str] = Field(default=None)
     description: Optional[str] = Field(default=None)
