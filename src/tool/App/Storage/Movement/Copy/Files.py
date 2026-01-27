@@ -1,7 +1,7 @@
 from App.Objects.Act import Act
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.LiteralArgument import LiteralArgument
+from App.Objects.Arguments.AllowedValues import AllowedValues
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App.Objects.Arguments.Assertions.NotNone import NotNone
 from Data.Types.String import String
@@ -22,8 +22,11 @@ class Files(Act):
                 orig = String,
                 assertions = [NotNone()]
             ),
-            LiteralArgument(
-                values = ['{0}.{1}', '{0}_{2}.{1}', '{0}_{3}.{1}'],
+            Argument(
+                allowed_values = AllowedValues(
+                    values = ['{0}.{1}', '{0}_{2}.{1}', '{0}_{3}.{1}'],
+                    strict = False
+                ),
                 strict = False,
                 name = 'save_format',
                 orig = String,

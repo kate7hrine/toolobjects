@@ -1,6 +1,7 @@
 from App.Objects.Act import Act
+from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
-from App.Objects.Arguments.LiteralArgument import LiteralArgument
+from App.Objects.Arguments.AllowedValues import AllowedValues
 from Web.Crawler.Webdrivers.Chromedriver.Chromedriver import Chromedriver
 from Web.Crawler.Webdrivers.Chromedriver.Add import Add
 from Data.Types.String import String
@@ -12,11 +13,13 @@ class Download(Act):
     @classmethod
     def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
-            LiteralArgument(
+            Argument(
                 name = 'channel',
-                values = ['Stable', 'Beta', 'Canary', 'Dev'],
+                allowed_values = AllowedValues(
+                    values = ['Stable', 'Beta', 'Canary', 'Dev'],
+                    strict = True,
+                ),
                 orig = String,
-                strict = True,
                 default = 'Stable'
             )
         ])

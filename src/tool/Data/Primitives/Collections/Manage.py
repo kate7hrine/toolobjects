@@ -2,7 +2,7 @@ from App.Objects.Act import Act
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ListArgument import ListArgument
-from App.Objects.Arguments.LiteralArgument import LiteralArgument
+from App.Objects.Arguments.AllowedValues import AllowedValues
 from App.Objects.Arguments.Assertions.NotNone import NotNone
 from Data.Primitives.Collections.Collection import Collection
 from App.Objects.Object import Object
@@ -24,10 +24,12 @@ class Manage(Act):
                 by_id = True,
                 assertions = [NotNone()]
             ),
-            LiteralArgument(
+            Argument(
                 name = 'act',
-                values = ['add', 'remove'],
-                strict = True,
+                allowed_values = AllowedValues(
+                    values = ['add', 'remove'],
+                    strict = True,
+                ),
                 default = 'add',
                 orig = String
             )

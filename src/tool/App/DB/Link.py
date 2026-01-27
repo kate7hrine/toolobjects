@@ -3,7 +3,7 @@ from Data.Types.Int import Int
 from Data.Types.String import String
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.LiteralArgument import LiteralArgument
+from App.Objects.Arguments.AllowedValues import AllowedValues
 from App.Objects.Arguments.ListArgument import ListArgument
 from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Storage.StorageUUID import StorageUUID
@@ -23,11 +23,14 @@ class Link(Act):
                 assertions = [NotNone()],
                 default = []
             ),
-            LiteralArgument(
+            Argument(
                 name = 'act',
                 default = 'link',
                 orig = String,
-                values = ['link', 'unlink']
+                values = AllowedValues(
+                    values = ['link', 'unlink'],
+                    strict = True
+                )
             ),
             ListArgument(
                 name = 'role',

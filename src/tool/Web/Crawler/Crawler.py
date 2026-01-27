@@ -12,7 +12,6 @@ from urllib.parse import urlparse
 from pydantic import Field
 import asyncio
 
-
 class Crawler(Object):
     webdriver: Webdriver = Field(default = None)
     url_override: str = Field(default = None)
