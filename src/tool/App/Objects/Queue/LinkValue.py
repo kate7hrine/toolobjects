@@ -1,6 +1,9 @@
 from App.Objects.Object import Object
 from pydantic import Field
 
+class LinkValueError(Exception):
+    pass
+
 class LinkValue(Object):
     value: str = Field()
 
@@ -36,7 +39,7 @@ class LinkValue(Object):
                 self.log(f"str {i}: {item} is link to prestart")
 
                 applied_parts.append(prestart[ids])
-            if type(prev) == dict:
+            elif type(prev) == dict:
                 self.log(f"str {i}: {item} is a key")
 
                 applied_parts.append(prev[item])
@@ -52,6 +55,8 @@ class LinkValue(Object):
                 self.log(f"str {i}: {item} is a key to object")
 
                 applied_parts.append(getattr(prev, item))
+            else:
+                raise LinkValueError("{0} is a probaly wrong value".format(str(item)))
 
         self.log(f"{_items} >>> *")
 

@@ -3,6 +3,7 @@ from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Queue.Queue import Queue
 from App.ACL.User import User
+from Data.Types.Boolean import Boolean
 
 class Run(Act):
     @classmethod
@@ -16,8 +17,14 @@ class Run(Act):
             Argument(
                 name = 'auth',
                 orig = User
+            ),
+            Argument(
+                name = 'prestart_from_args',
+                orig = Boolean,
+                default = True
             )
-        ])
+        ],
+        missing_args_inclusion = True)
 
     async def _implementation(self, i):
-        return await i.get('queue').run(i.get('auth'))
+        return await i.get('queue').run(i)

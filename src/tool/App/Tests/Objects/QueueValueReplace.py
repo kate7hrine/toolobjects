@@ -3,7 +3,7 @@ from App.Objects.Queue.Run import Run
 from App.Objects.Queue.Queue import Queue
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 
-class ValueReplace(Test):
+class QueueValueReplace(Test):
     @classmethod
     def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(missing_args_inclusion=True)
@@ -16,7 +16,7 @@ class ValueReplace(Test):
                 'predicate': 'Data.Types.Int',
                 'build': {
                     'name': 'random',
-                    'current': 0
+                    'inputs': 0
                 }
             }],
             items = [
@@ -39,27 +39,28 @@ class ValueReplace(Test):
                     }
                 },
                 {
-                    'predicate': 'App.Storage.Movement.Save',
-                    'arguments': {
-                        'storage': ['tmp'],
-                        'items': {
-                            'direct_value': '#0'
-                        }
-                    }
-                },
-                {
                     'predicate': 'Web.URL',
                     'build': {
                         'value': {
                             'value': 'https://i.ibb.co/rG42gtzg/image.png?v=',
                             'replacements': [{
                                 'position': (38, 39),
-                                'value': '#0.items.0.value'
+                                'value': '$0.arg_value'
                             }]
                         }
                     },
                     'arguments': {
-                        'force_flush': True
+                        'force_flush': True,
+                        'do_save': False
+                    }
+                },
+                {
+                    'predicate': 'Media.Get',
+                    'arguments': {
+                        'url': {
+                            'direct_value': '#2.items.0.value'
+                        },
+                        'object': 'Media.Images.Image'
                     }
                 }
             ],
@@ -73,5 +74,6 @@ class ValueReplace(Test):
 
         return await Run().execute({
             'queue': queue,
-            'auth': i.get('auth')
+            'auth': i.get('auth'),
+            'random': i.get('random')
         })
