@@ -33,16 +33,6 @@ class ObjectsList(ConnectionAdapter):
             _list_name: str = None
             _items: list = []
 
-            def _getComparement(self, item: dict, condition: Condition):
-                if condition.json_fields != None:
-                    _field = item.get(condition.getFirst())
-                    for field in condition.json_fields:
-                        _field = getattr(_field, field)
-
-                    return _field
-
-                return item.get(condition.getFirst(), None)
-
             @classmethod
             def _init_operators(_cls):
                 class Equals(Operator):
@@ -50,8 +40,8 @@ class ObjectsList(ConnectionAdapter):
 
                     def _implementation(self, query, condition):
                         _new = list()
-                        for item in self._items:
-                            if query._getComparement(item, condition) == condition.getLast():
+                        for item in query._items:
+                            if query._get_part(condition) == condition.getLast():
                                 _new.append(item)
 
                         return _new
@@ -61,18 +51,21 @@ class ObjectsList(ConnectionAdapter):
 
                     def _implementation(self, query, condition):
                         _new = list()
-                        for item in self._items:
-                            if query._getComparement(item, condition) in condition.getLast():
+                        for item in query._items:
+                            if query._get_part(condition) in condition.getLast():
                                 _new.append(item)
 
                         return _new
 
                 _cls.operators = [Equals, In]
 
+            def _json_value(self, item):
+                return item
+
             def _applyCondition(self, condition):
                 for val in self.operators:
                     if condition.operator == val.operator:
-                        self._items = val()(self, condition)
+                        self._items = val()._implementation(self, condition)
                         return self
 
                 return self

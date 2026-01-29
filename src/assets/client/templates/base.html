@@ -8,10 +8,11 @@
 </head>
 <body>
     <div id="content">
-        <div>
-            <a href="/"><b>{{ app_name }}</b></a>
-            <a href="javascript:history.back()"><</a>
-        </div>
+        {% if app_name %}
+            <div>
+                <a href="/"><b>{{ app_name }}</b></a>
+            </div>
+        {% endif %}
 
         {% if error %}
             <div id="error">

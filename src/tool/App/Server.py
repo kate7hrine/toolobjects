@@ -65,40 +65,28 @@ class Server(View):
             Argument(
                 name = 'ignore_autostart',
                 orig = Boolean,
-                default = False
+                default = False,
             ),
             Argument(
                 name = 'port',
                 orig = String,
-                default = None
+                default = None,
+                config_fallback = ('web.options.port', False)
             ),
             Argument(
                 name = 'host',
                 orig = String,
-                default = None
+                default = None,
+                config_fallback = ('web.options.host', False)
             )
         ])
 
-    def _get_host(self, i):
+    async def _implementation(self, i):
         _host = i.get('host')
-        if _host == None:
-            _host = self.getOption("web.options.host")
-
-        return _host
-
-    def _get_port(self, i):
         _port = i.get('port')
-        if _port == None:
-            _port = self.getOption("web.options.port")
         if _port == None:
             self.log('port is not passed anywhere, so it will be chosen randomly')
             _port = self._get_random_port()
-
-        return _port
-
-    async def _implementation(self, i):
-        _host = self._get_host(i)
-        _port = self._get_port(i)
 
         self._app = web.Application()
         self._pre_i = i.get('pre_i')
@@ -130,10 +118,10 @@ class Server(View):
         _http = 'http://'
         self._host = '{0}{1}:{2}'.format(_http, self._get_ip(_host), _port)
 
-        self.log("Started server on {0}".format(self._host))
-
         if i.get('ignore_autostart') == False:
             asyncio.create_task(app.Autostart.start_them(i.get('pre_i')))
+
+        self.log("Started server on {0}".format(self._host))
 
         while True:
             await asyncio.sleep(3600)
@@ -184,9 +172,7 @@ class Server(View):
             text =
             """
             <html>
-                <body>
-                    <b>Index page</b>
-                </body>
+                <body></body>
             </html>
             """,
             content_type = 'text/html'
