@@ -45,10 +45,19 @@ class FileType(Object):
             insertion = _lnk.toInsert()
         )
 
-    def get_url(self) -> str:
-        _file = self.get_file()
-        if _file != None:
-            return _file.getPath()
+    def get_url(self, from_server: bool = False) -> str:
+        if from_server == False:
+            _s = self.get_file()
+            if _s != None:
+                return _s.getPath()
+        else:
+            _f = None
+            if self.storage_unit != None:
+                self.storage_unit.setDb(self.getDb())
+                _f = self.storage_unit.get_storage_unit()
+
+            if _f != None:
+                return _f.get_common_file_url()
 
         _common_source = self.obj.get_common_source()
         if _common_source == None or _common_source.obj.isInstance(URL) == False:

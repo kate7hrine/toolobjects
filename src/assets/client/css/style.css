@@ -13,6 +13,15 @@
     padding: 3px 7px;
 }
 
+#upper_bar {
+    width: 100%;
+    height: 25px;
+    left: 0;
+    position: absolute;
+    z-index: -1;
+    background: #dfdddd87;
+}
+
 #upper #upper_menu {
     display: flex;
     justify-content: space-between;
@@ -30,4 +39,23 @@
 #special_message {
     border-bottom: 1px solid #eadfdf;
     padding: 1px 1px 5px 1px;
+}
+
+#floating_menu {
+    position: fixed;
+    right: 0;
+    opacity: 0.05;
+    transition: opacity 200ms ease-in-out;
+}
+
+#floating_menu:hover {
+    opacity: 1;
+}
+
+textarea {
+    width: 100%;
+}
+
+textarea.heighted {
+    height: 100px;
 }

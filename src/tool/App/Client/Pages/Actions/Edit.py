@@ -1,0 +1,28 @@
+from App.Client.Displayment import Displayment
+from App.Objects.Operations.Edit.Local import Local as LocalEdit
+import aiohttp_jinja2
+import aiohttp
+
+class Edit(Displayment):
+    for_object = 'App.Objects.Operations.Edit.Local'
+
+    async def render_as_page(self, request, context):
+        query = request.rel_url.query
+        vals = await request.post()
+        path_val = query.get('item')
+        item = self.get_objs([path_val])[0]
+
+        assert item != None, 'not found'
+
+        context.update({
+            'item': item,
+        })
+
+        if self.request.method == 'POST':
+            _dict = {'object': item}
+            _dict.update(dict(vals))
+            await LocalEdit().execute(_dict)
+
+            return self.redirect('/?i=App.Objects.Object&uuids='+path_val)
+
+        return self.render_template("Actions/edit.html")

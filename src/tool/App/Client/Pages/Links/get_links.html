@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}
+Links
+{% endblock %}
+
+{% block body %}
+    <b>{{ tr("client.storages") }}</b>
+    <div id='storages'>
+        {% for item in storages %}
+            <div>
+                <a href="?i=App.Storage.Item.Get&name={{ item.name }}">{{ item.name }}</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,5 +1,4 @@
 from App.Client.Displayment import Displayment
-from App.Storage.StorageUUID import StorageUUID
 from App import app
 import aiohttp_jinja2
 
@@ -8,12 +7,9 @@ class Object(Displayment):
 
     async def render_as_page(self, request, context):
         query = request.rel_url.query
-        uuids = query.get('uuids', '').split(',')
         act = query.get('act')
-        objs = list()
+        objs = self.get_objs(query.get('uuids', '').split(','))
         include_nones = query.get('include_none') == '1'
-        for id in uuids:
-            objs.append(StorageUUID.fromString(id).toPython())
 
         assert len(objs) > 0, 'objects not found'
 

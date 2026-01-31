@@ -19,7 +19,6 @@ class Explorer(Displayment):
         except IndexError as e:
             self.log_error(e)
 
-        print(path)
         context.update({
             'path': path,
             'items': await Navigate().execute({

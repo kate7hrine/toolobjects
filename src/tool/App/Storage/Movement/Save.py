@@ -62,22 +62,25 @@ class Save(Act):
             assert storage != None, f"storage {_storage_name} not found"
             assert storage.has_db_adapter(), f"storage {storage.name} does not contains db connection"
 
-            for item in i.get('items').getItems():
-                if i.get('public'):
-                    item.local_obj.make_public()
+            try:
+                for item in i.get('items').getItems():
+                    if i.get('public'):
+                        item.local_obj.make_public()
 
-                item.flush(storage, link_max_depth = i.get('link_max_depth'), ignore_flush_hooks = i.get('ignore_flush_hooks'))
-                item.save(do_commit = False)
+                    item.flush(storage, link_max_depth = i.get('link_max_depth'), ignore_flush_hooks = i.get('ignore_flush_hooks'))
+                    item.save(do_commit = False)
 
-                results += 1
+                    results += 1
 
-                for link_item in link_to:
-                    link_item.link(item)
+                    for link_item in link_to:
+                        link_item.link(item)
 
-                    self.log(f"saving: linked {item.getDbId()} to {link_item.getDbId()}")
+                        self.log(f"saving: linked {item.getDbId()} to {link_item.getDbId()}")
 
-            if storage.adapter.auto_commit == False:
-                #self.log('{0}: commit'.format(_storage_name))
-                storage.adapter.commit()
+                if storage.adapter.auto_commit == False:
+                    #self.log('{0}: commit'.format(_storage_name))
+                    storage.adapter.commit()
 
-            _i += 1
+                _i += 1
+            except Exception as e:
+                self.log_error(e, exception_prefix = 'Error when saving to {0}: '.format(_storage_name))

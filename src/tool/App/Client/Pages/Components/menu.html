@@ -1,0 +1,13 @@
+{% for _key_, _category_item_list in global_app_categories.items() %}
+    {% if len(_category_item_list) > 0 %}
+        <b>{{ tr(_key_) }}</b>
+
+        <div>
+            {% for _category_item in _category_item_list %}
+                <div>
+                    <a href="{{ _category_item.get_url() }}">{{ _category_item.get_name() }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endfor %}

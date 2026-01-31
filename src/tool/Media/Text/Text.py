@@ -7,7 +7,7 @@ from Data.Types.String import String
 
 class Text(Media):
     value: str | LinkInsertion = Field(default = '')
-    has_set_from_file: bool = Field(default = False)
+    has_set_from_file: bool = Field(default = True)
     encoding: str = Field(default = None)
     mime_type = 'text/html'
     default_name = 'text.txt'

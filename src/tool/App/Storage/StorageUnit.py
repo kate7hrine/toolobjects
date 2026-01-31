@@ -53,6 +53,12 @@ class StorageUnit(Object):
 
         return '/storage/{0}/{1}/'.format(_storage.name, self.getDbId())
 
+    def get_common_file_url(self):
+        _url = self.get_url()
+        _url += self.common
+
+        return _url
+
     def setCommonFile(self, file_path: Path):
         self.name = file_path.name
         self.ext = file_path.suffix[1:]

@@ -9,7 +9,9 @@ class List(Valueable):
 
     def asArgumentAsInstance(self, val):
         if val == None:
+            # its better in some cases
             return []
+            #return None
 
         results = list()
         if type(val) == str:

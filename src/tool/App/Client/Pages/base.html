@@ -5,8 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %} — {{ app_name or '...' }}</title>
     <link rel="stylesheet" href="static/client/css/style.css">
+
+    <script src="static/client/js/funcs.js"></script>
 </head>
 <body>
+    <div id="upper_bar"></div>
+
+    {% if is_index %}
+        <div></div>
+    {% else %}
+        {% if global_app_categories %}
+        <div id="floating_menu">
+            {% include "Components/menu.html" %}
+        </div>
+        {% endif %}
+    {% endif %}
+
     {% if app_name %}
         <div id="upper">
             <div id="upper_menu">

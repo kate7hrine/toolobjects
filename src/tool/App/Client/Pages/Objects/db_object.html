@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-DB Object
+{{len(objects)}} items
 {% endblock %}
 
 {% block body %}
@@ -27,10 +27,90 @@ DB Object
                                 </div>
                             </td>
                         </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>
+                                {% if item.obj.name %}
+                                    <div>{{ item.obj.name }}</div>
+                                {% endif %}
+                                {% if item.local_obj.name %}
+                                    <div><b>Local name</b></div>
+                                    <div>{{ item.local_obj.name }}</div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Descriptions</td>
+                            <td>
+                                {% if item.obj.description %}
+                                    <div>{{ item.obj.description }}</div>
+                                {% endif %}
+                                {% if item.local_obj.description %}
+                                    <div><b>Local description</b></div>
+                                    <div>{{ item.local_obj.description }}</div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Object created at</td>
+                            <td> {{ item.local_obj.created_at }} </td>
+                        </tr>
+                        <tr>
+                            <td>Declared created at</td>
+                            <td> {{ item.obj.created_at }} </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
             <hr>
+            <div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Storage</td>
+                            <td>
+                                <a href="?i=App.Storage.Item.Get&name={{ item.getDbName() }}">{{ item.getDbName() }}</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>ID</td>
+                            <td>
+                                {{ item.getDbId() }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+            <div>
+                <div>
+                    <a href="?i={{item._getNameJoined()}}&uuids={{item.getDbIds()}}">View as self</a>
+                </div>
+            </div>
+            <hr>
+            <div>
+                <b>Links</b>
+                <div>
+                    <a href="?i=App.Objects.Operations.GetLinks&from={{item.getDbIds()}}">Connections</a>
+                </div>
+                <div>
+                    <a href="?i=App.DB.Search&storage={{item.getDbName()}}&public=0&linked_to={{item.getDbIds()}}">Search in linked</a>
+                </div>
+            </div>
+            <div>
+                <b>Actions</b>
+                <div>
+                    <a href="?i=App.Objects.Operations.Edit.Local&item={{item.getDbIds()}}">Edit</a>
+                </div>
+            </div>
         </div>
+
+        <hr>
     {% endfor %}
 {% endblock %}
