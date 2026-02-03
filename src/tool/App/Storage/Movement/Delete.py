@@ -26,10 +26,10 @@ class Delete(Act):
         _index = 0
         for item in _items.getItems():
             if item == None:
-                self.log('deletion items, index {0}: none!'.format(_index))
+                self.log('deletion items, index {0}: none'.format(_index))
                 continue
 
             self.log('deleting item {0}'.format(item.db_info))
-            item.delete(i.get('remove_links'))
+            item.delete(i.get('remove_links'), True)
 
             _index += 1

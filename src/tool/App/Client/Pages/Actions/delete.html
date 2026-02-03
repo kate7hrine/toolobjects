@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+Delete
+{% endblock %}
+
+{% block body %}
+    <a href="/?i=App.Objects.Object&uuids={{item.getDbIds()}}"><<< back</a>
+
+    <form method="post">
+        <div>
+            <span>UUIDs</span>
+            <div>
+                <textarea name="uuids" placeholder="uuids">{{','.join(uuids)}}</textarea>
+            </div>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" name="remove_links">
+                Remove links
+            </label>
+        </div>
+        <input type="submit" value="Delete">
+    </form>
+{% endblock %}

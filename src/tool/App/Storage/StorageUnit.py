@@ -118,3 +118,8 @@ class StorageUnit(Object):
 
     def save_hook(self):
         self.files = list(self.genFilesList())
+
+    def deletion_hook(self):
+        if self.getDb()._adapter._storage_item.path_matches(self.get_root()):
+            self.log('removing storage unit files...')
+            shutil.rmtree(self.get_root())

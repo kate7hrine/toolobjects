@@ -3,6 +3,7 @@ from App.DB.ConnectionAdapter import ConnectionAdapter
 from App.Storage.StorageAdapter import StorageAdapter
 from pydantic import Field
 from typing import Optional
+from pathlib import Path
 from App import app
 
 class StorageItem(Object):
@@ -57,6 +58,9 @@ class StorageItem(Object):
     def destroy(self):
         self.adapter.destroy()
         self.storage_adapter.destroy()
+
+    def path_matches(self, path: Path):
+        return path.resolve().relative_to(self.storage_adapter.getStorageDir())
 
     def _init_hook(self):
         if self.storage_type != None:

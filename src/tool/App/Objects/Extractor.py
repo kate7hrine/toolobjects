@@ -2,13 +2,15 @@ from App.Objects.Executable import Executable
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App.Objects.Object import Object
 from App.Objects.Arguments.Variable import Variable
-from typing import Generator
+from typing import Generator, ClassVar
 import asyncio
 
 class Extractor(Executable):
     '''
     Class that returns only ObjectsList
     '''
+
+    self_name: ClassVar[str] = 'Extractor'
 
     @classmethod
     def _variables(cls):

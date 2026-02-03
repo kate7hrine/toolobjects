@@ -13,5 +13,5 @@ Similar to [ObjectMeta](./App.Objects.Misc.ObjectMeta.md), but contains changeab
 |edited_at|`datetime`|When the object instance was edited?|
 |updated_at|`datetime`|When the object instance was edited or linked|
 |geo|list of Geo|-|
-|public|`bool`|Is object is not unlisted?|
+|public|`bool`|Is object is not unlisted? It must be True only when object is for internal use.|
 |thumbnail|list of Thumbnail|Object's thumbnails|

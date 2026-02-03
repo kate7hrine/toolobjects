@@ -24,17 +24,18 @@ class Object(Displayment):
                     _json.append(item.to_json(exclude_none = include_nones, exclude_defaults = include_nones))
 
                 return self.return_json(_json)
-            case 'self_displayment':
+            case 'display':
+                _as = query.get('as')
                 htmls = list()
                 for item in objs:
-                    _class = app.app.view.displayments.get(item._getNameJoined())
+                    _class = self.get_for(_as)
                     if _class == None:
                         htmls.append(
-                            (item, aiohttp_jinja2.render_string('Components/message.html', request, {'message': 'not found displayment for ' + item._getNameJoined()}))
+                            (item, aiohttp_jinja2.render_string('Components/message.html', request, {'message': 'not found displayment for ' + _as}))
                         )
                         continue
                     else:
-                        displayment = _class[0]()
+                        displayment = _class()
                         displayment.request = request
                         htmls.append((item, await displayment.render_as_object(item)))
 
@@ -43,3 +44,9 @@ class Object(Displayment):
                 return aiohttp_jinja2.render_template('Objects/displayments.html', request, context)
 
         return aiohttp_jinja2.render_template('Objects/db_object.html', request, context)
+
+    async def render_as_list_item(self, item):
+        self.context.update({
+            'item': item
+        })
+        return self.render_string('Objects/object_listview.html')

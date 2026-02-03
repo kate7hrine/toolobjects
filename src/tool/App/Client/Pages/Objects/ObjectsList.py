@@ -8,15 +8,19 @@ class ObjectsList(Displayment):
     async def render_as_page(self, request, context):
         query = request.rel_url.query
         namespace_name = query.get('name')
-        namespace = None
+        show_only = query.get('show_only')
         categories = dict()
         total_count = 0
 
+        _items = None
+        namespace = None
         if namespace_name:
             namespace = app.ObjectsList.get_namespace_with_name(namespace_name)
-            categories, total_count = app.ObjectsList.sort(namespace.getItems())
+            _items = namespace.getItems()
         else:
-            categories, total_count = app.ObjectsList.sort(app.ObjectsList.getItems().toList())
+            _items = app.ObjectsList.getItems().toList()
+
+        categories, total_count = app.ObjectsList.sort(_items, show_only)
 
         context.update({
             'namespace': namespace,

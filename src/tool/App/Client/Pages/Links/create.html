@@ -6,13 +6,19 @@ Create link
 
 {% block body %}
     <a href="/?i=App.Objects.Object&uuids={{item.getDbIds()}}"><<< back</a>
-    
+
     <form method="post">
         <div>
-            <textarea name="with" placeholder="With... (ids)"></textarea>
+            <textarea name="with" placeholder="{{act}}... (ids)"></textarea>
         </div>
         <div>
             <textarea name="role" placeholder="Roles (divided by comma)"></textarea>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" name="unlink">
+                Unlink
+            </label>
         </div>
         <div>
             <input type="submit" value="Link">

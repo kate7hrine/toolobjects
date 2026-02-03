@@ -8,8 +8,8 @@ from App.Objects.Relations.Link import Link
 from App.Objects.Misc.Geo import Geo
 
 class LocalObjectMeta(Model):
+    # custom saved via
     saved_via: Optional[list[SavedVia]] = Field(default = [])
-    links: list[Link] = Field(default=[], exclude = True, repr = False)
     allowed_to_link: list[str] = Field(default = None)
     dynamic_links: bool = Field(default = False)
 
@@ -26,6 +26,8 @@ class LocalObjectMeta(Model):
     public: Optional[bool] = Field(default=False)
     role: Optional[list[str]] = Field(default = [])
     thumbnail: Optional[list[Thumbnail]] = Field(default = [])
+
+    links: list[Link] = Field(default=[], exclude = True, repr = False)
 
     def add_thumbnail(self, thumb: Thumbnail):
         self.thumbnail.append(thumb)

@@ -1,5 +1,7 @@
 {% for item in items %}
-    <div class="gallery_item">
-        <img src="{{item.get_url(True)}}" width="{{item.obj.width}}" height="{{item.obj.height}}" alt="{{item.obj.description}}">
-    </div>
+    <a href="{{item.get_url(True)}}">
+        <div class="gallery_item">
+            <img src="{{item.get_url(True)}}" alt="{{item.obj.description}}">
+        </div>
+    </a>
 {% endfor %}

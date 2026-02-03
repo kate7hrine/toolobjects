@@ -94,7 +94,7 @@ class ObjectsList(Object):
 
         return _item
 
-    def sort(self, items: list[str]) -> dict:
+    def sort(self, items: list[str], show_only: str = None) -> dict:
         _items = dict()
         names = list()
         total_count = 0
@@ -108,6 +108,13 @@ class ObjectsList(Object):
         for _name in sorted(names):
             obj = _items.get(_name)
             name = obj.getTitle()
+
+            if show_only != None:
+                if obj.hasModuleLoaded():
+                    if obj.getModule().self_name != show_only:
+                        continue
+                else:
+                    continue
 
             cursor_link = categories
             ind = 0
