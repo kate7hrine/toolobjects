@@ -6,6 +6,7 @@ from App import app
 import aiohttp
 import aiohttp_jinja2
 import jinja2
+from urllib.parse import quote
 
 from App.Client.Pages.App.Index import Index as PageIndex
 
@@ -61,7 +62,9 @@ class Client(Server):
             'request': request,
             'current_url': request.rel_url,
             'global_app_categories': categories,
-            'len': len
+            'len': len,
+            'url_for_object': '?i=App.Objects.Object&uuids=',
+            'current_url_encoded': quote(str(request.rel_url))
         }
 
     def _auth(self, args: dict, request):
@@ -138,10 +141,15 @@ class Client(Server):
     def init_hook(self):
         for item in app.ObjectsList.getObjectsByCategory(['App', 'Client', 'Pages']):
             module = item.getModule()
-            if self.displayments.get(module.for_object) == None:
-                self.displayments[module.for_object] = []
+            for_object = module.for_object
+            if type(for_object) == str:
+                for_object = [for_object]
 
-            self.displayments[module.for_object].append(module)
+            for for_item in for_object:
+                if self.displayments.get(for_item) == None:
+                    self.displayments[for_item] = []
+
+                self.displayments[for_item].append(module)
 
     @check_login
     async def _index(self, request):

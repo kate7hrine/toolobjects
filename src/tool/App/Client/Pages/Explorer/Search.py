@@ -34,6 +34,7 @@ class Search(Displayment):
                   'q.in_description': query.get('q.in_description') == 'on',
                   'limit': per_page,
                   'display_as': query.get('display_as'),
+                  'display_page_as': query.get('display_page_as'),
                   'conditions': [],
                   'offset_conditions': [],
                   'ascend': ascend,
@@ -75,26 +76,32 @@ class Search(Displayment):
         objs = list(_val.getItems())
         last_uuid = None
         _items = list()
-        display_as = 'App.Objects.Object'
-        if params.get('display_as'):
-            display_as = params.get('display_as')
+        _fallback = 'App.Objects.Object'
+        display_as = params.get('display_as')
+        if display_as in bad:
+            display_as = _fallback
+
+        display_page_as = params.get('display_page_as')
+        if display_page_as in bad:
+            display_page_as = _fallback
 
         if len(objs) > 0:
             last_uuid = objs[-1].getDbId()
             #last_uuid = objs[0].getDbId()
 
-        for item in objs:
-            try:
-                _d = self.get_for(display_as)(request = self.request, context = self.context)
-                _html = await _d.render_as_list_item(item)
+        # getting html of the list
+        collection_display = self.get_for(display_page_as)
+        if collection_display is None:
+            self.throw_message('no displayment for this', 'error')
+            collection_display = self.get_for(_fallback)
 
-                _items.append([item, _html])
-            except Exception as e:
-                _items.append([item, '<div><b class="error">{0}</b></div>'.format(str(e))])
-
+        collection_display = collection_display(request = self.request, context = self.context)
+        search_html = await collection_display.render_as_collection(objs, {
+            'display_as': display_as
+        }, None)
         self.context.update({
             'total_count': _val.getTotalCount(),
-            'items': _items,
+            'search_html': search_html,
             'last_uuid': last_uuid,
             'per_page': per_page,
             'params': params

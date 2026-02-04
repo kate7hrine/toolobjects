@@ -24,5 +24,6 @@ class Create(Act):
 
         _new = Chromedriver()
         _new.executable_path = i.get('executable_path')
-
         _bin.flush(_new)
+
+        _new.save()

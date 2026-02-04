@@ -46,7 +46,13 @@
             </div>
         {% endif %}
 
-        <div id="page">{% block body %} {% endblock %} </div>
+        <div id="page">
+            {% if ref %}
+                <a href="{{ref}}"><<< back</a>
+            {% endif %}
+
+            {% block body %} {% endblock %} 
+        </div>
     </div>
 </body>
 </html>

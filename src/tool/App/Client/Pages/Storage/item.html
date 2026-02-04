@@ -11,6 +11,7 @@
     </div>
 
     <div>
+        <b>Info</b>
         <table>
             <tbody>
                 {% if item.is_export %}
@@ -26,8 +27,8 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td></td>
-                        <td><a href="/?i=App.Storage.Item.Get&create_root=1&name={{item.name}}">Create root collection</a></td>
+                        <td>Root</td>
+                        <td><a href="/?i=App.Storage.Item.Get&create_root=1&name={{item.name}}">Create</a></td>
                     </tr>
                 {% endif %}
                 {% if item.allowed_objects %}
@@ -42,12 +43,17 @@
                         <td>{{ ", ".join(item.forbidden_objects) }}</td>
                     </tr>
                 {% endif %}
+                <tr>
+                    <td>Sizes</td>
+                    {% if storage_size %}
+                        <td><a href="?i=App.Storage.Item.Get&name={{item.name}}">Back</a></td>
+                    {% else %}
+                        <td><a href="?i=App.Storage.Item.Get&name={{item.name}}&calculate=1&calculate_db=1">Calculate</a></td>
+                    {% endif %}
+                </tr>
+                
             </tbody>
         </table>
-    </div>
-
-    <div>
-        <a href="?i=App.Storage.Item.Get&name={{item.name}}&calculate=1&calculate_db=1">Calculate sizes</a>
     </div>
 
     <div>

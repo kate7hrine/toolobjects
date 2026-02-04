@@ -319,10 +319,14 @@ class Model(PydanticBaseModel):
 
     def _get(self, field, default = None):
         # If field is link insertion, unwrapping it and getting as normal value
+        # also it append current _db to the property if it possible
 
         _field = getattr(self, field, default)
-        if hasattr(_field, '_link_insertion_type') == True:
+
+        if hasattr(_field, 'setDb'):
             _field.setDb(self.getDb())
+
+        if hasattr(_field, '_link_insertion_type') == True:
             return _field.unwrap()
 
         return _field

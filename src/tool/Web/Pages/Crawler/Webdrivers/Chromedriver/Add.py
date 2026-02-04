@@ -74,5 +74,6 @@ class Add(Act):
 
         driver.file = driver.link(storage_unit).toInsert()
         driver.flush(bin)
+        driver.save()
 
         return ObjectsList(items = [driver], unsaveable = True)

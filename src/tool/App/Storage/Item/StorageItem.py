@@ -19,6 +19,7 @@ class StorageItem(Object):
     name: str = Field()
     unused: bool = Field(default = False)
     is_export: bool = Field(default = False)
+    is_internal: bool = Field(default = False)
 
     # input
     storage_type: str = Field(default = 'App.Storage.Adapters.DoubleDividedHashDirs')

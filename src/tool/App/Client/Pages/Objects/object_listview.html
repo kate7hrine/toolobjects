@@ -1,3 +1,9 @@
 <div>
     <span>{{ item.any_name }}</span>
+
+    {% if item.hasDb() %}
+        <a href="?i=App.Objects.Object&uuids={{item.getDbIds()}}">
+            <sup>{{ item.getDbIds() }}</sup>
+        </a>
+    {% endif %}
 </div>

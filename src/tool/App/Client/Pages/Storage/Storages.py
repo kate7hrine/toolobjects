@@ -8,9 +8,19 @@ class Storages(Displayment):
 
     async def render_as_page(self, request, context):
         query = request.rel_url.query
+        show_internal = query.get('show_internal') == 'on'
+
+        items = list()
+        for item in app.Storage.items:
+            if show_internal is False:
+                if item.is_internal:
+                    continue
+
+            items.append(item)
 
         context.update({
-            'storages': app.Storage.items,
+            'storages': items,
+            'show_internal': show_internal
         })
 
         return aiohttp_jinja2.render_template('Storage/storages.html', request, context)

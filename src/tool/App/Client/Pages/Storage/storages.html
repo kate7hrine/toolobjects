@@ -6,6 +6,12 @@
 
 {% block body %}
     <b>{{ tr("client.storages") }}</b>
+    {% if show_internal %}
+        <b></b>
+    {% else %}
+        <a href="/?i=App.Storage.Item.List&show_internal=on">Show internal</a>
+    {% endif %}
+
     <div id='storages'>
         {% for item in storages %}
             <div>
