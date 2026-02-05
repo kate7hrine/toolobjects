@@ -69,31 +69,6 @@ class Downloader(Object):
                 orig = String
             ),
             Argument(
-                name = 'download.favicon',
-                orig = Boolean,
-                default = True
-            ),
-            Argument(
-                name = 'data.meta',
-                orig = Boolean,
-                default = True
-            ),
-            Argument(
-                name = 'download.media',
-                orig = Boolean,
-                default = True
-            ),
-            ListArgument(
-                name = 'download.media.selectors',
-                orig = String,
-                default = True
-            ),
-            Argument(
-                name = 'data.save_urls',
-                orig = Boolean,
-                default = True
-            ),
-            Argument(
                 name = 'webdriver',
                 orig = Webdriver,
                 by_id = True,

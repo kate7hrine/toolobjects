@@ -91,7 +91,8 @@ class Item(Object):
 
                 self.state = "success"
                 self._manager_link.triggerHooks('success', self)
-                self.log_success(f"download complete")
+                self.log_success("download complete")
+                self.log_success("download complete, dir {0}".format(self.getPath()))
 
                 self.response = response
 

@@ -11,7 +11,9 @@ from Web.Pages.Crawler.Webdrivers.WebdriverPage import WebdriverPage
 
 class Page(Object):
     _downloader: Any = None
+    _crawler: Any = None
     _page: WebdriverPage = None
+    _page_response: Any = None
 
     html: HTMLFile = Field(default = None)
     assets: list[Asset] = Field(default = None)
@@ -22,7 +24,10 @@ class Page(Object):
     base_url: str = Field(default = None)
     relative_url: str = Field(default = None)
 
-    _unserializable = ['_downloader', '_page']
+    _unserializable = ['_downloader', '_page', '_page_response']
+
+    async def _init_hook(self):
+        await self._crawler.register(self)
 
     def get_html(self):
         return self.html
@@ -42,10 +47,13 @@ class Page(Object):
         return self.file.get_storage_unit()
 
     async def from_url(self, url: str):
-        self._page = await self._downloader.webdriver.new_page()
+        # gymnastics
+        self._page = await self._downloader.webdriver.new_page(self._crawler)
+        await self._init_hook()
+
         self.log('going to {0}'.format(url))
 
-        await self._page.goto(url)
+        self._page_response = await self._page.goto(url)
 
     async def set_info(self):
         self.set_title(await self._page.get_title())
@@ -53,10 +61,31 @@ class Page(Object):
         self.base_url = self._page.get_base_url()
         self.relative_url = await self._page.get_relative_url()
 
+    async def get_encoding(self):
+        page = self._page.get()
+        #charset = await page.locator('meta[charset]').get_attribute('charset')
+        #if charset:
+        #    return charset
+
+        #content_type = await page.locator('meta[http-equiv=\"Content-Type\"]').get_attribute('content')
+        #if content_type and 'charset=' in content_type:
+        #    return content_type.split('charset=')[1].lower()
+
+        content_type = self._page_response.headers.get('content-type', '')
+        if 'charset=' in content_type.lower():
+            return content_type.lower().split('charset=')[1].split(';')[0].strip()
+        elif 'utf-8' in content_type.lower():
+            return 'utf-8'
+
+        return 'utf-8'
+
     # crawling methods
 
     def set_downloader(self, downloader):
         self._downloader = downloader
+
+    def set_crawler(self, crawler):
+        self._crawler = crawler(ref = self)
 
     async def clear(self):
         if self._page:

@@ -1,11 +1,14 @@
 <html>
     <head>
-        <title>{{item.obj.name}}</title>
+        {{head_html|safe}}
     </head>
-    <body>
-        <div>
+    <body id="___to_insert_page">
+
+        {% if hide_banner %}
+            <!--no banner-->
+        {% else %}
             <style>
-                #banner {
+                #___to_insert_page > #___to_inserted_page_banner {
                     position: absolute;
                     z-index: 9999;
                     width: 100%;
@@ -16,25 +19,28 @@
                     display: flex;
                     align-items: center;
                     box-sizing: border-box;
-                    background: #00000085;
+                    background: #ffffff85;
+                    opacity: 1;
                 }
 
-                #page_block {
-                    padding-top: 30px;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
+                #___to_insert_page > #___to_inserted_page_banner > * {
+                    font-size: unset;
+                    font-weight: unset;
+                    font-family: times !important;
+                    color: unset !important;
+                    width: unset;
+                }
+
+                #___to_insert_page {
+                    padding-top: 34px;
                 }
             </style>
-
-            <div id="banner">
+            <div id="___to_inserted_page_banner">
                 <a href="{{url_for_object}}{{item.getDbIds()}}">
                     <<< back
                 </a>
             </div>
-            <div id="page_block">
-                {{html|safe}}
-            </div>
-        </div>
+        {% endif %}
+        {{html|safe}}
     </body>
 </html>

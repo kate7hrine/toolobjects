@@ -13,6 +13,7 @@ class Chromedriver(Webdriver):
 
     _playwright: Any = None
     _browser: Any = None
+    _crawler: Any = None
     _context: Any = None
     #_service: Any = None
 
@@ -53,7 +54,7 @@ class Chromedriver(Webdriver):
             headless = i.get('webdriver.headless')
         )
 
-    async def new_page(self):
+    async def new_page(self, crawler):
         page = WebdriverPage()
         page._page = await self._context.new_page()
         await page.setViewport(self.viewport)
