@@ -1,0 +1,34 @@
+<style>
+    #bookmarks {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #bookmarks .bookmark {
+        display: grid;
+        grid-template-columns: 0fr 1fr;
+        gap: 5px;
+    }
+
+    #bookmarks .bookmark .icon {
+        width: 16px;
+    }
+
+    #bookmarks .bookmark .icon img {
+        max-width: 100%;
+    }
+</style>
+
+<div id="bookmarks">
+    {% for item in items %}
+        <a href="{{item.url or url_for_object + item.getDbIds()}}" class="bookmark" {% if item.open_in_new_page %}target="_blank"{% endif %}>
+            <div class="icon">
+                {% if item.favicon %}
+                    <img src="{{item.get_favicon_url()}}">
+                {% endif %}
+            </div>
+
+            <span>{{String.cut(item.any_name, 500)}}</span>
+        </a>
+    {% endfor %}
+</div>

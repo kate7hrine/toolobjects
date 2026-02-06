@@ -8,6 +8,9 @@ class Get(Displayment):
     async def render_as_page(self):
         query = self.request.rel_url.query
         obj = app.ObjectsList.getByName(query.get('name'))
+
+        assert obj != None, 'not found object'
+
         do_load = query.get('load') == '1'
         mro_items = None
 

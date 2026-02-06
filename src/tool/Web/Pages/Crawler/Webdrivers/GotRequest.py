@@ -11,5 +11,11 @@ class GotRequest(Object):
 
     def url_matches(self, url: str):
         _s = self.url.replace('https://', '').replace('http://', '')
-        _f = url.replace('https://', '').replace('http://', '')
+        _f = ''
+
+        try:
+            _f = url.replace('https://', '').replace('http://', '')
+        except Exception as e:
+            self.log_error(e)
+
         return _s == _f

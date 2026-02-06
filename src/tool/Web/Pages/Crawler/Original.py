@@ -39,10 +39,9 @@ class Original(Object):
             if request == None:
                 return
 
-            self.log('request {0}, method {1}'.format(response.url, request.request.method))
+            #self.log('request {0}, method {1}'.format(response.url, request.request.method))
 
             if request.request.method == 'GET':
-
                 request.asset = Asset(url=response.url)
                 _dir = page.html.get_assets_dir()
                 _dir = _dir.joinpath(request.asset.get_encoded_url())
@@ -84,7 +83,7 @@ class Original(Object):
             for item in getattr(html, key)(page):
                 found_asset = None
                 for asset in page._page.got_assets:
-                    if asset.url == item.url:
+                    if asset.url_matches(item.url):
                         found_asset = asset
 
                 if found_asset == None and item.has_url():

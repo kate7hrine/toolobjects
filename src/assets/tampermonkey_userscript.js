@@ -18,7 +18,8 @@
         'web_pages_storage': '',
         'images_collection': '',
         'web_pages_collection': '',
-        'web_pages_webdriver': null
+        'web_pages_webdriver': null,
+        'web_bookmarks_collection': null
     }
 
     const HOST = GM_getValue('host', DEFAULT_VALUES.host);
@@ -28,6 +29,7 @@
     const IMAGES_COLLECTION = GM_getValue('images_collection', DEFAULT_VALUES.images_collection)
     const WEB_PAGES_COLLECTION = GM_getValue('web_pages_collection', DEFAULT_VALUES.web_pages_collection)
     const WEB_PAGES_WEBDRIVER = GM_getValue('web_pages_webdriver', DEFAULT_VALUES.web_pages_webdriver)
+    const WEB_BOOKMARKS_COLLECTION = GM_getValue('web_bookmarks_collection', DEFAULT_VALUES.web_bookmarks_collection)
 
     function _api_to_call(args) {
         const url = new URL(HOST)
@@ -75,6 +77,21 @@
                 'link_to': WEB_PAGES_COLLECTION,
                 'set_url': location.href,
                 'webdriver': WEB_PAGES_WEBDRIVER
+            })
+        }
+
+        if (e.ctrlKey && e.altKey && e.code == 'KeyG') {
+            const fav = document.querySelector("link[rel*='icon']")
+            let fav_url = null
+            if (fav) {
+                fav_url = fav.href
+            }
+            await _api_to_call({
+                'i': 'Web.Bookmarks.Add',
+                'collection': WEB_BOOKMARKS_COLLECTION,
+                'url': location.href,
+                'title': document.title,
+                'favicon': fav_url
             })
         }
     })
