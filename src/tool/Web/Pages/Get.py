@@ -34,7 +34,7 @@ class Get(Wheel):
                 default = 'Web.Pages.Crawler.Original',
                 allowed_values = AllowedValues(
                     values = ['Web.Pages.Crawler.Original', 'Web.Pages.Crawler.Plain'],
-                    strict = True
+                    strict = False
                 )
             ),
             Argument(

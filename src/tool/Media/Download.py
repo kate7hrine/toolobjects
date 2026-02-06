@@ -29,6 +29,11 @@ class Download(Extractor):
                 orig = String,
             ),
             Argument(
+                name = 'referer',
+                orig = String,
+                default = None
+            ),
+            Argument(
                 name = 'download',
                 default = True,
                 orig = Boolean
@@ -52,7 +57,10 @@ class Download(Extractor):
                 _unit = app.Storage.get('tmp').get_storage_adapter().get_storage_unit()
 
                 item = app.DownloadManager.addURL(_url.value, _unit, filename)
-                await item.start(_obj.get_headers())
+                _headers = _obj.get_headers()
+                _headers.referer = i.get('referer')
+
+                await item.start(_headers)
 
                 _item.set_storage_unit(_unit)
 

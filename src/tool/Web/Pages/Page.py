@@ -55,6 +55,14 @@ class Page(Object):
 
         self._page_response = await self._page.goto(url)
 
+    async def from_html(self, url: str, html: str):
+        self._page = await self._downloader.webdriver.new_page(self._crawler)
+        await self._init_hook()
+
+        self._page.url_override = url
+        self._page_response = await self._page.goto('about:blank')
+        await self._page.get().evaluate("() => {document.write(`"+html+"`);}")
+
     async def set_info(self):
         self.set_title(await self._page.get_title())
         self.url = self._page.get_url(True)
@@ -71,11 +79,14 @@ class Page(Object):
         #if content_type and 'charset=' in content_type:
         #    return content_type.split('charset=')[1].lower()
 
-        content_type = self._page_response.headers.get('content-type', '')
-        if 'charset=' in content_type.lower():
-            return content_type.lower().split('charset=')[1].split(';')[0].strip()
-        elif 'utf-8' in content_type.lower():
-            return 'utf-8'
+        try:
+            content_type = self._page_response.headers.get('content-type', '')
+            if 'charset=' in content_type.lower():
+                return content_type.lower().split('charset=')[1].split(';')[0].strip()
+            elif 'utf-8' in content_type.lower():
+                return 'utf-8'
+        except Exception as e:
+            self.log_error(e)
 
         return 'utf-8'
 

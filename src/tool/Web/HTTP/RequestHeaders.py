@@ -9,3 +9,4 @@ class RequestHeaders(Object):
     accept_ranges: str = Field(default = None, alias = 'accept-ranges')
     cache_control: str = Field(default = None, alias = 'cache-control')
     content_type: str = Field(default = None, alias = 'content-type')
+    referer: str = Field(default = None, alias = 'referer')
