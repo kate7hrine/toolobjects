@@ -1,4 +1,44 @@
-from App.Objects.Act import Act
+from App.Objects.Thumbnail import Thumbnail
+from App.Objects.Arguments.ArgumentDict import ArgumentDict
+from App.Objects.Arguments.Argument import Argument
+from App.Objects.Arguments.Assertions.NotNone import NotNone
+from App.Objects.Responses.ObjectsList import ObjectsList
+from Media.Images.Image import Image
+from Web.Pages.Page import Page
+from App import app
 
-class MakeScreenshot(Act):
-    pass
+class MakeScreenshot(Thumbnail):
+    @classmethod
+    def _arguments(cls) -> ArgumentDict:
+        return ArgumentDict(items = [
+            Argument(
+                name = 'page',
+                orig = Page,
+                assertions = [NotNone()]
+            )
+        ])
+
+    async def _implementation(self, i):
+        thumbs = ObjectsList(items = [])
+        page = i.get('page')
+
+        for key in ['viewport', 'fullscreen']:
+            self.log('making {0} screenshot...'.format(key))
+
+            st = app.Storage.get('tmp').get_storage_adapter().get_storage_unit()
+            filename = 'screenshot_' + key + '.png'
+
+            path = st.get_root()
+            new_path = path.joinpath(filename)
+
+            st.setCommonFile(new_path)
+
+            await page._page.get().screenshot(path=new_path)
+
+            img = Image()
+            img.set_storage_unit(st)
+            img.save()
+
+            thumbs.append(img)
+
+        return thumbs

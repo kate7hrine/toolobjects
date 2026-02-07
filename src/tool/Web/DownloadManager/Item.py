@@ -57,7 +57,7 @@ class Item(Object):
         if new_headers != None:
             _headers.update(new_headers.to_minimal_json())
 
-        self.log('making call to {0} with headers {1}'.format(String.cut(self.url, 500), String.cut(str(_headers), 1000)))
+        self.log('making call to {0}'.format(String.cut(self.url, 500)))
 
         async with self._manager_link.semaphore:
             request = session.get(self.url,
@@ -91,8 +91,8 @@ class Item(Object):
 
                 self.state = "success"
                 self._manager_link.triggerHooks('success', self)
-                self.log_success("download complete")
-                self.log_success("download complete, dir {0}".format(self.getPath()))
+                #self.log_success("download complete")
+                #self.log_success("download complete, dir {0}".format(self.getPath()))
 
                 self.response = response
 

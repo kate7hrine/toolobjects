@@ -3,12 +3,15 @@ from Web.Pages.Crawler.PageHTML import PageHTML
 from Web.Pages.Crawler.Webdrivers.GotRequest import GotRequest
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.ListArgument import ListArgument
 
 from Data.Types.Boolean import Boolean
 from Data.Types.String import String
 from Data.Types.Int import Int
+from Data.Types.Float import Float
 from App.Objects.Misc.Increment import Increment
+
+from Web.Pages.Screenshot.MakeScreenshot import MakeScreenshot
+from App.Objects.Misc.Thumbnail import Thumbnail as ThumbnailObject
 
 from Web.Pages.Page import Page
 from Web.Pages.Assets.Asset import Asset
@@ -50,10 +53,13 @@ class Original(Object):
 
             if request.request.method == 'GET':
                 try:
-                    _url = None                    
+                    _url = response.url
                     if request.request.redirected_from:
-                        _url = request.request.redirected_from.url
                         self.log('assets: redirected from {0}'.format(_url), role = _roles)
+                        _url_r = request.request.redirected_from.url
+                        for _item in page._page.got_assets:
+                            if _item.url_matches(_url_r):
+                                request = _item
 
                     request.asset = Asset(url=_url)
                     _i = self.i.getIndex()
@@ -77,15 +83,29 @@ class Original(Object):
     async def crawl(self, page: Page, i: dict):
         remove_scripts = i.get('scripts.remove')
 
+        await asyncio.sleep(i.get('crawler.sleep.before_crawl'))
+
         await page.set_info()
+        page.html.set_encoding(await page.get_encoding())
 
         if i.get('scroll_down'):
             await page._page.scroll_down(i.get('web.crawler.scroll_down.cycles'), i.get('web.crawler.scroll_down.'))
 
-        page.html.set_encoding(await page.get_encoding())
-
+        await asyncio.sleep(i.get('crawler.sleep.before_html'))
         await page._page._page.wait_for_timeout(i.get('crawler.network_timeout'))
-        await asyncio.sleep(i.get('crawler.sleep_time'))
+
+        if i.get('crawler.screenshot.save'):
+            self.log('making screenshot...')
+
+            thumbs = await MakeScreenshot().execute({
+                'page': page
+            })
+
+            for thumb in thumbs.getItems():
+                page.local_obj.add_thumbnail(ThumbnailObject(
+                    role = ['image'],
+                    obj = page.link(thumb, role = ['thumbnail']).toInsert()
+                ))
 
         html = PageHTML.from_html(await page._page.get_html())
         if page.html.encoding == None:
@@ -113,7 +133,7 @@ class Original(Object):
 
                 if found_asset == None and item.has_url():
                     try:
-                        await item.download_function(page.html.get_assets_dir())
+                        await item.download_function(page.html.get_assets_dir(), self.i.getIndex())
                     except Exception as e:
                         self.log_error(e, exception_prefix='assets downloading error: ', role = ['crawler.asset.download'])
 
@@ -125,10 +145,10 @@ class Original(Object):
 
         for meta in html.get_meta(page):
             _name = meta.get_name()
-            if _name == None:
-                self.log('metatag {0} = {1}'.format(_name, meta.get_content()))
-            else:
-                self.log('metatag: no name')
+            #if _name == None:
+            #    self.log('metatag {0} = {1}'.format(_name, meta.get_content()))
+            #else:
+            #    self.log('metatag: no name')
 
             page.meta_tags.append(meta)
 
@@ -140,6 +160,11 @@ class Original(Object):
 
         page.html.write(html.prettify())
 
+        await self._after_crawl(page, i)
+
+    async def _after_crawl(self, page, i):
+        pass
+
     @classmethod
     def getArguments(cls):
         return ArgumentDict(items = [
@@ -150,13 +175,23 @@ class Original(Object):
             ),
             Argument(
                 name = 'crawler.network_timeout',
-                orig = Int,
+                orig = Float,
                 default = 5000
             ),
             Argument(
-                name = 'crawler.sleep_time',
-                orig = Int,
+                name = 'crawler.sleep.before_crawl',
+                orig = Float,
                 default = 10
+            ),
+            Argument(
+                name = 'crawler.sleep.before_html',
+                orig = Float,
+                default = 10
+            ),
+            Argument(
+                name = 'crawler.screenshot.save',
+                orig = Boolean,
+                default = True
             ),
             Argument(
                 name = 'data.save_urls',

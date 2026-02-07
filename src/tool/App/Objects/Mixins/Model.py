@@ -1,10 +1,11 @@
 from pydantic import BaseModel as PydanticBaseModel
 from typing import Literal, ClassVar, Any
 from datetime import datetime
+from App.Objects.Mixins.Section import Section
 from pydantic import model_serializer
 from App.Objects.Relations.LinkInsertion import LinkInsertion
 
-class Model(PydanticBaseModel):
+class Model(PydanticBaseModel, Section):
     # Unserializable fields:
 
     # Like "exclude" on Field: won't be serialized anywhere
