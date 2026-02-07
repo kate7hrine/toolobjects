@@ -14,9 +14,9 @@ class Atom(FeedProtocol):
         'xmlns':"http://www.w3.org/2005/Atom"
     }
 
-    def _get_entries(self, channel: Channel, data: ET) -> Generator[Entry]:
+    async def _get_entries(self, channel: Channel, data: ET) -> Generator[Entry]:
         for entry in data.findall('./xmlns:entry', self.namespaces):
-            yield self._get_entry(entry)
+            yield await self._get_entry(entry)
 
     def _get_channels(self, data: ET):
         channel = Channel()
@@ -56,7 +56,7 @@ class Atom(FeedProtocol):
             except ValueError:
                 continue
 
-    def _get_entry(self, data: ET):
+    async def _get_entry(self, data: ET):
         _title = data.find('./xmlns:title', self.namespaces)
         _summary = data.find('./xmlns:summary', self.namespaces)
         _content = data.find('./xmlns:content', self.namespaces)
@@ -72,6 +72,7 @@ class Atom(FeedProtocol):
                 type = _content.get('type'),
                 content = _content.text,
             )
+            await entry.content.update()
 
         for link in data.find('./xmlns:link', self.namespaces):
             entry.link_items.append(self._get_link(link))

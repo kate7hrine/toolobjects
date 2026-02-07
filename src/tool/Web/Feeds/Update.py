@@ -30,9 +30,10 @@ class Update(Act):
         _old_time = _channel.local_obj.updated_at
         _new_time = _old_time
         protocol = _type()
-        for entry in protocol._get_entries(_channel, root):
+        async for entry in protocol._get_entries(_channel, root):
             # If found newer items
             if entry.obj.created_at > _old_time:
+                entry.local_obj.make_public()
                 if entry.obj.created_at > _new_time:
                     _new_time = entry.obj.created_at
                 _channel.link(entry)

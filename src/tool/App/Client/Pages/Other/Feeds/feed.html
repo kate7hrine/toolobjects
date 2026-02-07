@@ -1,0 +1,25 @@
+<b>warning: html included</b>
+
+<style>
+    #feed {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+
+<div id="feed">
+    {% for item in items %}
+        <div>
+            <b>
+                <a href="{{url_for_object}}{{item.getDbIds()}}">{{item.any_name}}</a>
+            </b>
+            <div>
+                {% if item.content %}
+                    {{item.content.get_html()|safe}}
+                {% endif %}
+
+                <hr>
+            </div>
+        </div>
+    {% endfor %}
+</div>

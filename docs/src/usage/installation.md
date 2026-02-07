@@ -53,6 +53,7 @@ python tool.py -i App.ACL.Users.ChangePassword -new [new password]
             "args": {
                 "i": "App.Objects.Operations.ExecuteIterative",
                 "i_2": "App.Objects.ScheduledTasks.Check",
+                "max_iterations": -1,
                 "auth": "root"
             }
         }
