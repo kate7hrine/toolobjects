@@ -1,11 +1,11 @@
-from App.Objects.Mixins.BaseModel import BaseModel
+from App.Objects.Mixins.Model import Model
 from App.DB.DBInsertable import DBInsertable
 from App.Objects.Relations.LinkInsertion import LinkInsertion
 from App.Objects.Relations.LinkData import LinkData
 from pydantic import Field, computed_field
 from typing import Any
 
-class Link(BaseModel, DBInsertable):
+class Link(Model, DBInsertable):
     '''
     Link to an object.
 

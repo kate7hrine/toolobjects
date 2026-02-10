@@ -1,6 +1,7 @@
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.ArgumentValues import ArgumentValues
 from App.Objects.Arguments.Argument import Argument
+from App.Objects.Arguments.LiteralArgument import LiteralArgument
 from App.Objects.Executable import Executable
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App.Objects.Responses.NoneResponse import NoneResponse
@@ -52,7 +53,7 @@ class Console(View):
 
                 self.log_raw(i.get('console.print.divider').join(_displays))
             else:
-                self.log_raw(JSON(data = results.to_json()).dump(indent = 4))
+                self.log_raw(JSON(data = results.to_json(exclude_none = True, exclude_defaults = True)).dump(indent = 4))
 
     def _auth(self, i):
         if i.get('auth') != None:
@@ -72,10 +73,11 @@ class Console(View):
                 orig = Boolean,
                 default = True
             ),
-            Argument(
+            LiteralArgument(
                 name = 'console.print.as',
                 orig = String,
-                default = 'str'
+                default = 'str',
+                values = ['str', 'json']
             ),
             Argument(
                 name = 'console.print.display_ids',

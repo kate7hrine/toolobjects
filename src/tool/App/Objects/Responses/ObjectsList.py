@@ -1,4 +1,5 @@
 from App.Objects.Responses.Response import Response
+from App.Objects.Mixins.Model import Model
 from App.Objects.Object import Object
 from App.Objects.Relations.Submodule import Submodule
 from pydantic import Field
@@ -13,7 +14,7 @@ class ObjectsList(Response):
         unsaveable - means that objects in list are already flushed, and they shouldn't be written again
     '''
 
-    items: list[Object] = Field(default = [])
+    items: list[Model] = Field(default = [])
     total_count: int = Field(default = 0)
     supposed_to_be_single: bool = Field(default = False)
     unsaveable: bool = Field(default = False)

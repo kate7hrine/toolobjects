@@ -30,7 +30,7 @@ class StorageUnit(Object):
     def set_root(self, path: str):
         self._root_path = str(path)
 
-    def getCommonFile(self) -> File:
+    def get_common_file(self) -> File:
         _common = Path(self.common)
         for item in self.files:
             if _common != None and item.getPath(self.get_root()) == _common:
@@ -85,7 +85,7 @@ class StorageUnit(Object):
         self.log(f"copied storageunit from {str(self.getDir())} to {str(new_root)}")
 
     def toFile(self) -> File:
-        _common_file = self.getCommonFile()
+        _common_file = self.get_common_file()
         if _common_file == None:
             _common_file = self.getFirstFile()
         if _common_file == None:
@@ -98,7 +98,7 @@ class StorageUnit(Object):
         return _common_file
 
     def guessName(self) -> str:
-        _common = self.getCommonFile()
+        _common = self.get_common_file()
         if _common != None:
             return _common.name
 

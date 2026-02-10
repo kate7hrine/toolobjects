@@ -10,11 +10,26 @@ class Image(Media):
     @classmethod
     def _submodules(cls) -> list:
         from Media.Images.Download import Download
+        from Media.Images.ByStorageUnit import ByStorageUnit
+        from Media.Images.ByPath import ByPath
+        from Media.Images.MakeThumbnail import MakeThumbnail
 
         return [
             Submodule(
                 item = Download,
                 role = ['media_method']
+            ),
+            Submodule(
+                item = ByStorageUnit,
+                role = ['media_method']
+            ),
+            Submodule(
+                item = ByPath,
+                role = ['media_method']
+            ),
+            Submodule(
+                item = MakeThumbnail,
+                role = ['thumbnail']
             )
         ]
 
