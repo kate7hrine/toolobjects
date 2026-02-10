@@ -1,16 +1,12 @@
-from .Test import Test
+from App.Objects.Test import Test
 from App.Queue.Run import Run
-from App.Queue.Item import Item
-from App.Arguments.ArgumentDict import ArgumentDict
-from App.Arguments.Objects.List import List
-from App.Arguments.Types.Int import Int
 
 class QueueTest(Test):
     async def implementation(self, i):
         self.log('queue test')
 
         runs = Run()
-        args = ArgumentDict(items = {
+        args = {
             'prestart': '''
             [{
             "predicate": "App.Arguments.Types.Int.Int", 
@@ -35,14 +31,6 @@ class QueueTest(Test):
                         "direct_value": "#0.models.0.number"
                     }
                 }
-            },
-            {
-                "predicate": "App.Storage.DB.Flush.Flush",
-                "arguments": {
-                    "object": {
-                        "direct_value": "#2"
-                    }
-                }
             }]''',
             'output': '''
             [{
@@ -50,8 +38,16 @@ class QueueTest(Test):
                 "response": "App.Responses.AnyResponse.AnyResponse"
             }]
             '''
-        })
+        }
         '''
+            {
+                "predicate": "App.Storage.DB.Flush.Flush",
+                "arguments": {
+                    "object": {
+                        "direct_value": "#1"
+                    }
+                }
+            }
             {
                 "name": "Web.URL.URL",
                 "arguments": {

@@ -8,9 +8,8 @@ class Variableable:
     '''
     variables: DictList = None
 
-    def constructor(self):
-        super().constructor()
-
+    def init_vars(self):
+        self.log('init vars')
         self.variables = DictList(items = [])
         for var in self.__class__.getAllVariables():
             self.variables.append(var)

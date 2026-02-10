@@ -36,7 +36,7 @@ class LoadedObject(Object):
             self.parts.append(part)
 
     def getModule(self):
-        self.setModule(self.loadModule())
+        self.setModule(self.loadModule(ignore_modules = True))
 
         return self._module
 
@@ -49,7 +49,7 @@ class LoadedObject(Object):
     def setModule(self, module):
         self._module = module
 
-    def loadModule(self):
+    def loadModule(self, ignore_modules: bool = False):
         module_name = ".".join(self.getTitle())
 
         _root = Path(self.root)
@@ -58,10 +58,14 @@ class LoadedObject(Object):
         spec = importlib.util.spec_from_file_location(module_name, _mod.joinpath(self.title + '.py'))
         assert spec != None, 'spec not found'
         module = importlib.util.module_from_spec(spec)
+
         spec.loader.exec_module(module)
 
         common_object = getattr(module, self.title, None)
         assert common_object != None, f"{module_name}: {self.title} is not found"
+        if ignore_modules == False:
+            _modules = common_object.getNotInstalledModules()
+            assert len(_modules) == 0, f"following modules not installed: {', '.join(_modules)}"
 
         try:
             if issubclass(common_object, Object) == False:

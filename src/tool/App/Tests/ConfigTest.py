@@ -1,4 +1,4 @@
-from .Test import Test
+from App.Objects.Test import Test
 from App import app
 
 class ConfigTest(Test):

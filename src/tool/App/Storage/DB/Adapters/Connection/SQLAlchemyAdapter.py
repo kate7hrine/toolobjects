@@ -1,7 +1,5 @@
 from App.Storage.DB.Adapters.ConnectionAdapter import ConnectionAdapter
 from App.Storage.DB.Adapters.ObjectAdapter import ObjectAdapter
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, event, String
 from snowflake import SnowflakeGenerator
 from typing import Any
 import json
@@ -12,7 +10,14 @@ class SQLAlchemyAdapter(ConnectionAdapter):
     ObjectUnit: Any = None
     ObjectUnitLink: Any = None
 
+    @classmethod
+    def getRequiredModules(self):
+        return ['sqlalchemy==2.0.44', 'snowflake-id']
+
     def _init_models(self):
+        from sqlalchemy.ext.declarative import declarative_base
+        from sqlalchemy import Column, Integer, event, String
+
         Base = declarative_base()
         _id_gen = SnowflakeGenerator(32)
 

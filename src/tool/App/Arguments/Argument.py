@@ -1,7 +1,7 @@
 #from App.Documentation.Documentation import Documentation
 from .Assertions.Assertion import Assertion
 from App.Objects.Object import Object
-from typing import Any, List
+from typing import Any, List, Literal
 from pydantic import Field, computed_field
 
 class Argument(Object):
@@ -26,6 +26,7 @@ class Argument(Object):
     is_sensitive: bool = Field(default = False)
     auto_apply: bool = Field(default = False)
     assertions: List[Assertion] = Field(default=[])
+    role: Literal['config', 'env'] = Field(default=[])
 
     current: Any = Field(default=None)
 

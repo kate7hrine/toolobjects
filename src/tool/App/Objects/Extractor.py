@@ -1,5 +1,4 @@
 from App.Objects.Executable import Executable
-from App.Arguments.ArgumentDict import ArgumentDict
 from App.Responses.ModelsResponse import ModelsResponse
 from App.Objects.Object import Object
 from App.Arguments.Objects.Orig import Orig
@@ -38,6 +37,8 @@ class Extractor(Executable):
         pass
 
     async def implementation_wrap(self, i = {}) -> ModelsResponse:
+        self.init_vars()
+
         await self.implementation(i)
 
         return ModelsResponse(models = self.variables.get("items").current)

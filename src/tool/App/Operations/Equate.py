@@ -15,5 +15,5 @@ class Equate(Act):
             )
         ])
 
-    async def implementation(self, i: ArgumentDict) -> None:
-        i.items['equate_this'].current = i.get('to')
+    async def implementation(self, i) -> None:
+        i.values['equate_this'].current = i.get('to')

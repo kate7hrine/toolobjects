@@ -1,4 +1,4 @@
-from App.Tests.Test import Test
+from App.Objects.Test import Test
 from Data.Text import Text
 from Data.Random import Random
 from App import app

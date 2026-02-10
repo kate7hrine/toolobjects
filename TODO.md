@@ -28,7 +28,7 @@
 - [x] flushed object: allow to override name (ObjectMeta.object_names)
 - [x] ~~add collections?~ allow override getLinks
 - [ ] Web.DownloadManager.Manager
-- [ ] Data.XML
+- [x] Data.XML
 - [ ] File.FileTypes.Image
 - [ ] App.Config.Set
 - [ ] App.Config.Get
@@ -39,14 +39,14 @@
 - [ ] DisplayType (?)
 - [x] get rid of saveable
 - [x] Executable.common_object move to submodule with common name
-- [ ] declare requirements that module uses
+- [x] declare requirements that module uses
 - [ ] allow to replace some field with link
 - [ ] db flush: move links
 - [ ] db flush: replaced links
-- [ ] custom object can contain "source" and "meta" fields in it and replace the original
+- [ ] custom object can contain "source" and "meta" fields in it and replace the original (?)
 - [ ] db flush: when loading from db save the link to db's item and add sync between them
-- [ ] objects list: split to Namespace, allow to add another object lists
-- [ ] objects list: fallback to common if module not found
+- [x] objects list: split to Namespace, allow to add another object lists
+- [ ] ~~objects list: fallback to common if module not found~~
 - [ ] arguments strangely passes to executable
 - [ ] daemon, App.Daemons.StartDaemon, implementation_cycle() (?)
 - [ ] Configurable: role to argumnet 'env' or 'config'

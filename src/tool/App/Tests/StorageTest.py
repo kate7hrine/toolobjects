@@ -1,6 +1,5 @@
-from App.Tests.Test import Test
+from App.Objects.Test import Test
 from App import app
-import asyncio
 
 class StorageTest(Test):
     async def implementation(self, i):
@@ -26,4 +25,3 @@ class StorageTest(Test):
         _unit.files = _unit.genFilesList()
 
         self.log_raw(_unit)
-        await asyncio.sleep(1)

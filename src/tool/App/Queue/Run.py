@@ -39,7 +39,7 @@ class Run(Act):
             )
         ])
 
-    async def implementation(self, i: ArgumentDict):
+    async def implementation(self, i):
         queue = Queue()
         queue.output = i.get('output')
 

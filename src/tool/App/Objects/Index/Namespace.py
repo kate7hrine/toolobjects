@@ -43,8 +43,6 @@ class Namespace(Object):
                     self.log(f"{item.name}: loaded but not imported", role=['module_skipped'])
             except Exception as exception:
                 item.is_success = False
-
-                raise exception
                 self.log_error(exception)
 
                 if isinstance(exception, AssertionError) == False and isinstance(exception, ModuleNotFoundError) == False:

@@ -1,5 +1,5 @@
 from App import app
-from typing import Any
+from typing import Any, Literal
 
 class Configurable:
     '''
@@ -11,7 +11,7 @@ class Configurable:
         pass
 
     @classmethod
-    def getAllSettings(cls):
+    def getAllSettings(cls, where: Literal['env', 'config'] = None):
         '''
         There are similar by code functions: Configurable.getAllSettings, Validable.getAllArguments, Submodulable.getAllSubmodules, Variableable.getAllVariables.
         thats not so many, but it's better to move to MROThing or smth
@@ -24,11 +24,18 @@ class Configurable:
 
             item = class_val.getSettings()
             if item != None:
+                if where != None:
+                    if where in item.role:
+                        continue
+
                 alls.append(item)
 
         return alls
 
-    # @staticmethod
     @classmethod
-    def getOption(cls, name: str, default: Any = None):
+    def getAllEnvSettings(cls):
+        return cls.getAllSettings(where='env')
+
+    @classmethod
+    def getOption(cls, name: str, default: Any = None, where: Literal['env', 'config'] = 'config'):
         return app.Config.get(name, default)

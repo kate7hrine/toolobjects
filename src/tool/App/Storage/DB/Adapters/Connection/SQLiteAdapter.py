@@ -1,5 +1,4 @@
 from App.Storage.DB.Adapters.Connection.SQLAlchemyAdapter import SQLAlchemyAdapter
-from sqlalchemy.orm import Session
 from pydantic import Field
 from typing import Literal, Any
 
@@ -22,6 +21,7 @@ class SQLiteAdapter(SQLAlchemyAdapter):
 
     def _get_engine(self, connection_string: str):
         from sqlalchemy import create_engine
+        from sqlalchemy.orm import Session
 
         self._engine = create_engine(connection_string)
         self._session = Session(self._engine, expire_on_commit=False)

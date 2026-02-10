@@ -1,4 +1,4 @@
-from App.Tests.Test import Test
+from App.Objects.Test import Test
 from App.Console.PrintLog import PrintLog
 
 class ConsoleLogTest(Test):

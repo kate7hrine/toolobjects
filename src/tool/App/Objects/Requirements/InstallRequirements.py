@@ -1,0 +1,32 @@
+from App.Objects.Act import Act
+from App.Arguments.ArgumentDict import ArgumentDict
+from App.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Arguments.Objects.Executable import Executable
+from App.Responses.AnyResponse import AnyResponse
+
+class InstallRequirements(Act):
+    @classmethod
+    def getArguments(cls):
+        return ArgumentDict(items=[
+            Executable(
+                name = 'object',
+                assertions = [NotNoneAssertion()]
+            )
+        ])
+
+    async def implementation(self, i):
+        import subprocess, sys
+
+        _object = i.get('object')
+        modules = _object.getNotInstalledModules()
+        if len(modules) < 1:
+            self.log(f"plugin {_object.getNameJoined()} does not contains uninstalled modules")
+
+        else:
+            _pars = [sys.executable, '-m', 'pip', 'install']
+            for _module in modules:
+                _pars.append(_module)
+
+            subprocess.call(_pars)
+
+        return AnyResponse(data = modules)

@@ -41,7 +41,7 @@ class Item(Object):
         for key, val in original_arguments.items():
             final_arguments[key] = self.getArgument(original_arguments, key, val)
 
-        return ArgumentDict(items = final_arguments)
+        return final_arguments
 
     def getArgument(self, original_arguments: dict, key: str, val: str | dict) -> Any:
         # Computing value
@@ -60,7 +60,7 @@ class Item(Object):
 
     async def run(self):
         arguments = self.getArguments()
-        self.log(f"Running {self.predicate} with arguments {arguments.items}")
+        self.log(f"Running {self.predicate} with arguments {arguments}")
 
         item_class = self.getPredicate()
         item_instance = item_class(**self.getBuildArguments())

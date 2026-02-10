@@ -3,6 +3,10 @@ from pydantic import Field
 from App import app
 
 class Executable(Argument):
+    '''
+    Returns object by name. named as "executable"
+    '''
+
     str_type: str = Field(default = None)
 
     def implementation(self, original_value: str):

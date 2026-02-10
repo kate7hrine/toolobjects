@@ -1,7 +1,6 @@
 from pydantic import BaseModel as PydanticBaseModel, computed_field, Field
 
 class BaseModel(PydanticBaseModel):
-
     @computed_field
     @property
     def class_name(self) -> str:
@@ -19,7 +18,11 @@ class BaseModel(PydanticBaseModel):
 
     # model_dump alias
     def to_json(self, exclude_internal: bool = True):
-        return self.model_dump(mode='json')
+        excludes = []
+        if exclude_internal == True:
+            excludes = self._internal_fields
+
+        return self.model_dump(mode='json', exclude=excludes)
 
     @classmethod
     def getMRO(cls) -> list:
