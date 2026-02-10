@@ -1,3 +1,0 @@
-### App.Objects.Responses.Response
-
-...
