@@ -8,7 +8,7 @@ from App.Storage.VirtualPath.Path import Path as VirtualPath
 
 class Navigate(Executable):
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
             Argument(
                 name = 'path',

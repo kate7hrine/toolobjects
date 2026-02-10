@@ -66,7 +66,7 @@ class DefaultExecutorWheel(Act):
         return results
 
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
             Argument(
                 name = 'i',

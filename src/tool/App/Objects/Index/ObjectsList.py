@@ -85,14 +85,14 @@ class ObjectsList(Object):
         return _item
 
     @classmethod
-    def getDisplayments(cls):
+    def _displayments(cls):
         return [Displayment(
             role = ['js'],
             value = "Web/_js/ObjectsList.js"
         )]
 
     @classmethod
-    def getSettings(cls):
+    def _settings(cls):
         return [
             ListArgument(
                 name = 'objects.index.namespaces',

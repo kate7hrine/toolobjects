@@ -8,7 +8,7 @@ from Data.String import String
 
 class GetHash(Act):
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
             Argument(
                 name = 'string',
@@ -16,7 +16,7 @@ class GetHash(Act):
                 assertions = [NotNoneAssertion()]
             )
         ])
-    
+
     def implementation(self, i):
         hasher = PasswordHasher()
 

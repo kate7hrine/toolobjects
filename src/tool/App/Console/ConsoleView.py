@@ -48,7 +48,7 @@ class ConsoleView(View):
                 self.log_raw(JSON(data = results.to_json()).dump(indent = 4))
 
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
             Argument(
                 name = 'console_view.print_result',

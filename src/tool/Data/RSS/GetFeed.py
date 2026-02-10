@@ -19,7 +19,7 @@ class GetFeed(Extractor):
     last_time: float = Field(default = 0)
 
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
             Argument(
                 name = 'url',

@@ -41,7 +41,7 @@ class FileType(Object):
         return _common_source.obj.value
 
     @classmethod
-    def getDisplayments(cls):
+    def _displayments(cls):
         class DisplayAsString(Act):
             def implementation(self, i):
                 orig = i.get('orig')

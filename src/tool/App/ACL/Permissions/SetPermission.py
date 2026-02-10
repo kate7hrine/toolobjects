@@ -5,7 +5,7 @@ from App.ACL.Permissions.ObjectPermission import ObjectPermission
 
 class SetPermission(Act):
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
             Argument(
                 name = 'permission',

@@ -7,7 +7,7 @@ import random
 
 class Random(Extractor):
     @classmethod
-    def getArguments(cls):
+    def _arguments(cls):
         return ArgumentDict(items=[
             Argument(
                 name = "min",

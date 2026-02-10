@@ -7,7 +7,7 @@ from App.Objects.Responses.AnyResponse import AnyResponse
 
 class InstallRequirements(Act):
     @classmethod
-    def getArguments(cls):
+    def _arguments(cls):
         return ArgumentDict(items=[
             Argument(
                 name = 'object',

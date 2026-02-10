@@ -20,7 +20,7 @@ class DaemonList(Object):
         app.mount('Daemons', daemons)
 
     @classmethod
-    def getSettings(cls):
+    def _settings(cls):
         return [
             ListArgument(
                 name = 'daemons.autostart',

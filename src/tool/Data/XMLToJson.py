@@ -15,7 +15,7 @@ class XMLToJson(Convertation):
         return ObjectsList(items = [_item])
 
     @classmethod
-    def getRequiredModules(cls):
+    def _required_modules(cls):
         return [
             Requirement(
                 name = 'xmltodict'
@@ -23,7 +23,7 @@ class XMLToJson(Convertation):
         ]
 
     @classmethod
-    def getSubmodules(cls) -> list[Submodule]:
+    def _submodules(cls) -> list[Submodule]:
         return [
             Submodule(
                 item = XML,

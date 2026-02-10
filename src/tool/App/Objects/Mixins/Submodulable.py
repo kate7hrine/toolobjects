@@ -7,18 +7,18 @@ class Submodulable:
     '''
 
     @classmethod
-    def getSubmodules(cls) -> list[Submodule]:
+    def _submodules(cls) -> list[Submodule]:
         return []
 
     @classmethod
-    def getAllSubmodules(cls, with_role: list[str] | None = None) -> list[Submodule]:
+    def getSubmodules(cls, with_role: list[str] | None = None) -> list[Submodule]:
         modules = []
 
         for item in cls.getMRO():
             if hasattr(item, 'getSubmodules') == False:
                 continue
 
-            _items = item.getSubmodules()
+            _items = item._submodules()
             if _items == None:
                 continue
 

@@ -5,7 +5,7 @@ from Data.Gallery.AddImages import AddImages
 
 class Gallery(Client):
     @classmethod
-    def getSubmodules(cls) -> list:
+    def _submodules(cls) -> list:
         return [
             Submodule(
                 item = Image,

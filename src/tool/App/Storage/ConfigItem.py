@@ -78,7 +78,7 @@ class ConfigItem(Object):
             #self.reset()
 
     def append_settings_of_module(self, module) -> None:
-        _settings = module.getSettings()
+        _settings = module._settings()
         if _settings != None:
             for item in _settings:
                 self.values.compare.append(item)

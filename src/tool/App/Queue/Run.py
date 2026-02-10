@@ -13,7 +13,7 @@ class Run(Act):
     '''
 
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items=[
             ListArgument(
                 name = 'prestart',

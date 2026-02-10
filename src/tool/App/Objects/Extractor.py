@@ -9,7 +9,7 @@ class Extractor(Executable):
     '''
 
     @classmethod
-    def getVariables(cls):
+    def _variables(cls):
         return [
             ListArgument(
                 name = 'items',

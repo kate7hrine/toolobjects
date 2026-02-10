@@ -11,21 +11,21 @@ class Variableable:
     def init_vars(self):
         # self.log('init vars')
         self.variables = DictList(items = [])
-        for var in self.__class__.getAllVariables():
+        for var in self.__class__.getVariables():
             self.variables.append(var)
 
     @classmethod
-    def getVariables(cls) -> list:
+    def _variables(cls) -> list:
         pass
 
     @classmethod
-    def getAllVariables(cls) -> list:
+    def getVariables(cls) -> list:
         alls = []
 
         for class_val in cls.getMRO():
             if hasattr(class_val, "getVariables") == False:
                 continue
-            _vars = class_val.getVariables()
+            _vars = class_val._variables()
             if _vars == None:
                 continue
 

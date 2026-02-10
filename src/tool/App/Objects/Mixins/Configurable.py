@@ -7,18 +7,18 @@ class Configurable:
     '''
 
     @classmethod
-    def getSettings(cls) -> list:
+    def _settings(cls) -> list:
         pass
 
     @classmethod
-    def getAllSettings(cls, where: Literal['env', 'config'] = None):
+    def getSettings(cls, where: Literal['env', 'config'] = None):
         alls = []
 
         for class_val in cls.getMRO():
             if hasattr(class_val, "getSettings") == False:
                 continue
 
-            items = class_val.getSettings()
+            items = class_val._settings()
             if items == None:
                 continue
 
@@ -33,7 +33,7 @@ class Configurable:
 
     @classmethod
     def getAllEnvSettings(cls):
-        return cls.getAllSettings(where='env')
+        return cls.getSettings(where='env')
 
     @classmethod
     def getOption(cls, name: str, default: Any = None, where: Literal['env', 'config'] = 'config'):

@@ -100,7 +100,7 @@ class Logger(Object):
         self.addHook('log', print_file)
 
     @classmethod
-    def getSettings(cls):
+    def _settings(cls):
         return [
             ListArgument(
                 name = 'logger.print.exclude',

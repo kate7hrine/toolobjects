@@ -58,7 +58,7 @@ class Storage(Object):
                 return item
 
     @classmethod
-    def getSettings(cls):
+    def _settings(cls):
         return [
             ListArgument(
                 name = 'storage.dbs',

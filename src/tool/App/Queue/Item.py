@@ -33,7 +33,7 @@ class Item(Object):
     def getBuildArguments(self):
         return self.build
 
-    def getArguments(self) -> dict:
+    def _arguments(self) -> dict:
         original_arguments = self.arguments
         final_arguments = {}
 
@@ -58,7 +58,7 @@ class Item(Object):
             return vals.toString()
 
     async def run(self):
-        arguments = self.getArguments()
+        arguments = self._arguments()
         self.log(f"Running {self.predicate} with arguments {arguments}")
 
         item_class = self.getPredicate()

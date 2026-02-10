@@ -99,7 +99,7 @@ class Manager(Object):
         return _headers.minimal_json()
 
     @classmethod
-    def getSettings(cls):
+    def _settings(cls):
         return [
             Argument(
                 name = "download_manager.max_concurrent_downloads",

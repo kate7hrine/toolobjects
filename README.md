@@ -4,6 +4,11 @@ Experimental data receivation / organization tool / framework / app / toolbox / 
 
 ### Documentation
 
+- [How to run (Console view)](docs/guides/running.md)
+- [Some examples](docs/guides/examples.md)
+<!--- [Example 1: implementing TODO list](docs/guides/todo_list.md)-->
+- [Example 2: RSS channels](docs/guides/rss.md)
+
 - [Objects system](docs/objects/objects.md)
 - [Namespaces, objects list](docs/objects/objects_list.md)
 - [Executables](docs/objects/executables.md)
@@ -18,11 +23,6 @@ Experimental data receivation / organization tool / framework / app / toolbox / 
 - [Queue](docs/other/queue.md)
 - [Daemons](docs/other/daemons.md)
 - [Download manager](docs/other/download_manager.md)
-
-- [How to run (Console view)](docs/views/console.md)
-- [Some examples](docs/guides/examples.md)
-- [Example 1: implementing TODO list](docs/guides/todo_list.md)
-- [Example 2: RSS channels](docs/guides/rss.md)
 
 ## Objects
 

@@ -8,31 +8,31 @@ class Validable:
 
     def getCompareKeys(self) -> list:
         _keys = list()
-        for item in self.getAllArguments().toList():
+        for item in self.getArguments().toList():
             _keys.append(item.name)
 
         return _keys
 
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         '''
         Arguments for validation
         '''
         return ArgumentDict(items = [])
 
     @classmethod
-    def getAllArguments(cls) -> ArgumentDict:
+    def getArguments(cls) -> ArgumentDict:
         '''
         Joins ArgumentDicts from all extended classes
         '''
 
         # Takes current ArgumentDict cuz it can contain properties
-        _list = cls.getArguments()
+        _list = cls._arguments()
 
         # Slicing 1 because first arguments already got
         for _class in cls.getMRO()[1:]:
             if hasattr(_class, 'getArguments') == True:
-                new_arguments = _class.getArguments()
+                new_arguments = _class._arguments()
                 if new_arguments == None:
                     continue
 

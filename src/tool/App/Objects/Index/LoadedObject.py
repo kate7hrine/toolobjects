@@ -102,7 +102,7 @@ class LoadedObject(Object):
         module.mount()
 
     def appendSettings(self) -> None:
-        _settings = self.getModule().getAllSettings()
+        _settings = self.getModule().getSettings()
         for _item in _settings:
             app.Config.getItem(role = _item.role).append_compare(_item)
 

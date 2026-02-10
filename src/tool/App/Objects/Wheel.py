@@ -12,7 +12,7 @@ class Wheel(Executable):
     '''
 
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         itms = ArgumentDict()
         itms.missing_args_inclusion = True
 
@@ -41,7 +41,7 @@ class Wheel(Executable):
 
     def _wheel(self, i):
         modules = []
-        for submodule in self.getAllSubmodules():
+        for submodule in self.getSubmodules():
             if 'wheel' not in submodule.role:
                 continue
 
@@ -60,7 +60,7 @@ class Wheel(Executable):
         '''
 
         for item in items:
-            decl = ArgumentValues(compare = item.item.getAllArguments(), values = values)
+            decl = ArgumentValues(compare = item.item.getArguments(), values = values)
             if decl.diff():
                 return item
 

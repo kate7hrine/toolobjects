@@ -6,7 +6,7 @@ class Int(Object):
     value: int = None
 
     @classmethod
-    def getDisplayments(cls):
+    def _displayments(cls):
         class DisplayAsString(Act):
             def implementation(self, i):
                 orig = i.get('orig')

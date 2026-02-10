@@ -7,7 +7,7 @@ from Data.Boolean import Boolean
 
 class SetChecked(Act):
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
             Argument(
                 name = 'item',

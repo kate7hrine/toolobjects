@@ -10,7 +10,7 @@ from App.Objects.Responses.ObjectsList import ObjectsList
 
 class ExecuteById(Act):
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
             Argument(
                 name = 'item',

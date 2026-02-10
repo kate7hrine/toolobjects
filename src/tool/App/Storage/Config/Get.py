@@ -8,7 +8,7 @@ from App import app
 
 class Get(Act):
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
             ListArgument(
                 name = 'key',

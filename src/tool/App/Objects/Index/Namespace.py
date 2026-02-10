@@ -115,7 +115,7 @@ class Namespace(Object):
 
             if self.load_submodules == True and _obj.hasModuleLoaded():
                 # Not loading for prioritized, xd.
-                for item in _obj.getModule().getAllSubmodules():
+                for item in _obj.getModule().getSubmodules():
                     _modl = LoadedObject(
                         path = _str_path,
                         root = self.root

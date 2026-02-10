@@ -7,7 +7,7 @@ from App import app
 
 class FileManager(Client):
     @classmethod
-    def getSubmodules(cls):
+    def _submodules(cls):
         return [
             Submodule(
                 item = Dir,

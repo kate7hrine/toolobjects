@@ -73,7 +73,7 @@ class AuthLayer(Object):
         return len(list(app.AuthLayer.getPermissions(likeness))) > 0
 
     @classmethod
-    def getSettings(cls):
+    def _settings(cls):
         return [
             ListArgument(
                 name = 'app.auth.users',

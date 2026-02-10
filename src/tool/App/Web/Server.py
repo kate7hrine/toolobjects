@@ -242,7 +242,7 @@ class Server(View):
             await asyncio.sleep(3600)
 
     @classmethod
-    def getSettings(cls) -> list:
+    def _settings(cls) -> list:
         return [
             Argument(
                 name = 'web.options.host',

@@ -7,7 +7,7 @@ from App import app
 
 class PrintLog(Executable):
     @classmethod
-    def getArguments(cls):
+    def _arguments(cls):
         return ArgumentDict(items=[
             Argument(
                 name = 'log',

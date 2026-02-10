@@ -74,7 +74,7 @@ class Executable(Object, Variableable, Validable):
 
             assert self.canBeUsedBy(_auth), "access denied (executable={0}, every_call_permission_check=true, user={1})".format(self.getClassNameJoined(), _name)
 
-        args = self.getAllArguments()
+        args = self.getArguments()
         vals = i.toDict()
         passing = args.compareWith(
             inputs = vals,

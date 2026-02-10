@@ -10,7 +10,7 @@ from App.Storage.StorageUUID import StorageUUID
 
 class Link(Act):
     @classmethod
-    def getArguments(cls):
+    def _arguments(cls):
         return ArgumentDict(items = [
             Argument(
                 name = 'owner',

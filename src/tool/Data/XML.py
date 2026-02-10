@@ -8,7 +8,7 @@ class XML(Object):
     xml: str = Field()
 
     @classmethod
-    def getSubmodules(cls) -> list:
+    def _submodules(cls) -> list:
         from Data.XMLToJson import XMLToJson
 
         return [

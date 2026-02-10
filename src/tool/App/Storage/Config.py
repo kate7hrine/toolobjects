@@ -52,7 +52,7 @@ class Config(Object):
             return None
 
     @classmethod
-    def getSettings(cls):
+    def _settings(cls):
         return [
             ListArgument(
                 name = 'app.config.items',

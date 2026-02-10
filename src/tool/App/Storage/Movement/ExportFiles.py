@@ -3,7 +3,7 @@ from App.Objects.Arguments.ArgumentDict import ArgumentDict
 
 class ExportFiles(Act):
     @classmethod
-    def getArguments(cls):
+    def _arguments(cls):
         pass
 
     async def implementation(self, i):

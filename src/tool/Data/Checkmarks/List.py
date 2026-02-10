@@ -12,7 +12,7 @@ class List(Object):
                 yield item
 
     @classmethod
-    def getDisplayments(cls):
+    def _displayments(cls):
         class DisplayAsString(Act):
             def implementation(self, i):
                 orig = i.get('orig')

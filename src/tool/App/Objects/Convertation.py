@@ -11,14 +11,14 @@ class Convertation(Executable):
 
     @classmethod
     def getCommonObject(cls):
-        return cls.getAllSubmodules(with_role=['object_in'])[0]
+        return cls.getSubmodules(with_role=['object_in'])[0]
 
     @classmethod
     def getConvertsTo(cls):
-        return cls.getAllSubmodules(with_role=['object_out'])[0]
+        return cls.getSubmodules(with_role=['object_out'])[0]
 
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items=[
             Argument(
                 name = "orig",

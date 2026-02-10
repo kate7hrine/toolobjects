@@ -3,15 +3,15 @@ from pydantic import BaseModel
 
 class ModuleRequireable(BaseModel):
     @classmethod
-    def getRequiredModules(cls):
+    def _required_modules(cls):
         '''
         pip modules that required by object
         '''
         return []
 
     @classmethod
-    def getAllRequiredModules(cls):
-        return cls.getRequiredModules()
+    def getRequirements(cls):
+        return cls._required_modules()
 
     @classmethod
     def getNotInstalledModules(self) -> list:
@@ -19,7 +19,7 @@ class ModuleRequireable(BaseModel):
         satisf_libs = []
         not_libs = []
 
-        for required_module in self.getRequiredModules():
+        for required_module in self._required_modules():
             if required_module.name in all_installed:
                 satisf_libs.append(required_module)
             else:

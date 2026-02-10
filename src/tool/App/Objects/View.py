@@ -40,7 +40,7 @@ class View(Executable):
                 return True
 
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
             Argument(
                 name = 'pre_i',

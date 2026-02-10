@@ -5,7 +5,7 @@ from App.Objects.Arguments.Argument import Argument
 
 class Equate(Act):
     @classmethod
-    def getArguments(cls) -> ArgumentDict:
+    def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items=[
             Argument(
                 name = 'equate_this'

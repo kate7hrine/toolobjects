@@ -9,8 +9,8 @@ class Convertable(BaseModel):
     @classmethod
     def findConvertationsForClass(cls, for_class: BaseModel) -> list:
         converters = []
-        for submodule in cls.getAllSubmodules(with_role=['convertation']):
-            obj_in = submodule.item.getAllSubmodules(with_role=['object_out'])
+        for submodule in cls.getSubmodules(with_role=['convertation']):
+            obj_in = submodule.item.getSubmodules(with_role=['object_out'])
             for _submodule in obj_in:
                 if _submodule.item is for_class:
                     converters.append(submodule)
@@ -27,14 +27,14 @@ class Convertable(BaseModel):
         return await _itm.execute(i = {'orig': self})
 
     @classmethod
-    def getDisplayments(cls) -> list[BaseModel]:
+    def _displayments(cls) -> list[BaseModel]:
         return None
 
     @classmethod
-    def getAllDisplayments(cls) -> Generator[BaseModel]:
+    def getDisplayments(cls) -> Generator[BaseModel]:
         for item in cls.getMRO():
             if hasattr(item, 'getDisplayments') == True:
-                new = item.getDisplayments()
+                new = item._displayments()
                 if new == None:
                     continue
 
@@ -42,7 +42,7 @@ class Convertable(BaseModel):
                     yield item
 
     def displayAs(self, as_type: str) -> str | Any:
-        for displayment_probaly in self.getAllDisplayments():
+        for displayment_probaly in self.getDisplayments():
             if as_type in displayment_probaly.role:
                 return displayment_probaly.value().implementation(i = {'orig': self})
 
