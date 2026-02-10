@@ -7,7 +7,7 @@ from Web.Feeds.Elements.Author import Author
 from Web.Feeds.Elements.Category import Category
 from typing import ClassVar, Generator, AsyncGenerator
 from email.utils import parsedate_to_datetime
-from datetime import datetime
+from datetime import datetime, timezone
 
 class Atom(FeedProtocol):
     protocol_name = 'atom'
@@ -53,7 +53,9 @@ class Atom(FeedProtocol):
         if data.find('name') != None:
             _self.name = data.find('name').text
         if data.find('email') != None:
-            _self.name = data.find('email').text
+            _self.email = data.find('email').text
+        if data.find('uri') != None:
+            _self.uri = data.find('uri').text
 
         return _self
 
@@ -73,7 +75,8 @@ class Atom(FeedProtocol):
             "%Y-%m-%dT%H:%M:%S",
         ]:
             try:
-                return datetime.strptime(val, fmt)
+                _val = datetime.strptime(val, fmt)
+                return _val
             except ValueError:
                 continue
 
@@ -102,7 +105,7 @@ class Atom(FeedProtocol):
             entry.author.append(self._get_author(author))
 
         for item in data.find_all('category'):
-            entry.author.append(self._get_category(item))
+            entry.category.append(self._get_category(item))
 
         _published = data.find('published')
         _edited = data.find('updated')

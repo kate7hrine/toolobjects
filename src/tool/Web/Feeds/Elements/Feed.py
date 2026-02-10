@@ -5,6 +5,7 @@ from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from Data.Types.Boolean import Boolean
 from bs4 import BeautifulSoup
+from bs4.dammit import EncodingDetector
 
 class Feed(Object):
     @classmethod
@@ -28,7 +29,9 @@ class Feed(Object):
 
     @classmethod
     def parse(self, data: str):
-        return BeautifulSoup(data, 'xml')
+        _detect = EncodingDetector.find_declared_encoding(data, is_html=True)
+
+        return BeautifulSoup(data.encode(_detect, errors = 'ignore'), 'xml')
 
     @classmethod
     def getArguments(cls):

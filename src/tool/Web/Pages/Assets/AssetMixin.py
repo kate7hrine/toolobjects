@@ -31,7 +31,10 @@ class AssetMixin(BaseModel):
 
     def set_url(self, href: str, base_url: str = ''):
         if not href.startswith('http'):
-            href = base_url + href
+            if href.startswith('data:') == False:
+                href = base_url + href
+            else:
+                return
 
         self.url = href
 
@@ -47,6 +50,10 @@ class AssetMixin(BaseModel):
     async def download_function(self, dir, name: str = None):
         if name == None:
             name = self.get_encoded_url()
+
+        if self.url == None:
+            self.log('no url...')
+            return
 
         _item = app.DownloadManager.addURL(self.url, dir, str(name))
         await _item.start()

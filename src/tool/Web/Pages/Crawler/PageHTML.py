@@ -32,7 +32,7 @@ class PageHTML(Object):
             yield Favicon(url = orig_page.base_url + '/favicon.ico')
 
     def get_media(self, orig_page: Page) -> Generator[Favicon]:
-        for tag in self.bs.select("[src]"):
+        for tag in self.bs.select("img[src], video[src], audio[src]"):
             item = Media()
             item.set_url(tag.get('src'), orig_page.relative_url)
             item.set_node(tag)
@@ -128,7 +128,7 @@ class PageHTML(Object):
         return head_html
 
     def clear_js(self):
-        self.log('removing all js functions from tags')
+        #self.log('removing all js functions from tags')
 
         for tag in self.bs.select('*'):
 
@@ -145,6 +145,10 @@ class PageHTML(Object):
 
             tag.attrs = {key:value for key,value in tag.attrs.items()
                     if key not in attrs_to_remove}
+
+    def remove_css(self):
+        for tag in self.bs.select('style'):
+            tag.decompose()
 
     def make_correct_links(self, page):
         _s = page.html._get('file').get_storage_unit()

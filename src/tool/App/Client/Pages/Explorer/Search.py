@@ -3,6 +3,7 @@ from App.DB.Search.Search import Search as RealSearch
 from App.DB.Query.Condition import Condition
 from App.DB.Query.Sort import Sort
 from App.DB.Query.Values.Value import Value
+from App import app
 
 class Search(Displayment):
     for_object = 'App.DB.Search'
@@ -12,6 +13,7 @@ class Search(Displayment):
         query = self.request.rel_url.query
         per_page = query.get('per_page', 30)
         storage = query.get('storage')
+        act = query.get('act')
         linked_to = query.get('linked_to')
         after = query.get('after', 0)
         prev = query.get('prev', 0)
@@ -104,8 +106,26 @@ class Search(Displayment):
             'search_html': search_html,
             'last_uuid': last_uuid,
             'per_page': per_page,
-            'params': params
+            'params': params,
+            'act': act
         })
+
+        if act == 'linked_to':
+            linked_to_type = query.get('linked_to_type')
+
+            match (linked_to_type):
+                case 'item':
+                    self.context.update({
+                        '_item': app.Storage.get(storage)
+                    })
+                case _:
+                    self.context.update({
+                        '_object': linked_to
+                    })
+
+            self.context.update({
+                'act': act
+            })
 
         _url2 = dict(query)
         _url2['prev'] = prev

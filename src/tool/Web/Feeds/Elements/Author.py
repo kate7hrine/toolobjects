@@ -4,3 +4,4 @@ from pydantic import Field
 class Author(Object):
     name: str = Field(default = None)
     email: str = Field(default = None)
+    uri: str = Field(default = None)

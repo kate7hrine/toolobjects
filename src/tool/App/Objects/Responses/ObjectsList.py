@@ -42,6 +42,9 @@ class ObjectsList(Response):
         for item in self.items:
             yield item
 
+    def get(self, index: int):
+        return self.items[index]
+
     @classmethod
     def asArgument(cls, val: str) -> Object:
         if type(val) == str:

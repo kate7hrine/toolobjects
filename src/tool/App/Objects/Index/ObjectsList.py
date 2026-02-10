@@ -94,6 +94,11 @@ class ObjectsList(Object):
 
         return _item
 
+    def get_creations(self):
+        for item in self.namespaces:
+            for obj in item.get_creation_items():
+                yield obj
+
     def sort(self, items: list[str], show_only: str = None) -> dict:
         _items = dict()
         names = list()

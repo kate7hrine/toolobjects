@@ -5,6 +5,7 @@ from typing import Generator
 from pathlib import Path
 from pydantic import Field
 from App.Logger.LogPrefix import LogPrefix
+from App.Objects.Operations.Create.CreationItem import CreationItem
 import sys
 
 class Namespace(Object):
@@ -24,6 +25,7 @@ class Namespace(Object):
     ignore_dirs: list = Field(default = [])
     load_once: bool = Field(default = True)
     load_submodules: bool = Field(default = True)
+    creation_items: list[CreationItem] = Field(default = [])
 
     items: DictList = Field(default = None)
 
@@ -159,6 +161,9 @@ class Namespace(Object):
 
     def isAlreadyLoaded(self, item: LoadedObject) -> bool:
         return item.get_name_for_dictlist() in self._names
+
+    def get_creation_items(self):
+        return self.creation_items
 
     @property
     def append_prefix(self) -> LogPrefix:

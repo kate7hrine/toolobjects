@@ -143,7 +143,7 @@ class ObjectsList(ConnectionAdapter):
                 self_adapter.data.get('links').append(self.to_json())
 
                 if owner._orig != None:
-                    owner._orig.save()
+                    owner._orig.save(do_commit = False)
 
                 if self_adapter.auto_commit == True:
                     self_adapter.commit()

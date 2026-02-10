@@ -4,8 +4,11 @@ from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from Web.Feeds.Elements.Channel import Channel
 from Web.Feeds.Elements.Feed import Feed
+from App.Logger.LogPrefix import LogPrefix
 
 class Update(Act):
+    prefix: LogPrefix = None
+
     @classmethod
     def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
@@ -17,24 +20,35 @@ class Update(Act):
             )
         ]).join_class(Feed)
 
+    @property
+    def append_prefix(self):
+        return self.prefix
+
     async def _implementation(self, i):
         _channel = i.get('channel')
         response_xml = await Feed.download(_channel.get_original_url())
         root = Feed.parse(response_xml)
         _type = Feed.detect_type(root)
 
+        self.prefix = LogPrefix(
+            name = 'feed',
+            id = _channel.getDbIds()
+        )
+
+        # TODO update of the channel item
         assert _type != None, 'unknown type of feed'
 
         _count = 0
-        _old_time = _channel.local_obj.updated_at
+        _old_time = _channel.local_obj.updated_at.replace(tzinfo=None)
         _new_time = _old_time
         protocol = _type()
 
         async for entry in protocol._get_entries(_channel, root, i):
             # If found newer items
-            if entry.obj.created_at > _old_time:
+            _created_at = entry.obj.created_at.replace(tzinfo=None)
+            if _created_at > _old_time:
                 entry.local_obj.make_public()
-                if entry.obj.created_at > _new_time:
+                if _created_at > _new_time:
                     _new_time = entry.obj.created_at
                 _channel.link(entry)
 

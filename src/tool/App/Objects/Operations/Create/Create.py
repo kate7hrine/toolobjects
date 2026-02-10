@@ -1,4 +1,4 @@
 from App.Objects.Act import Act
 
-class Stop(Act):
+class Create(Act):
     pass

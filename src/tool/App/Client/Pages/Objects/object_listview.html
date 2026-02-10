@@ -1,9 +1,3 @@
 <div>
-    <span>{{ String.cut(item.any_name, 50) }}</span>
-
-    {% if item.hasDb() %}
-        <a href="?i=App.Objects.Object&uuids={{item.getDbIds()}}">
-            <sup>{{ item.getDbIds() }}</sup>
-        </a>
-    {% endif %}
+    <span>{{ String.cut(item.any_name, 90) }}</span>
 </div>

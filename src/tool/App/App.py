@@ -4,6 +4,7 @@ from App.Objects.Arguments.ArgumentValues import ArgumentValues
 from App.Objects.Misc.Increment import Increment
 from App.Objects.Index.Namespaces.Namespace import Namespace
 from App.Objects.Arguments.Argument import Argument
+from App.Objects.Operations.Create.CreationItem import CreationItem
 from pathlib import Path
 from pydantic import ConfigDict
 from typing import Any
@@ -103,7 +104,29 @@ class App(Object):
             load_once = False,
             ignore_dirs = ['Custom'],
             load_before = load_before,
-            load_after = load_after
+            load_after = load_after,
+            creation_items = [
+                CreationItem(
+                    name = 'Collection',
+                    object_name = 'Data.Primitives.Collections.Collection',
+                    create = 'Data.Primitives.Collections.Create',
+                ),
+                CreationItem(
+                    name = 'Media',
+                    object_name = 'Media.Media',
+                    create = 'Media.Get'
+                ),
+                CreationItem(
+                    name = 'RSS Feed',
+                    object_name = 'Web.Feeds.Elements.Channel',
+                    create = 'Web.Feeds.Create'
+                ),
+                CreationItem(
+                    name = 'Web page',
+                    object_name = 'Web.Pages.Page',
+                    create = 'Web.Pages.Get'
+                ),
+            ]
         )
         self.objects.load()
 

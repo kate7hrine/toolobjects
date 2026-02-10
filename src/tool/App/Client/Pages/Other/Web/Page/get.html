@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+Save page
+{% endblock %}
+
+{% block body %}
+    <form method="POST">
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <td>{{_("client.web_page.url")}}</td>
+                    <td>
+                        <input type="text" name="url">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Inline CSS</td>
+                    <td>
+                        <input type="checkbox" name="inline_css">
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" value="{{_('client.create')}}">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+{% endblock %}

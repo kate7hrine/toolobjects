@@ -12,7 +12,7 @@
         "client.index.export": "Export",
         "client.storages": "Storages",
         "client.storages.add": "Create new storage",
-        "client.storages.add.tip": "You can define any other db connection in config, but now a new SQLite DB will be created.",
+        "client.storages.add.tip": "New SQLite will be created now. You can change connection settings later.",
         "client.storages.create_collection": "Create new collection",
         "client.storages.create_collection.title": "Create collection",
         "client.storage.root": "Root",
@@ -53,6 +53,10 @@
         "client.bookmarks.add": "Bookmark this page",
 
         "client.web_pages.back": "Back to the page",
-        "client.web_pages.page_url": "Page URL"
+        "client.web_pages.page_url": "Page URL",
+
+        "client.rss.url": "Feed URL",
+
+        "client.web_page.url": "Page URL"
     }
 }

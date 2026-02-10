@@ -1,6 +1,6 @@
 #content {
     background: #fcfcfc;
-    padding: 10px 104px 10px 30px;
+    padding: 10px 160px 10px 30px;
 }
 
 #upper {
@@ -60,6 +60,19 @@
     background: white;
 }
 
+.search_items .search_item {
+    border-bottom: 1px solid #8888887d;
+    padding: 0px 0px 5px 0px;
+    display: grid;
+    grid-template-columns: 1fr 0fr;
+}
+
+.search_items .search_item a {
+    text-decoration: none;
+    font-size: 12px;
+    width: 145px;
+}
+
 #floating_menu:hover {
     opacity: 1;
 }
@@ -77,6 +90,10 @@ textarea.heighted {
     max-height: unset;
 }
 
+input[type='text'] {
+    width: 80%;
+}
+
 .displayment_back {
     font-size: 10px;
 }
@@ -88,4 +105,8 @@ textarea.heighted {
 body {
     word-break: break-word;
     word-wrap: break-word;
+}
+
+.options_hidden {
+    display: none;
 }

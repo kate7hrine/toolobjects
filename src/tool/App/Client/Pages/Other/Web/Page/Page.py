@@ -26,8 +26,15 @@ class Page(Displayment):
         match (act):
             case 'url':
                 url = query.get('url')
+                new_url = Asset.get_decoded_url(url)
+                redirect_url = item.relative_url + new_url
+
+                if new_url.startswith(item.relative_url) or new_url.startswith('http'):
+                    redirect_url = new_url
+
                 self.context.update({
-                    'url': Asset.get_decoded_url(url),
+                    'url': new_url,
+                    'redirect_url': redirect_url
                 })
                 return self.render_template('Other/Web/Page/page_url.html')
             case 'options':
@@ -44,6 +51,11 @@ class Page(Displayment):
         html = html_path.read_text(encoding = encoding)
 
         html = PageHTML.from_html(html)
+        if query.get('disable_js') == 'on':
+            html.clear_js()
+        if query.get('disable_css') == 'on':
+            html.remove_css()
+
         html.make_correct_links(item)
         head_html = html.move_head()
 

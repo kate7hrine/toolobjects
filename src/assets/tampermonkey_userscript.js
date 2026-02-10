@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      2026-02-06
 // @description  functions for image and page saving
-// @author       Kate7hrine
+// @author       v00d00mag1c
 // @match        http*://*/*
 // @grant        GM_getValue
 // ==/UserScript==

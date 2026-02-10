@@ -5,74 +5,127 @@ Search
 {% endblock %}
 
 {% block body %}
-    <form>
-        <table>
-            <tbody>
-                <tr>
-                    <td>Query</td>
-                    <td>
-                        <textarea style="height: 11px;max-width: 153px;" name="q">{{params.get('q') or ''}}</textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <label>
-                            <input type="checkbox" name="q.in_description" {% if params.get('q.in_description') %}checked{%endif%}>
-                            in description
-                        </label>
-                    </td>
-                </tr>
-                <tr>
-                    <td>In storage</td>
-                    <td>
-                        <input type="text" name="storage" value="{{params.get('storage') or ''}}">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Show unlisted</td>
-                    <td>
-                        <input type="checkbox" name="show_unlisted" {% if params.get('show_unlisted') == 'on' %}checked{% endif %}>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Ascend</td>
-                    <td>
-                        <input type="checkbox" name="ascend" {% if params.get('ascend') %}checked{% endif %}>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Per page</td>
-                    <td>
-                        <input type="text" name="per_page" value="{{per_page}}">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Object name</td>
-                    <td>
-                        <input type="text" name="only_object" value="{{params.get('only_object') or ''}}">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Display as</td>
-                    <td>
-                        <input type="text" name="display_as" value="{{params.get('display_as') or ''}}">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Display this page as</td>
-                    <td>
-                        <input type="text" name="display_page_as" value="{{params.get('display_page_as') or ''}}">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <input type="hidden" name="i" value="App.DB.Search">
-        <input type="hidden" name="linked_to" value="{{params.get('linked_to') or ''}}">
-        <input type="hidden" name="after" value="{{after}}">
+    <div>
+        <script>
+            function _toggle_options() {
+                document.querySelector('form').classList.toggle('options_hidden')
+            }
+        </script>
 
-        <input type="submit" value="Search">  
-    </form>
+        <div>
+            {% if act == 'linked_to' %}
+                <div>
+                    {% if _item %}
+                        <div>
+                            <a href="/?i=App.Storage.Item.Get&name={{_item.name}}">
+                                <<< back
+                            </a>
+                        </div>
+
+                        <div>
+                            <a href="/?i=App.Objects.Operations.Create&storage={{_item.name}}&ref={{current_url_encoded}}">+ Create</a>
+                        </div>
+                    {% endif %}
+
+                    {% if _object %}
+                        <div>
+                            <a href="/?i=App.Objects.Object&uuids={{_object}}">
+                                <<< back
+                            </a>
+                        </div>
+
+                        <div>
+                            <a href="/?i=App.Objects.Operations.Create&db_item={{_object}}&ref={{current_url_encoded}}">+ Create</a>
+                        </div>
+                    {% endif %}
+                </div>
+                <hr>
+            {% endif %}
+
+        </div>
+        
+        <div>
+            <a href="javascript:_toggle_options()">Toggle params</a>
+        </div>
+
+        <form class="options_hidden">
+            <input type="hidden" name="act" value="{{current_url.query.get('act') or ''}}">
+            <input type="hidden" name="linked_to_type" value="{{current_url.query.get('linked_to_type') or ''}}">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Query</td>
+                        <td>
+                            <textarea style="height: 11px;max-width: 153px;" name="q">{{params.get('q') or ''}}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <label>
+                                <input type="checkbox" name="q.in_description" {% if params.get('q.in_description') %}checked{%endif%}>
+                                in description
+                            </label>
+                        </td>
+                    </tr>
+
+                    {% if params.get('storage') %}
+                    <tr>
+                        <td>In storage</td>
+                        <td>
+                            <input type="hidden" name="storage" value="{{params.get('storage')}}">
+                            <a href="/?i=App.Storage.Item.Get&name={{params.get('storage')}}">
+                                {{params.get('storage')}}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td>Show unlisted</td>
+                        <td>
+                            <input type="checkbox" name="show_unlisted" {% if params.get('show_unlisted') == 'on' %}checked{% endif %}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ascend</td>
+                        <td>
+                            <input type="checkbox" name="ascend" {% if params.get('ascend') %}checked{% endif %}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Per page</td>
+                        <td>
+                            <input type="text" name="per_page" value="{{per_page}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Object name</td>
+                        <td>
+                            <input type="text" name="only_object" value="{{params.get('only_object') or ''}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Display as</td>
+                        <td>
+                            <input type="text" name="display_as" value="{{params.get('display_as') or ''}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Display this page as</td>
+                        <td>
+                            <input type="text" name="display_page_as" value="{{params.get('display_page_as') or ''}}">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="hidden" name="i" value="App.DB.Search">
+            <input type="hidden" name="linked_to" value="{{params.get('linked_to') or ''}}">
+            <input type="hidden" name="after" value="{{after}}">
+
+            <input type="submit" value="Search">  
+        </form>
+    </div>
+
     <hr>
     <div>
         <b style="display:none;">{{ _("client.index.total_count", total_count) }}</b>

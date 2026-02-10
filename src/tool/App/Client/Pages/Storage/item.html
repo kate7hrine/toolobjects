@@ -133,23 +133,18 @@
 
     <div>
         <div>
-            <a href="/?i=App.Storage.VirtualPath.Navigate&path={{item.name}}:/">Explorer</a>
+            <a href="/?i=App.DB.Search&storage={{item.name}}&act=linked_to&linked_to_type=item">Search</a>
         </div>
         <div>
-            <a href="/?i=App.DB.Search&storage={{item.name}}">Search</a>
+            <a href="/?i=App.Storage.VirtualPath.Navigate&path={{item.name}}:/">Explorer</a>
         </div>
     </div>
 
-    <div>
-        <div>
-            <a href="/?i=App.Storage.Movement.Export&act=storage&storage={{item.name}}&ref={{current_url_encoded}}">{{_("client.index.export")}}</a>
-        </div>
-    </div>
     <hr>
 
     <div>
         <div>
-            <a href="?i=Data.Primitives.Collections.Create&storage={{item.name}}&ref={{current_url_encoded}}">+ {{_("client.storages.create_collection")}}</a>
+            <a href="/?i=App.Storage.Movement.Export&act=storage&storage={{item.name}}&ref={{current_url_encoded}}">{{_("client.index.export")}}</a>
         </div>
     </div>
 {% endblock %}

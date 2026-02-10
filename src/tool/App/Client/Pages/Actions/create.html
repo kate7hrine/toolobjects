@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+Create
+{% endblock %}
+
+{% block body %}
+    <div>
+        {% for item in creations %}
+            <div>
+                <a href="/?i={{item.create}}&storage={{storage or ''}}&item={{db_item or ''}}">{{item.name}}</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

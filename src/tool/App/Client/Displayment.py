@@ -75,3 +75,25 @@ class Displayment(Object):
 
     def is_post(self):
         return self.request.method == 'POST'
+
+    def get_link_item(self):
+        query = self.request.rel_url.query
+        if query.get('storage'):
+            storage = app.Storage.get(query.get('storage'))
+
+            assert storage != None, 'storage not found'
+
+            self.context.update({
+                'storage': storage,
+            })
+
+            return storage
+
+        if query.get('item'):
+            item = StorageUUID.fromString(query.get('item')).toPython()
+
+            self.context.update({
+                'db_item': item,
+            })
+
+            return item

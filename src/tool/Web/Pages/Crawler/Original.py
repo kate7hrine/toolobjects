@@ -117,11 +117,11 @@ class Original(Object):
             for item in getattr(html, key)(page):
                 found_asset = None
 
-                match (key):
-                    case 'get_scripts':
-                        if remove_scripts:
-                            item.decompose()
-                            continue
+                #match (key):
+                #    case 'get_scripts':
+                #        if remove_scripts:
+                #            item.decompose()
+                #            continue
 
                 for asset in page._page.got_assets:
                     if item.url and asset.url_matches(item.url):
@@ -148,11 +148,11 @@ class Original(Object):
 
             page.meta_tags.append(meta)
 
-        if remove_scripts:
-            try:
-                html.clear_js()
-            except Exception as e:
-                self.log_error(e)
+        #if remove_scripts:
+        #    try:
+        #        html.clear_js()
+        #    except Exception as e:
+        #        self.log_error(e)
 
         page.html.write(html.prettify())
 
@@ -164,11 +164,6 @@ class Original(Object):
     @classmethod
     def getArguments(cls):
         return ArgumentDict(items = [
-            Argument(
-                name = 'scripts.remove',
-                orig = Boolean,
-                default = True
-            ),
             Argument(
                 name = 'crawler.network_timeout',
                 orig = Float,

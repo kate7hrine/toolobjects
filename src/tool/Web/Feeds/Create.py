@@ -2,6 +2,7 @@ from App.Objects.Act import Act
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from Data.Types.Boolean import Boolean
+from Data.Types.Int import Int
 from Web.URL import URL
 from Web.Feeds.Get import Get
 from App import app
@@ -15,6 +16,11 @@ class Create(Act):
                 orig = URL
             ),
             Argument(
+                name = 'refresh_every',
+                orig = Int,
+                default = 120
+            ),
+            Argument(
                 name = 'add_to_autostart',
                 orig = Boolean,
                 default = True
@@ -26,6 +32,7 @@ class Create(Act):
         url = i.get('url')
         add_to_autostart = i.get('add_to_autostart')
         save_to = i.get('save_to')
+        refresh_every = i.get('refresh_every')
 
         assert save_to != ['tmp'], 'it must be saved somewhere'
 
@@ -49,7 +56,7 @@ class Create(Act):
                     'args': {
                         "i": "App.Objects.Operations.ExecuteIterative",
                         "i_2": "Web.Feeds.Update",
-                        "interval": 120,
+                        "interval": refresh_every,
                         "max_iterations": -1,
                         "channel": channel.getDbIds(),
                         "auth": "root"

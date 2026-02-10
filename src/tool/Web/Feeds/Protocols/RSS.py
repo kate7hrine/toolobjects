@@ -63,7 +63,7 @@ class RSS(FeedProtocol):
         for item in data.find_all('title', recursive=False):
             entry.obj.name = item.text
 
-        self.log('entry: '+entry.obj.name)
+        #self.log('entry: '+entry.obj.name)
 
         for item in data.find_all('summary', recursive=False):
             entry.summary = item.text

@@ -5,21 +5,35 @@
         display: flex;
         flex-direction: column;
     }
+
+    #feed .feed_item > div {
+        display: inline-flex;
+        flex-direction: column;
+        gap: 4px;
+    }
 </style>
 
 <div id="feed">
     {% for item in items %}
-        <div>
-            <b>
-                <a href="{{url_for_object}}{{item.getDbIds()}}">{{item.any_name}}</a>
-            </b>
+        <div class="feed_item">
             <div>
-                {% if item.content %}
-                    {{item.content.get_html()|safe}}
+                <b>
+                    <a href="{{url_for_object}}{{item.getDbIds()}}">{{item.any_name}}</a>
+                </b>
+                <div class="cdata">
+                    {% if item.content %}
+                        {{item.content.get_html()|safe}}
+                    {% endif %}
+                </div>
+                {% if len(item.link_items) > 0 %}
+                <div class="links">
+                    {% for link in item.link_items %}
+                        <a href="{{link.value}}">{{link.value}}</a>
+                    {% endfor %}
+                </div>
                 {% endif %}
-
-                <hr>
             </div>
+            <hr>
         </div>
     {% endfor %}
 </div>

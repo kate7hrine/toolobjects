@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}
+Get medias
+{% endblock %}
+
+{% block body %}
+    <div>
+        <b>Media item</b>
+    </div>
+
+    <div>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Media type</td>
+                    <td>
+                        <select name="object">
+                            {% for item in media_types %}
+                                <option value="{{item._getNameJoined()}}">
+                                    {{item._getModuleName()}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

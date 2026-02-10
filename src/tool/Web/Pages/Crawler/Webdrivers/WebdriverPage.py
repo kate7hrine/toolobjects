@@ -12,6 +12,9 @@ class WebdriverPage(Object):
     _unserializable = ['_page']
 
     async def setViewport(self, viewport: dict):
+        if viewport == {}:
+            return
+
         await self._page.set_viewport_size(viewport)
 
     async def goto(self, url: str, wait_until: str = 'domcontentloaded'):
