@@ -168,7 +168,7 @@ class HookThread():
     def __init__(self):
         self.task_queue = queue.Queue()
         self.running = True
-        self.thread = threading.Thread(target=self._loop, daemon=True)
+        self.thread = threading.Thread(target = self._loop, daemon = True)
         self.thread.start()
 
     def _loop(self):
@@ -181,11 +181,21 @@ class HookThread():
 
                 try:
                     if asyncio.iscoroutinefunction(hook_func):
-                        self.running_loop.create_task(hook_func(*args, **kwargs))
+                        task = self.running_loop.create_task(hook_func(*args, **kwargs))
+
+                        while not task.done():
+                            self.running_loop.run_until_complete(
+                                asyncio.sleep(0.001)
+                            )
+
+                        try:
+                            task.result()
+                        except Exception as e:
+                            pass
                     else:
                         hook_func(*args, **kwargs)
                 except Exception as e:
-                    print(e)
+                    pass
                 finally:
                     self.task_queue.task_done()
             except queue.Empty:
