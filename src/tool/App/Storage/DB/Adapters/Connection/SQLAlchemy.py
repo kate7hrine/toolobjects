@@ -104,6 +104,7 @@ class SQLAlchemy(ConnectionAdapter):
                 if len(link.role) > 0:
                     self.role = str(link.role)
 
+                link.setDb(self)
                 _session.add(self)
 
             def fallback(self):

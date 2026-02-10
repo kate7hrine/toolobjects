@@ -19,6 +19,8 @@ class Checkmark(Object):
                 if orig.state:
                     _mark = "[x]"
 
-                return _mark + " " + orig.label + ' ' # :((
+                # TODO remove
+                _i = orig.to_json()
+                return _mark + " " + _i.get('label').get('value') + ' ' # :((
 
         return [DisplayAsString()]

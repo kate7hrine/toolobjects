@@ -26,9 +26,9 @@ class Linkable(BaseModel):
     def addLink(self, link: Link) -> Link:
         if self.hasDb() == True:
             if link.item.hasDb() == False:
-                self.log('addLink: current item is flushed, but not linked item, so we will flush link item')
+                self.log('addLink: {0} {1} item is flushed, {2} is not, so we will flush item that we link'.format(self.getClassNameJoined(), self.getDbId(), link.item.getClassNameJoined()))
 
-                link.item.flush(self.getDb()._adapter._storage_item)
+                link.item.setDb(link.item.flush(self.getDb()._adapter._storage_item))
 
             self.getDb().addLink(link)
 

@@ -82,7 +82,7 @@ class BaseModel(PydanticBaseModel):
         return results
 
     @classmethod
-    def asArgument(cls, val: Any):
+    def asClass(cls, val: Any):
         if isinstance(val, cls):
             return val
 
@@ -90,6 +90,10 @@ class BaseModel(PydanticBaseModel):
             return None
 
         return cls.model_validate(val)
+
+    @classmethod
+    def asArgument(cls, val: Any):
+        return cls.asClass(val)
 
     @classmethod
     def getMRO(cls) -> list:

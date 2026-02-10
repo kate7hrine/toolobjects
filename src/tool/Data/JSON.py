@@ -20,8 +20,8 @@ class JSON(Object):
 
     @staticmethod
     def isStringValidJson(text: str) -> bool:
-        if type(text) != str:
-            return True
+        #if type(text) != str:
+        #    return True
 
         try:
             _json = json.loads(text)

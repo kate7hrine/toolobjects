@@ -4,6 +4,7 @@ from typing import Any, List, Literal, Callable, Generator
 from pydantic import Field, computed_field
 from App.Objects.Locale.Documentation import Documentation
 from App.Storage.StorageUUID import StorageUUID
+from Data.JSON import JSON
 
 class Argument(Object):
     '''
@@ -27,9 +28,13 @@ class Argument(Object):
     orig: list[Any] | Any = Field()
     default: Any | Callable = Field(default = None)
     inputs: str = Field(default = None) # workaround for assertions
+
+    literally: bool = Field(default = False)
     is_sensitive: bool = Field(default = False)
     id_allow: bool = Field(default = False) # workaround + hardcode
     auto_apply: bool = Field(default = False)
+    check_json: bool = Field(default = True)
+
     assertions: List[Assertion] = Field(default=[])
     role: Literal['config', 'env'] = Field(default='config')
     documentation: Documentation = Field(default = None)
@@ -42,14 +47,25 @@ class Argument(Object):
 
         if self.orig == None:
             return original_value
-        
+
         if self.id_allow == True:
             if StorageUUID.validate(original_value):
                 return StorageUUID.fromString(original_value).toPython()
 
+        return self.getImplementation(original_value)
+
+    def getImplementation(self, original_value: Any | str):
+        if self.check_json == True and JSON.isStringValidJson(original_value) == True:
+            val = JSON.fromText(original_value).data
+
+            return self.implementation(val)
+
         return self.implementation(original_value)
 
     def implementation(self, val: Any | str) -> Any:
+        if self.literally:
+            return self.getOrig().asClass(val)
+
         return self.getOrig().asArgument(val)
 
     def getOrig(self) -> Object:

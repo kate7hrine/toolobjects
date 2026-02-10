@@ -131,8 +131,4 @@ Calling it:
 > python tool.py -i Data.Checkmarks.SetChecked -item content_0 -state 1
 ```
 
-Calling `App.Storage.DB.Search` will show that it was checked. Wow.
-
-Changing `label` in `Checkmark` to `LinkInsertion`. Now you can't create Checkmark by old way, so adding shortcut act:
-
-
+Calling `App.Storage.DB.Search` will show that it was checked.

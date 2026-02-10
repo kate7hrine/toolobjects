@@ -62,6 +62,8 @@ db and storage:
 - [ ] VirtualPath pagination (adapter pagination also)
 - [ ] multifile config
 - [ ] link to storageunit file
+- [ ] LinkInsertion must be changed after flushing from db
+- [ ] remove console and to_json differences
 
 - [ ] ItemPermission for dbs
 
