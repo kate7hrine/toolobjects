@@ -18,6 +18,7 @@ class Namespace(Object):
     root: str = Field()
     load_before: list = Field(default = [])
     load_after: list = Field(default = [])
+    ignore_dirs: list = Field(default = [])
 
     items: DictList = Field(default = None)
 
@@ -70,11 +71,23 @@ class Namespace(Object):
 
         files = global_path.rglob('*.py')
         for plugin in files:
+            _path = plugin.relative_to(global_path)
+            _str_path = str(_path)
+            _skip = False
+            for _ignore in self.ignore_dirs:
+                if _str_path.startswith(_ignore):
+                    _skip = True
+
             if plugin.name in _side_names:
+                _skip = True
+
+            if _skip == True:
                 continue
 
+            # "ignore_dirs" param
+
             yield LoadedObject(
-                path = str(plugin.relative_to(global_path)),
+                path = _str_path,
                 root = self.root
             )
 

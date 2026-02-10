@@ -27,11 +27,13 @@ class ObjectsList(Object):
         _objects = cls(
             namespaces = [
                 app.app.objects
-            ]
+            ],
+            current = cls.getOption("objects.index.namespaces.current")
         )
 
         for item in cls.getOption('objects.index.namespaces'):
             _objects.namespaces.append(item)
+            item.load()
 
         app.mount('ObjectsList', _objects)
 
@@ -82,5 +84,9 @@ class ObjectsList(Object):
                     name = 'objects.index.namespace',
                     orig = Namespace
                 )
+            ),
+            List(
+                name = 'objects.index.namespaces.current',
+                default = ['common'],
             )
         ]
