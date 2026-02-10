@@ -12,7 +12,7 @@ from typing import Generator
 class RSS(FeedProtocol):
     def _get_channels(self, data: ET):
         _items = list()
-        for channel in data.find('.//channel'):
+        for channel in data.findall('./channel'):
             _channel = Channel()
             _items.append(_channel)
 
@@ -34,7 +34,7 @@ class RSS(FeedProtocol):
                         if _val != None:
                             setattr(_channel, key, _val.text)
 
-        return _items[0]
+        return _items
 
     def _get_link(self, data):
         _self = Link()
@@ -42,14 +42,14 @@ class RSS(FeedProtocol):
 
         return _self
 
-    def _get_entries(self, channel: Channel, data: ET) -> Generator[Entry]:
+    async def _get_entries(self, channel: Channel, data: ET) -> Generator[Entry]:
         for entry in data.findall('.//item'):
-            yield self._get_entry(entry)
+            yield await self._get_entry(entry)
 
     def _date_to_str(self, val: str):
         return parsedate_to_datetime(val)
 
-    def _get_entry(self, data: ET):
+    async def _get_entry(self, data: ET):
         entry = Entry()
 
         for key in ['title', 'summary', 'description', 'link', 'pubDate']:
@@ -63,6 +63,7 @@ class RSS(FeedProtocol):
                         type = _val.get('type'),
                         content = _val.text,
                     )
+                    await entry.content.update()
                 case 'pubDate':
                     if _val != None:
                         entry.obj.created_at = self._date_to_str(_val.text)

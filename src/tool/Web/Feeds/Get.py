@@ -35,13 +35,14 @@ class Get(Extractor):
 
         for channel in channels:
             _new_time = None
-            for entry in protocol._get_entries(channel, root):
+            async for entry in protocol._get_entries(channel, root):
                 if _new_time == None:
                     _new_time = entry.obj.created_at
                 else: 
                     if entry.obj.created_at > _new_time:
                         _new_time = entry.obj.created_at
 
+                entry.local_obj.make_public()
                 channel.link(entry)
 
             channel.obj.set_common_source(Source(

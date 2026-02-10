@@ -100,7 +100,8 @@ media:
 
 - [x] FromPage
 - [x] web links bookmarks
-- [ ] RSS CDATA
+- [ ] rss: CDATA (image downloading)
+- [ ] rss: save another fields
 
 web crawler:
 
@@ -146,7 +147,6 @@ others:
 - [ ] Example: App.Storage.Movement.Import. mount_name is None by default, and if its not, its sets that the name from last part. and maybe its better to set default as lambda function?
 - [ ] ~~App.Object.Paginable~~
 - [ ] storage unit password encryption
-- [x] App.Storage.Movement* acts logically should belong to App.DB*
 - [ ] ~~LinkInsertion must be changed after flushing from db~~ (self._get() is compromis)
 - [ ] ~~remove console and to_json differences~~
 - [ ] storageunit generates hash randomly but maybe hash the common file? (no this is imposible because the common file is not known beforehand)
