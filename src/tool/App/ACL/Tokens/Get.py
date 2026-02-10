@@ -45,6 +45,7 @@ class Get(Act):
             _token.infinite = True
 
         _token.flush(app.Storage.get('users'))
+        _token.save()
 
         return ObjectsList(items = [String(value = _token.value)], unsaveable = True)
 

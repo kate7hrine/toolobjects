@@ -134,7 +134,7 @@ class Model(PydanticBaseModel):
         include_extra: include "model_computed_fields"
         '''
 
-        excludes = []
+        excludes = ['internal_toolobjects_link_items']
         if exclude_internal == True:
             for _exclude in self._internal_fields:
                 excludes.append(_exclude)

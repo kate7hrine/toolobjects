@@ -8,8 +8,7 @@ class Linkable():
     Object that can contain links to other objects
     '''
 
-    links: list[Link] = Field(default=[], exclude = True, repr = False)
-    dynamic_links: bool = Field(default = False)
+    internal_toolobjects_link_items: list[Link] = Field(default=[], exclude = True, repr = False)
     supports_dynamic_links: ClassVar[bool] = False
 
     def link(self, object, role: list = []):
@@ -59,7 +58,7 @@ class Linkable():
             #self.log('current item does not has db!')
 
         self.log('linked items with classes {0}, {1}'.format(self._getClassNameJoined(), link.item._getClassNameJoined()))
-        self.links.append(link)
+        self.internal_toolobjects_link_items.append(link)
 
         return link
 
@@ -74,7 +73,7 @@ class Linkable():
 
             return True
         else:
-            self.links.remove(link.item)
+            self.internal_toolobjects_link_items.remove(link.item)
 
     def isLinked(self, item: BaseModel) -> bool:
         return self.find_link(item) != None
@@ -104,7 +103,7 @@ class Linkable():
             for item in self.getDb().getLinks():
                 yield item
 
-        for item in self.links:
+        for item in self.internal_toolobjects_link_items:
             yield item
 
     def _get_virtual_linked(self) -> Generator[Link]:
@@ -117,7 +116,7 @@ class Linkable():
         '''
         Return dynamic links or real links
         '''
-        if self.dynamic_links == True and ignore_virtual == False:
+        if self.obj.dynamic_links == True and ignore_virtual == False:
             return self._get_virtual_linked()
         else:
             return self.getLinkedItems()

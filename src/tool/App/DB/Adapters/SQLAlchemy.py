@@ -299,7 +299,7 @@ class SQLAlchemy(ConnectionAdapter):
         def _applySort(self, sort: Sort):
             from sqlalchemy import desc
 
-            if sort.descend == True:
+            if sort.descend == False:
                 self._query = self._query.order_by(self._getComparement(sort.condition))
             else:
                 self._query = self._query.order_by(desc(self._getComparement(sort.condition)))

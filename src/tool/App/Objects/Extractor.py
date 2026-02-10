@@ -26,6 +26,10 @@ class Extractor(Executable):
         self._instance_variables.get('items').value.append(out)
         self.trigger_variables()
 
+    def set_total_count(self, count: int):
+        self._instance_variables.get('items').value.total_count = count
+        self.trigger_variables()
+
     async def _implementation(self, i = {}) -> None:
         '''
         Not supposed to return something.
