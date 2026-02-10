@@ -18,8 +18,9 @@ class Executable(Object, Variableable, Validable):
 
     id: int = 0
     self_name: ClassVar[str] = 'Executable'
-    internal_use: bool = Field(default = True)
+    #internal_use: bool = Field(default = True)
     args: dict = Field(default = {})
+    _unserializable = ['id', 'variables']
 
     @classmethod
     def getClassEventTypes(cls) -> list:
@@ -94,5 +95,5 @@ class Executable(Object, Variableable, Validable):
         just sets args that can be flushed
         '''
 
-        self.internal_use = False # idk whats this
+        #self.internal_use = False # idk whats this
         self.args = args.values

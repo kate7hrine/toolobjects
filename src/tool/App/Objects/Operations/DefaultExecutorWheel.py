@@ -2,6 +2,7 @@ from App.Objects.Act import Act
 from App.Arguments.ArgumentDict import ArgumentDict
 from App.Arguments.Objects.Executable import Executable
 from App.Arguments.Types.String import String
+from App.Arguments.Types.Boolean import Boolean
 from App.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
 from App.Arguments.Assertions.InputNotInValues import InputNotInValues
 from App.Arguments.ArgumentValues import ArgumentValues
@@ -15,19 +16,38 @@ class DefaultExecutorWheel(Act):
     '''
 
     async def implementation(self, i: ArgumentValues):
+        force_flush = i.get('force_flush')
         executable = i.get('i')
+
         assert executable != None, 'not found object'
-        assert executable.canBeExecuted(), 'object does not contains execute interface'
+
         assert app.app.view.canUseObject(executable), 'object cannot be used at this view'
         assert executable.canBeUsedBy(None), 'access denied'
 
-        _item = executable()
-        _item.integrate(i.values)
-        results = await _item.execute(i = i)
+        results = None
+        if force_flush == False:
+            assert executable.canBeExecuted(), 'object does not contains execute interface'
+
+            _item = executable()
+            _item.integrate(i.values)
+            results = await _item.execute(i = i)
+        else:
+            _vals = i.getValues(exclude = ['force_flush', 'i', 'as_args'])
+            _item = None
+            results = ObjectsList(items = [])
+
+            if isinstance(executable, Executable):
+                if i.get('as_args'):
+                    _item = executable(**_vals)
+                else:
+                    _item = executable(args = _vals)
+            else:
+                _item = executable(**_vals)
+
+            results.append(_item)
 
         if isinstance(results, ObjectsList):
             save_to = i.get('save_to')
-
             if save_to != None:
                 _save = Save()
                 await _save.execute({
@@ -42,7 +62,7 @@ class DefaultExecutorWheel(Act):
         return ArgumentDict(items = [
             Executable(
                 name = 'i',
-                default = 'App.Queue.Run',
+                # default = 'App.Queue.Run',
                 assertions = [
                     NotNoneAssertion(),
                     InputNotInValues(values=['App.Console.ConsoleView', 'App.Console.ConsoleView.ConsoleView'])
@@ -52,6 +72,15 @@ class DefaultExecutorWheel(Act):
                 # Save to
                 name = 'save_to',
                 default = None,
+            ),
+            Boolean(
+                # Flushes literally, ignores execution interface
+                name = 'force_flush',
+                default = False
+            ),
+            Boolean(
+                name = 'as_args',
+                default = False
             )
         ],
         missing_args_inclusion = True)

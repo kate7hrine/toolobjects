@@ -4,9 +4,11 @@ from App.Arguments.Types.String import String
 from App.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
 from Data.RSS.Channel import Channel
 from Data.RSS.ChannelItem import ChannelItem
+from pydantic import Field
 
 class GetFeed(Extractor):
     # Should it be in Web category or in Data? dont know
+    channel: Channel = Field(default = None)
 
     @classmethod
     def getArguments(cls) -> ArgumentDict:
@@ -31,7 +33,7 @@ class GetFeed(Extractor):
         rss_response = xmltodict.parse(response_xml)
         rss = rss_response.get('rss')
         _channel = rss.get('channel')
-        channel = Channel(
+        self.channel = Channel(
             title = _channel.get('title'),
             description = _channel.get('description'),
             channel_link = _channel.get('link'),
@@ -42,6 +44,5 @@ class GetFeed(Extractor):
 
         for item in _channel.get('item'):
             _item = ChannelItem.model_validate(item, by_alias = True)
-            channel.link(_item)
-
-        self.append(channel)
+            self.channel.link(_item)
+            self.append(_item)

@@ -1,0 +1,43 @@
+from App.Objects.Act import Act
+from App.Arguments.ArgumentDict import ArgumentDict
+from App.Arguments.Types.Int import Int
+from App.Arguments.Types.Boolean import Boolean
+from App.Storage.Storage import StorageArgument
+from App.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Responses.ObjectsList import ObjectsList
+
+class ExecuteById(Act):
+    @classmethod
+    def getArguments(cls) -> ArgumentDict:
+        return ArgumentDict(items = [
+            StorageArgument(
+                name = 'storage',
+                assertions = [NotNoneAssertion()]
+            ),
+            Int(
+                name = 'uuid',
+                assertions = [NotNoneAssertion()]
+            ),
+            Boolean(
+                name = 'link',
+                default = True
+            )
+        ])
+
+    async def implementation(self, i):
+        _storage = i.get('storage')
+        # halture
+        obj = _storage.adapter.ObjectAdapter.getById(i.get('uuid'))
+        _exec = obj.toPython()
+        _args = _exec.args
+        _args.update(i.getValues(exclude = ['storage', 'uuid', 'link']))
+
+        assert _exec != None, 'not found object'
+        assert _exec.canBeExecuted(), 'object does not contains execute interface'
+
+        _res = await _exec.execute(i = _args)
+        if isinstance(_res, ObjectsList) and i.get('link') == True:
+            for item in _res.getItems():
+                _exec.link(item)
+
+        return _res
