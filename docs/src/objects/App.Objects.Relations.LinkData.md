@@ -11,7 +11,7 @@ Data about link. Currently, there is only `role`, but it was moved to a separate
 **Roles table**
 
 |Role|Description|What does it do?|
-|object|Link is related to the data of this object (e.g. [LinkInsertion](./App.Objects.Relations.LinkInsertion.md))|
+|object|Link is related to the data of this object (or used in [LinkInsertion](./App.Objects.Relations.LinkInsertion.md))|
 |common|Link was created by script|
 |external|Link is not related to this object|
 |thumbnail|Link's object is a thumbnail of this object|

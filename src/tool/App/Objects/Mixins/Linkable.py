@@ -19,11 +19,6 @@ class Linkable():
         )
         return self.addLink(_link)
 
-    '''def __add__(self, object):
-        self.link(object)
-
-        return self'''
-
     def unlink(self, item: Link, role: list = []) -> None:
         _link = Link(
             item = item,
@@ -115,7 +110,7 @@ class Linkable():
         '''
         Return dynamic links or real links
         '''
-        if self.obj.dynamic_links == True and ignore_virtual == False:
+        if self.local_obj.dynamic_links == True and ignore_virtual == False:
             return self._get_virtual_linked()
         else:
             return self.getLinkedItems()

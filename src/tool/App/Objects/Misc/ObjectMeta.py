@@ -8,7 +8,6 @@ from App.Objects.Misc.Geo import Geo
 
 class ObjectMeta(Model):
     saved_via: SavedVia = Field(default = None)
-    dynamic_links: bool = Field(default = False)
 
     name: Optional[str] = Field(default=None)
     description: Optional[str] = Field(default=None)
