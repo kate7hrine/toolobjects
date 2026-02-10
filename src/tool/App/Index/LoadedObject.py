@@ -61,7 +61,8 @@ class LoadedObject(Object):
     def get_module(self):
         parts = self.category + [self.title]
         module_name = ".".join(parts)
-        self.verify_module_hash(module_name)
+
+        assert self.verify_module_hash(module_name), f"module {module_name} not verified"
 
         module = importlib.import_module(module_name)
         assert module != None, f"module {module_name} not found"

@@ -1,10 +1,13 @@
 from App.Objects.Executable import Executable
 from App.Arguments.ArgumentsDict import ArgumentsDict
 from typing import Any
-from pydantic import Field, computed_field
 from App.App import App
 
 class View(Executable):
+    '''
+    Wrapper of the app. Contains executable interface that runs from tool.py
+    '''
+
     app: Any = None
 
     def setApp(self, app: App) -> None:

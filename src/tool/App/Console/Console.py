@@ -1,4 +1,4 @@
-from App.Views.View import View
+from App.View import View
 from App.Arguments.ArgumentsDict import ArgumentsDict
 from App.Data.DictList import DictList
 from App.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion

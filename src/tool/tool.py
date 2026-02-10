@@ -1,7 +1,7 @@
 # Initialization file
 
 from App.App import App
-from App.Views.View import View
+from App.View import View
 #import tracemalloc
 #tracemalloc.start()
 
@@ -9,6 +9,7 @@ current = App()
 current._constructor()
 
 async def _main():
+    # wrap relies on view (globals mount), so creating temporary view, then creating actual view
     tmp_view = View(app = current)
     tmp_view.setAsCommon()
 

@@ -11,7 +11,7 @@ class List(Object):
     id: Increment = None
     items: DictList = None
     calls: list = []
-    priority_names: list = ['App\\Config\\Config.py', 'App\\Logger\\Logger.py', 'App\\Storage\\Storage.py', 'Web\\DownloadManager\\Manager.py']
+    priority_names: list = ['App\\Storage\\Config.py', 'App\\Logger\\Logger.py', 'App\\Storage\\Storage.py', 'Web\\DownloadManager\\Manager.py']
 
     def constructor(self):
         self.id = Increment()
