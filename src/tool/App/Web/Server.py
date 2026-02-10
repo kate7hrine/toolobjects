@@ -20,6 +20,7 @@ import socket
 from concurrent.futures import ThreadPoolExecutor
 from App.Objects.Threads.ExecutionThread import ExecutionThread
 
+from typing import Optional, Coroutine
 from aiohttp import web
 from App import app
 
@@ -168,7 +169,7 @@ class Server(View):
 
             return web.FileResponse(str(file))
 
-        async def _call_shortcut(pre_i, args: dict, event_index: int):
+        async def _call_shortcut(pre_i, args: dict, event_index: int, on_event: Optional[Coroutine] = None):
             _json = JSON(data = {})
             results = None
 
@@ -180,6 +181,8 @@ class Server(View):
                 self.log('not authenticated')
 
             try:
+                pre_i.add_variables_hook(on_event)
+
                 thread = ExecutionThread(id = event_index)
                 thread.set(pre_i.execute(args))
                 thread.set_name(str(args.get('i')))
@@ -238,8 +241,15 @@ class Server(View):
 
             self.log('got message {0}, index {1}'.format(_event_type, _event_index))
 
+            async def _handle_variable_message(variable):
+                await ws.send_str(JSON(data={
+                    'type': 'variable',
+                    'event_index': _event_index,
+                    'payload': variable.to_json()
+                }).dump())
+
             pre_i = pre_i()
-            results = await _call_shortcut(pre_i, _payload, _event_index)
+            results = await _call_shortcut(pre_i, _payload, _event_index, _handle_variable_message)
 
             await ws.send_str(JSON(data={
                 'type': _event_type,
