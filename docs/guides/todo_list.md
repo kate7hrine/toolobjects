@@ -29,17 +29,17 @@ class Checkmark(Object):
 Trying to save?
 
 ```cli
-> python tool.py -i Data.Checkmarks.List -force_flush 1 -save_to content
-> python tool.py -i Data.Checkmarks.Checkmark -label 123 -force_flush 1 -save_to content
+> python tool.py -i Data.Checkmarks.List -force_flush 1 -save_to common
+> python tool.py -i Data.Checkmarks.Checkmark -label 123 -force_flush 1 -save_to common
 > python tool.py -i App.Storage.DB.Link -owner {id1} -items {id2}
 ```
 
 Getting from db:
 
 ```
-> python tool.py -i App.Storage.DB.Search -storage content -uuids {id1}
+> python tool.py -i App.Storage.DB.Search -storage common -uuids {id1}
 
-<Data.Checkmarks.List> [content_0]
+<Data.Checkmarks.List> [common_0]
 ```
 
 OK, lets add checkmarks list showing:

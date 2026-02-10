@@ -29,3 +29,7 @@ class LinkAdapter(AbstractAdapter):
         _link.setDb(self)
 
         return _link
+
+    @abstractmethod
+    def deleteFromDB(self, remove_links: bool = False):
+        ...

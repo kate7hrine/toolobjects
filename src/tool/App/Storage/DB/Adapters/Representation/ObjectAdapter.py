@@ -27,6 +27,10 @@ class ObjectAdapter(AbstractAdapter):
     def removeLink(self, link: CommonLink):
         ...
 
+    @abstractmethod
+    def deleteFromDB(self, remove_links: bool = True):
+        ...
+
     def toPython(self):
         _object_name = None
 

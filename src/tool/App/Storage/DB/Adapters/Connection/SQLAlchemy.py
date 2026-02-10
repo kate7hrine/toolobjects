@@ -175,6 +175,12 @@ class SQLAlchemy(ConnectionAdapter):
             def removeLink(self, link: CommonLink):
                 pass
 
+            def deleteFromDB(self, remove_links: bool = True):
+                from sqlalchemy import delete
+                for item in self.getLinks():
+                    item.delete()
+                _session.delete(self)
+
         # Automatically sets snowflake id
         @event.listens_for(_ObjectAdapter, 'before_insert', propagate=True)
         @event.listens_for(_LinkAdapter, 'before_insert', propagate=True)

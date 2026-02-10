@@ -84,6 +84,12 @@ class DBInsertable():
 
         return _common
 
+    def delete(self, remove_links: bool = True):
+        if self.hasDb() == False:
+            return
+
+        self.getDb().deleteFromDB(remove_links = remove_links)
+
     def save(self) -> bool:
         '''
         Updates linked db item if exists

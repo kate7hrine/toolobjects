@@ -7,5 +7,5 @@ python tool.py -i Data.Random -save_to tmp
 **Searching**
 
 ```
-python tool.py -i App.Storage.DB.Search -storage content
+python tool.py -i App.Storage.DB.Search -storage common
 ```

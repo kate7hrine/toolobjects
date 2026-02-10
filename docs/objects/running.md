@@ -6,11 +6,14 @@ also it has proxy executable App.Objects.Operations.DefaultExecutorWheel
 
 on `force_flush` = 1 "i" will be flushed not using execution interface, passed by other arguments.
 
-usage example:
+on `as_args` = 1, all arguments will be moved to `args` dict of the json
 
-1. getting rss channel and updating it
+using `App.Objects.Operations.ExecuteById`, you can execute flushed literally executables, with `sift` it will call classes `update()` function
+
+Example: getting RSS channel and updating it (tmp will reset anyway)
 
 ```
+> python tool.py -view App.Console.InteractiveView
 -i Data.RSS.GetFeed -url https://feeds.bbci.co.uk/news/world/rss.xml -force_flush 1 -save_to tmp
 -i App.Storage.DB.Search -storage tmp
 -i App.Objects.Operations.ExecuteById -item {got uuid} -sift 1

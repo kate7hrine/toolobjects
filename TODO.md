@@ -59,7 +59,7 @@ db and storage:
 - [ ] storageunit generates hash randomly but maybe hash the common file?
 - [ ] storageunit flush_hook and getCommonDir(): pathlib parts are duplicated and its better to move to HashDir class
 - [ ] links order
-- [ ] link with parent=None to link to the db
+- [ ] links are not optimized
 - [ ] VirtualPath pagination (adapter pagination also)
 - [ ] multifile config
 - [ ] link to storageunit file
@@ -116,3 +116,5 @@ others:
 - [ ] App.Objects.View can be imagined as App.Objects.Displayment
 - [ ] App.Object.Paginable
 - [ ] storage unit password & encryption)
+- [ ] App.Storage.Movement* acts are logically should belong to App.Storage.DB*
+- [ ] link with parent=None to link to the db

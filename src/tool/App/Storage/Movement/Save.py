@@ -45,6 +45,7 @@ class Save(Act):
             link_to.append(item.toPython())
 
         for storage in i.get('storage'):
+            # i can't get name to display that its not found !!!!
             assert storage != None, "storage not founb" #f"storage {storage.name} not found"
             assert storage.hasAdapter(), f"storage {storage.name} does not contains db connection"
 

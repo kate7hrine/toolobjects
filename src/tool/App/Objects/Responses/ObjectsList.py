@@ -3,6 +3,7 @@ from App.Objects.Object import Object
 from App.Objects.Relations.Submodule import Submodule
 from pydantic import Field
 from typing import Generator
+from App.Storage.StorageUUID import StorageUUID
 
 class ObjectsList(Response):
     '''
@@ -10,6 +11,7 @@ class ObjectsList(Response):
     '''
 
     items: list[Object] = Field(default = [])
+    total_count: int = Field(default = 0)
     supposed_to_be_single: bool = Field(default = False)
 
     def append(self, item: Object):
@@ -24,6 +26,18 @@ class ObjectsList(Response):
     def getItems(self) -> Generator[Object]:
         for item in self.items:
             yield item
+
+    @classmethod
+    def asArgument(cls, val: str) -> Object:
+        if type(val) == list:
+            _obj = cls()
+            for item in val:
+                _item = StorageUUID.fromString(item)
+                _obj.append(_item.toPython())
+
+            return _obj
+
+        return super().asArgument(val)
 
     def getPrevailingObjects(self) -> list[dict]:
         '''
