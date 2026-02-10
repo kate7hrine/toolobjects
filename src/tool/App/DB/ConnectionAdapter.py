@@ -18,6 +18,9 @@ class ConnectionAdapter(Object, Protocol):
     name: str = Field(default = 'objects')
     auto_commit: bool = Field(default = True)
 
+    objects_table_name: str = Field(default = 'objects')
+    links_table_name: str = Field(default = 'links')
+
     _storage_item: Any = None # Storage item DI
     _id_gen: Any = None
     ObjectAdapter: Any = None

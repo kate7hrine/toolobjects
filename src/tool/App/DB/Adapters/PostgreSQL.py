@@ -1,5 +1,32 @@
-from App.DB.Adapters.SQLAlchemy import SQLAlchemy
+from App.DB.Adapters.MySQL import MySQL
+from App.Objects.Requirements.Requirement import Requirement
+from App.DB.Query.Condition import Condition
 
-class PostgreSQL(SQLAlchemy):
-    # not implemented
+class PostgreSQL(MySQL):
     protocol_name = 'postgresql+pg8000'
+
+    class QueryAdapter(MySQL.QueryAdapter):
+        def _getComparement(self, condition: Condition):
+            from sqlalchemy import func
+
+            if condition.json_fields != None:
+                return func.jsonb_extract_path_text(
+                    getattr(self._model, condition.getFirst()), 
+                    *condition.json_fields
+                )
+
+            return getattr(self._model, condition.getFirst())
+
+    @classmethod
+    def _requirements(cls):
+        return [
+            Requirement(
+                name = 'pg8000'
+            )
+        ]
+
+    def _get_content_column(self):
+        from sqlalchemy import Column, Text
+        from sqlalchemy.dialects.postgresql import JSONB
+
+        return Column(JSONB(), nullable=False)

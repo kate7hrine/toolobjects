@@ -14,6 +14,10 @@ from pydantic import Field
 import json
 
 class SQLAlchemy(ConnectionAdapter):
+    _engine: Any = None
+    _session: Any = None
+    delimiter: ClassVar[str] = '://'
+
     class QueryAdapter(Query):
         _model: Any = None
         _query: Any = None
@@ -96,15 +100,21 @@ class SQLAlchemy(ConnectionAdapter):
             for item in self._query:
                 yield item
 
+    # OK, its very bad code, but however
+    def _get_content_column(self):
+        from sqlalchemy import Column, Text
+
+        return Column(Text(), nullable=False)
+
     # we have to put this into function :(to have links to the connection class and session)
     def _init_models(self_adapter):
         from sqlalchemy.ext.declarative import declarative_base
-        from sqlalchemy import Column, BigInteger, Integer, event, String, Text
+        from sqlalchemy import Column, BigInteger, Integer, event, String
 
         Base = declarative_base()
 
         class _LinkAdapter(LinkAdapter, Base):
-            __tablename__ = 'links'
+            __tablename__ = self_adapter.links_table_name
             _adapter = self_adapter
 
             uuid = Column(BigInteger(), primary_key=True)
@@ -155,13 +165,13 @@ class SQLAlchemy(ConnectionAdapter):
 
         # a lot of confusing links
         class _ObjectAdapter(ObjectAdapter, Base):
-            __tablename__ = 'objects'
+            __tablename__ = self_adapter.objects_table_name
             _adapter = self_adapter
             _orig = None
             order_index = None
 
             uuid = Column(BigInteger(), primary_key=True)
-            content = Column(Text(), nullable=False)
+            content = self_adapter._get_content_column()
 
             def get_order_index(self):
                 if self.order_index == None:
@@ -302,7 +312,3 @@ class SQLAlchemy(ConnectionAdapter):
     def destroy(self):
         self.getSession().close()
         self._engine.dispose()
-
-    _engine: Any = None
-    _session: Any = None
-    delimiter: ClassVar[str] = '://'

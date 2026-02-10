@@ -65,6 +65,10 @@ class ObjectAdapter(AbstractAdapter):
 
             _msg += ". UnknownObject returned"
 
-            app.Logger.log(message = _msg, role = ["storage.adapter.db.import"])
+            app.Logger.log(message = _msg, role = ['error', 'storage.adapter.db.import'])
+
+            return UnknownObject()
+        except Exception as e:
+            app.Logger.log(e, role = ['error'])
 
             return UnknownObject()
