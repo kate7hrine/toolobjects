@@ -31,9 +31,13 @@ class Logger(Object):
         logs_dir = app.app.storage.joinpath("logs")
         logs_dir.mkdir(exist_ok = True)
 
+        if app.Logger != None:
+            return
+
         logger = cls(
             hidden_categories = app.Config.get("logger.print.exclude"),
         )
+        logger._constructor()
         logger.log_to_console = logger.getOption('logger.print.console')
 
         if cls.getOption("logger.print.file") == True:
@@ -48,7 +52,11 @@ class Logger(Object):
             role: list[str] = [],
             prefix: LogPrefix = None, 
             exception_prefix: str = '',
-            trigger: bool = True):
+            trigger: bool = True,
+            not_log: bool = False):
+
+        if not_log == True:
+            return None
 
         write_message = message
         if isinstance(message, Exception):
@@ -79,7 +87,7 @@ class Logger(Object):
 
         return True
 
-    def constructor(self):
+    def _constructor(self):
         def print_log(to_print, check_categories):
             if self.log_to_console == False:
                 return

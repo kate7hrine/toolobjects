@@ -3,9 +3,9 @@ from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Executable import Executable
-from App.Objects.Responses.AnyResponse import AnyResponse
+from App.Objects.Requirements.Install import Install
 
-class InstallRequirements(Act):
+class InstallFromObject(Act):
     @classmethod
     def _arguments(cls):
         return ArgumentDict(items=[
@@ -17,18 +17,11 @@ class InstallRequirements(Act):
         ])
 
     async def implementation(self, i):
-        import subprocess, sys
-
         _object = i.get('object')
-        modules = _object.getNotInstalledModules()
-        if len(modules) < 1:
+        _requirements = _object.getNotInstalledModules()
+        if len(_requirements) < 1:
             self.log(f"plugin {_object.getNameJoined()} does not contains uninstalled modules")
-
         else:
-            _pars = [sys.executable, '-m', 'pip', 'install']
-            for _module in modules:
-                _pars.append(_module.getName())
-
-            subprocess.call(_pars)
-
-        return AnyResponse(data = modules)
+            await Install().execute({
+                'requirements': _requirements
+            })

@@ -20,14 +20,18 @@ class AuthLayer(Object):
             if item.name == name:
                 return item
 
-    def login(self, name: str, password: str):
+    def login(self, name: str, password: str, login_from: str = None):
         user = self.getUserByName(name)
 
         assert user != None, 'user not found'
         _usr = user.auth(password)
         assert _usr, 'invalid username or password'
 
-        self.log(f"logged as {name}")
+        _role = ['auth_as']
+        if login_from != None:
+            _role.append('auth_from_' + login_from)
+
+        self.log(f"logged as {name}", role = _role)
 
         return user
 

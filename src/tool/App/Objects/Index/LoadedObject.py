@@ -25,6 +25,7 @@ class LoadedObject(Object):
     is_success: bool = False
     is_prioritized: bool = False
     is_submodule: bool = False
+    mounted: bool = False
 
     def constructor(self):
         _path = Path(self.path)
@@ -99,7 +100,9 @@ class LoadedObject(Object):
         if app.Config != None:
             self.appendSettings()
 
-        module.mount()
+        if self.mounted == False:
+            self.mounted = True
+            module.mount()
 
     def appendSettings(self) -> None:
         _settings = self.getModule().getSettings()

@@ -9,16 +9,3 @@ Logger creates Log objects. They contain section - maybe, place where message is
 ### Hiding useless messages
 
 Option logger.print.exclude allows to hide some logs from being displayed. It uses App.Logger.HideCategory class.
-
-i may recomend:
-
-```
-    "logger.print.exclude": [
-        {
-            "role": "objects_loading"  
-        }
-    ],
-    "logger.print.file": false,
-    "logger.print.console.show_time": false,
-    "logger.print.console.show_role": true,
-```

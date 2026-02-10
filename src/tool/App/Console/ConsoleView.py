@@ -32,7 +32,8 @@ class ConsoleView(View):
     def _auth(self, username, password):
         return app.AuthLayer.login(
             name = username,
-            password = password
+            password = password,
+            login_from = 'console'
         )
 
     def _print_call(self, results, print_result: bool = True, print_as: bool = 'str'):

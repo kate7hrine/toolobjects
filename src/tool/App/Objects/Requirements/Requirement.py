@@ -1,12 +1,12 @@
-from App.Objects.Object import Object
+from App.Objects.Mixins.BaseModel import BaseModel
 from pydantic import Field
 
-class Requirement(Object):
+class Requirement(BaseModel):
     name: str = Field()
     version: str = Field(default = None)
 
-    def getName(self) -> str:
-        if self.version == None:
+    def get_name(self) -> str:
+        if self.version != None:
             return f"{self.name}=={self.version}"
 
         return self.name

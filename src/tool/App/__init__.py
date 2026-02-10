@@ -11,8 +11,13 @@ class _Wrap:
 
     def mount(self, name: str, item):
         msg = f"Mounted {name} into globals"
+
         try:
-            self.Logger.log(msg, role = ['objects_loading', 'objects_mounting'], section = ['Wrap'])
+            if getattr(self, name) != None:
+                self.Logger.log("{0} already mounted".format(name), role = ['objects_loading', 'objects_mounting'])
+                return
+
+            self.Logger.log(msg, role = ['objects_loading', 'objects_mounting'])
         except:
             pass
 

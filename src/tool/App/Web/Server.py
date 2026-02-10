@@ -114,7 +114,8 @@ class Server(View):
             results = None
             args['auth'] = app.AuthLayer.login(
                 name = args.get('username'),
-                password = args.get('password')
+                password = args.get('password'),
+                login_from = 'web'
             )
 
             try:
