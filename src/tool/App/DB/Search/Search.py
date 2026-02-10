@@ -5,6 +5,7 @@ from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ListArgument import ListArgument
 from Data.Types.Int import Int
+from Data.Types.Boolean import Boolean
 from App.DB.Query.Condition import Condition
 from App.DB.Query.Values.Value import Value
 from App.DB.Query.Sort import Sort
@@ -34,6 +35,11 @@ class Search(Act):
                 name = 'limit',
                 orig = Int,
                 default = 30
+            ),
+            Argument(
+                name = 'only_public',
+                orig = Boolean,
+                default = True
             ),
             ListArgument(
                 name = 'linked_to',
@@ -102,6 +108,18 @@ class Search(Act):
                 operator = 'in',
                 val2 = Value(
                     value = _ids_check
+                )
+            ))
+
+        if i.get('only_public'):
+            _query.addCondition(Condition(
+                val1 = Value(
+                    column = 'content',
+                    json_fields = ['local_obj', 'public']
+                ),
+                operator = '==',
+                val2 = Value(
+                    value = True
                 )
             ))
 

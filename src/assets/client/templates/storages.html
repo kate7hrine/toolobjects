@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}
+Storages
+{% endblock %}
+
+{% block body %}
+    <span>list of storages:</span>
+    <div id='storages'>
+        {% for item in storages %}
+            <div>
+                <a href="?i=App.Storage.VirtualPath.Navigate&path={{ item.name }}:/">{{ item.name }}</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="static/client/css/style.css">
+</head>
+<body>
+    <div id="content">
+        <div>
+            <a href="/"><b>{{ app_name }}</b></a>
+            <a href="javascript:history.back()"><</a>
+        </div>
+
+        {% if error %}
+            <div id="error">
+                <b>{{ error }}</b>
+            </div>
+        {% endif %}
+
+        <div id="page">{% block body %} {% endblock %} </div>
+    </div>
+</body>
+</html>

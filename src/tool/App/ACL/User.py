@@ -8,13 +8,12 @@ from pydantic import Field
 
 class User(Object):
     name: str = Field()
-    password_hash: str = Field(default = None, repr = False, exclude = True)
+    password_hash: str = Field(repr = False)
     inactive: bool = Field(default = False)
     via_token: Optional[Token] = Field(default = None)
 
     def auth(self, password: str) -> bool:
         hasher = PasswordHasher()
-
         if self.password_hash == None or hasher.verify(self.password_hash, password):
             return True
 

@@ -52,7 +52,7 @@ class AuthLayer(Object):
         if _item != None:
             _token = _item.toPython()
             _user = _token.to_user()
-            self.log(f"logged as {_user.name}", role = ['auth', 'auth.by_token'])
+            # self.log(f"logged as {_user.name}", role = ['auth', 'auth.by_token'])
 
             return _user
 

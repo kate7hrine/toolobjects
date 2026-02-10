@@ -43,12 +43,13 @@ class ObjectsList(Object):
     def append_namespace(self, namespace: Namespace):
         self.namespaces.append(namespace)
 
-    def has_namespace_with_name(self, name: str):
+    def get_namespace_with_name(self, name: str):
         for item in self.namespaces:
             if item.name == name:
-                return True
+                return item
 
-        return False
+    def has_namespace_with_name(self, name: str):
+        return self.get_namespace_with_name(name) != None
 
     def getItems(self, check_namespaces: bool = True) -> DictList:
         if self._last_current != None and self._last_current == self.current:

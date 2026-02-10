@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+Index
+{% endblock %}
+
+{% block body %}
+    <div>
+        Logged as <span>{{ user.name }}</span>. <a href="/logout">Logout</a>
+    </div>
+
+    <div>
+        <div>
+            <a href="/?i=App.Objects.Index.ObjectsList">Namespaces</a>
+        </div>
+        <div>
+            <a href="/?i=App.Storage.Item.List">Storages</a>
+        </div>
+    </div>
+
+{% endblock %}
