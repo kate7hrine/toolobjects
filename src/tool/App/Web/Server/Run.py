@@ -13,10 +13,12 @@ from App.Storage.DB.Adapters.Search.Condition import Condition
 from App.Storage.StorageUnit import StorageUnit
 import asyncio, traceback, os
 
-class WebServer(View):
+class Run(View):
+    # Run is sounds like act name, but its view. its required to nest it to Server dir because we need to separate client js classes
     async def implementation(self, i):
         _pre_i = i.get('pre_i')
 
+        _client = Path(__file__).parent.joinpath('client')
         _host = self.getOption("web.options.host")
         _port = self.getOption("web.options.port")
         _app = web.Application()
@@ -24,18 +26,35 @@ class WebServer(View):
 
         def _spa(request):
             return web.Response(
-                text = 'spa',
+                text =
+                """
+                <html>
+                    <head>
+                        <script defer src="/static/node_modules/alpinejs/dist/cdn.min.js"></script>
+                    </head>
+                    <body>
+                        <script type="module">
+                            import { App } from "/static/App/App.js"
+
+                            window.app = new App()
+                            await window.app.run()
+                        </script>
+                    </body>
+                </html>
+                """,
                 content_type = 'text/html'
             )
 
         def _get_asset(request):
             asset_path  = request.match_info.get('path', '')
-            static_dir = Path(os.path.dirname(__file__)).joinpath("assets")
-            static_file = static_dir.joinpath(asset_path)
-            if static_file.exists() == True and static_file.is_file() == True:
-                return web.FileResponse(static_file)
+            static_file = _client.joinpath(asset_path)
+            try:
+                assert static_file.exists() == True and static_file.is_file() == True
+                static_file.resolve().relative_to(static_file.resolve())
+            except (ValueError, RuntimeError, AssertionError):
+                raise web.HTTPForbidden(reason="Not found / Access denied")
 
-            return web.HTTPNotFound(text="not found asset")
+            return web.FileResponse(static_file)
 
         def _get_storage_unit(request):
             uuid = int(request.match_info.get('uuid', ''))
@@ -165,7 +184,7 @@ class WebServer(View):
 
         for route in [
             ('/', _spa, 'get'),
-            # ('/static/{path:.*}', _get_asset, 'get'),
+            ('/static/{path:.*}', _get_asset, 'get'),
             ('/storage/{storage}/{uuid}/{path:.*}', _get_storage_unit, 'get'),
             ('/api', _single_call, 'get'),
             ('/rpc', _ws, 'get'),
@@ -216,5 +235,10 @@ class WebServer(View):
                 name = 'web.aiohttp.debug',
                 default = True,
                 orig = Boolean
+            ),
+            Argument(
+                name = 'app.name',
+                default = 'orgtool',
+                orig = String
             )
         ]

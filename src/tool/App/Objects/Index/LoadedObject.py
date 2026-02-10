@@ -1,5 +1,5 @@
 from App.Objects.Object import Object
-from pydantic import Field
+from pydantic import Field, computed_field
 from typing import Any
 from pathlib import Path
 from App import app
@@ -98,7 +98,8 @@ class LoadedObject(Object):
         for _item in _settings:
             app.Config.getItem(role = _item.role).append_compare(_item)
 
-    @cached_property
+    @computed_field
+    @property
     def name(self) -> str:
         '''
         property to get DictList working

@@ -4,6 +4,7 @@ from App.Storage.DB.DBInsertable import DBInsertable
 from App.Objects.Mixins.Section import Section
 
 class LinkInsertion(BaseModel, DBInsertable, Section):
+    _link_insertion_type: bool = True
     link: int | Any = Field()
     field: list[str] = Field(default = [])
     #additional: dict = Field(default = {})

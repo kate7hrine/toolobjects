@@ -1,13 +1,13 @@
-from App.Objects.Executable import Executable
-from App.Objects.Object import Object
-from typing import Literal, ClassVar, Any
+from App.Objects.Mixins.BaseModel import BaseModel
+from typing import Literal, Any
 
-class Displayment(Executable):
+class Displayment(BaseModel):
     '''
     Class that display object some way
     '''
 
-    role: ClassVar[list[Literal['str', 'js'] | str]] = []
+    role: list[Literal['str', 'js'] | str] = []
+    value: str = None
 
     def implementation(self, i: dict) -> Any:
         '''

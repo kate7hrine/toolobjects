@@ -41,23 +41,23 @@ class Convertable(BaseModel):
                 for item in new:
                     yield item
 
-    def getIdSign(self):
-        if self.hasDb():
-            return f"[{self._db._adapter._storage_item.name}_{self._db.uuid}]"
-
-        return '[not flushed]'
- 
     def displayAs(self, as_type: str) -> str | Any:
         for displayment_probaly in self.getAllDisplayments():
             if as_type in displayment_probaly.role:
                 return displayment_probaly.implementation(i = {'orig': self})
 
     def displayAsString(self) -> str:
+        def getIdSign(self):
+            if self.hasDb():
+                return f"[{self._db._adapter._storage_item.name}_{self._db.uuid}]"
+
+            return '[not flushed]'
+    
         _ret = f"<{self.class_name}>"
         _res = self.displayAs(as_type = 'str')
         if _res != None:
             _ret = _res
 
-        _ret += self.getIdSign()
+        _ret += getIdSign()
 
         return _ret

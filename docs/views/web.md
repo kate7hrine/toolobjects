@@ -1,9 +1,9 @@
 ### Web server
 
-The "web" view is object "App.Web.WebServer":
+The "web" view is object "App.Web.Server.Run":
 
 ```
-python tool.py -view App.Web.WebServer
+python tool.py -view App.Web.Server.Run
 ```
 
 Default host (`web.options.host`) and port (`web.options.port`) are 127.0.0.1:22222.
@@ -12,7 +12,7 @@ It contains these routes:
 
 `/api` (GET)
 
-The same as ConsoleView: runs object from `i` param from `pre_i` param (that was passed before server running) and returns results in json. Arguments must be passed in `application/json` content type.
+The same as ConsoleView: runs object from `i` param from `pre_i` executable (that was passed before server running), returns results in json. Arguments must be passed in `application/json` content-type.
 
 `/rpc` (GET)
 
