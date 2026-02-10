@@ -18,9 +18,13 @@ class Checkmark(Object):
                 if orig.state:
                     _mark = "[x]"
 
-                # TODO remove
-                _i = orig.to_json()
-                return _mark + " " + _i.get('label').get('value') + ' '
+                _label = orig._get('label')
+                _label_text = ""
+
+                if _label != None:
+                    _label_text = _label.value
+
+                return "\n" + _mark + " " + _label_text + ' \n'
 
         return [
             StringDisplayment(

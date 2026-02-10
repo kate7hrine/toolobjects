@@ -5,8 +5,6 @@ from App.Objects.Misc.Thumbnail import Thumbnail
 from pathlib import Path
 
 class Image(FileType):
-    width: int = Field(default = None)
-    height: int = Field(default = None)
     _img = None
 
     @classmethod
@@ -29,8 +27,8 @@ class Image(FileType):
         self._img = None
 
     def _set_dimensions(self, data):
-        self.width = data.size[0]
-        self.height = data.size[1]
+        self.obj.width = data.size[0]
+        self.obj.height = data.size[1]
 
     def _make_thumbnail(self, data, percentage: float = 0.5):
         sizes = (data.size[0], data.size[1])

@@ -1,10 +1,20 @@
 from App.Objects.Object import Object
 from App.Objects.Displayments.StringDisplayment import StringDisplayment
-from Data.Checkmarks.Checkmark import Checkmark
+from Data.Primitives.Checkmarks.Checkmark import Checkmark
 from App.Objects.Act import Act
 from typing import Generator
+from App.Objects.Relations.Submodule import Submodule
 
 class List(Object):
+    @classmethod
+    def _submodules(cls):
+        return [
+            Submodule(
+                item = Checkmark,
+                role = ['link_allowed']
+            )
+        ]
+
     def getCheckmarks(self) -> Generator[Checkmark]:
         for link in self.getLinked():
             item = link.item

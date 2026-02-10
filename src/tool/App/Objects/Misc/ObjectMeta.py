@@ -18,7 +18,6 @@ class ObjectMeta(Model):
     original_description: Optional[str] = Field(default=None)
 
     role: Optional[list[str]] = Field(default = [])
-    duration: Optional[int] = Field(default = None)
 
     collection: Optional[bool] = Field(default=False)
     public: Optional[bool] = Field(default=False)
@@ -29,6 +28,11 @@ class ObjectMeta(Model):
     created_at: Optional[datetime] = Field(default_factory=lambda: datetime.now())
     edited_at: Optional[datetime] = Field(default=None)
     declared_created_at: Optional[datetime] = Field(default_factory=lambda: datetime.now())
+
+    # other fields
+    width: int = Field(default = None)
+    height: int = Field(default = None)
+    duration: Optional[int] = Field(default = None)
 
     @property
     def any_name(self):

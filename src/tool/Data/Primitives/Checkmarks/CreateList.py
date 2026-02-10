@@ -1,0 +1,25 @@
+from App.Objects.Extractor import Extractor
+from App.Objects.Arguments.ArgumentDict import ArgumentDict
+from App.Objects.Arguments.Argument import Argument
+from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from Data.String import String
+from Data.Primitives.Checkmarks.List import List
+
+class CreateList(Extractor):
+    @classmethod
+    def _arguments(cls) -> ArgumentDict:
+        return ArgumentDict(
+            items = [
+                Argument(
+                    name = 'name',
+                    orig = String,
+                    assertions = [NotNoneAssertion()]
+                )
+            ]
+        )
+
+    def implementation(self, i):
+        _list = List()
+        _list.obj.original_name = i.get('name')
+
+        self.append(_list)
