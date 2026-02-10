@@ -14,4 +14,4 @@ class Submodule(Link):
     convertation: will be used for convertTo
     '''
 
-    role: list[Literal['object', 'common', 'wheel', 'convertation'] | str] = Field(default = ['common'])
+    role: list[Literal['object', 'thumbnail', 'common', 'wheel', 'convertation'] | str] = Field(default = ['common'])

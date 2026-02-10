@@ -146,5 +146,9 @@ class Logger(Object):
             Boolean(
                 name = 'logger.print.console.show_role',
                 default = False
+            ),
+            Boolean(
+                name = 'logger.print.console.show_time',
+                default = True
             )
         ]

@@ -17,7 +17,6 @@ class ModelsResponse(Response):
 
     @staticmethod
     def fromItems(items):
-        print(items)
         new = ModelsResponse(models = items)
 
         return new

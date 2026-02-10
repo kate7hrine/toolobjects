@@ -1,4 +1,5 @@
-from App.DB.Adapters.Connection.SQLAlchemyAdapter import SQLAlchemyAdapter
+from App.Storage.DB.Adapters.Connection.SQLAlchemyAdapter import SQLAlchemyAdapter
+from sqlalchemy.orm import Session
 from pydantic import Field
 from typing import Literal, Any
 
@@ -6,15 +7,15 @@ class SQLiteAdapter(SQLAlchemyAdapter):
     protocol_name = 'sqlite'
     content: str = Field(default = None)
 
-    def getContent(self, storage_di: Any = None):
+    def getContent(self, storage_item: Any = None):
         if self.content != None:
             return str(self.content)
         else:
-            return str(storage_di.getDir().joinpath(storage_di.name + '.db'))
+            return str(storage_item.getDir().joinpath(storage_item.name + '.db'))
 
-    def _constructor(self, storage_di: Any = None):
+    def _constructor(self, storage_item: Any = None):
         protocol = 'sqlite'
-        connection_string = protocol + self.delimiter + self.getContent(storage_di)
+        connection_string = protocol + self.delimiter + self.getContent(storage_item)
 
         self._get_engine(connection_string)
         self._init_models()
@@ -23,3 +24,4 @@ class SQLiteAdapter(SQLAlchemyAdapter):
         from sqlalchemy import create_engine
 
         self._engine = create_engine(connection_string)
+        self._session = Session(self._engine, expire_on_commit=False)

@@ -2,7 +2,7 @@ from App.Objects.Object import Object
 from . import LogSection, LogPrefix
 from pydantic import Field
 from datetime import datetime
-from typing import Literal
+from typing import Literal, Any
 from App import app
 
 class Log(Object):
@@ -25,12 +25,15 @@ class Log(Object):
         RESET = self.Colors.reset
 
         parts = []
-        parts.append(self.time.strftime("%H:%M:%S.%f"))        
+
+        if app.Config.get('logger.print.console.show_time') == True:
+            parts.append(self.time.strftime("%H:%M:%S.%f"))        
+
         parts.append(self.Colors.section + self.section.toString() + RESET)
         if self.prefix != None:
             parts.append(self.Colors.prefix + self.prefix.toString() + RESET)
 
-        if app.Config.get('logger.show_role') == True:
+        if app.Config.get('logger.print.console.show_role') == True:
             if len(self.role) > 0:
                 _role = ", ".join(self.role)
                 parts.append(self.Colors.deprecated + f"<{_role}>" + RESET)

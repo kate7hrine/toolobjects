@@ -1,6 +1,6 @@
 from App.Objects.Object import Object
 from App.Storage.StorageUnit import StorageUnit
-from App.DB.Adapters.ConnectionAdapter import ConnectionAdapter
+from App.Storage.DB.Adapters.ConnectionAdapter import ConnectionAdapter
 from pydantic import Field
 from pathlib import Path
 from App import app
@@ -61,7 +61,10 @@ class StorageItem(Object):
         self.getStorageDir().mkdir(exist_ok=True)
 
     def getDBAdapterByName(self, adapter_name: str):
-        for adapter in app.app.objects.getObjectsByNamespace(['App', 'DB', 'Adapters', 'Connection']):
+        for adapter in app.app.objects.getObjectsByNamespace(['App', 'Storage', 'DB', 'Adapters', 'Connection']):
             _module = adapter.getModule()
             if _module.protocol_name == adapter_name:
-                return _module()
+                item = _module()
+                item._constructor(self)
+
+                return item

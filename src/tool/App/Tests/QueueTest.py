@@ -37,7 +37,7 @@ class QueueTest(Test):
                 }
             },
             {
-                "predicate": "App.DB.Flush.Flush",
+                "predicate": "App.Storage.DB.Flush.Flush",
                 "arguments": {
                     "object": {
                         "direct_value": "#2"

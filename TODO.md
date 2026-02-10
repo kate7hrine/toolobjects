@@ -42,3 +42,4 @@
 - [ ] DisplayType (?)
 - [ ] link insertion
 - [x] get rid of saveable
+- [ ] Executable.common_object move to submodule with common name
