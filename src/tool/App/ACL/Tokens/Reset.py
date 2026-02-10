@@ -5,6 +5,7 @@ from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
 from Data.String import String
 from App import app
 from App.DB.Query.Condition import Condition
+from App.ACL.Tokens.Token import Token
 
 class Reset(Act):
     @classmethod
@@ -24,12 +25,7 @@ class Reset(Act):
         assert _user != None, 'user not found'
 
         _tokens = app.Storage.get('users').adapter.getQuery()
-        _tokens.addCondition(Condition(
-            val1 = 'content',
-            json_fields = ['obj', 'saved_via', 'object_name'],
-            operator = '==',
-            val2 = 'App.ACL.Tokens.Token'
-        ))
+        _tokens.where_object(Token)
         _tokens.addCondition(Condition(
             val1 = 'content',
             json_fields = ['user'],

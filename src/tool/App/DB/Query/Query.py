@@ -1,5 +1,6 @@
 from typing import Any, Generator, Self, ClassVar
 from abc import ABC, abstractmethod
+from App.Objects.Object import Object
 from App.DB.Query.Condition import Condition
 from App.DB.Query.Sort import Sort
 from App.DB.Representation.ObjectAdapter import ObjectAdapter
@@ -90,3 +91,11 @@ class Query(ABC):
         self._applyConditions()
         self._applySorts()
         self._applyLimits()
+
+    def where_object(self, obj: Object) -> Self:
+        self.addCondition(Condition(
+            val1 = 'content',
+            json_fields = ['obj', 'saved_via', 'object_name'],
+            operator = '==',
+            val2 = obj.getClassNameJoined(),
+        ))

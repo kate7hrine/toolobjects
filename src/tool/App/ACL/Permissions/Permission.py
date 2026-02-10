@@ -17,12 +17,7 @@ class Permission(BaseModel, DBInsertable):
     def getPermissions(cls, likeness: BaseModel = None):
         _storage = app.Storage.get('users')
         _query = _storage.adapter.getQuery()
-        _query.addCondition(Condition(
-            val1 = 'content',
-            operator = '==',
-            val2 = 'App.ACL.Permissions.Permission',
-            json_fields = ['obj', 'saved_via', 'object_name']
-        ))
+        _query.where_object(cls)
 
         if likeness != None:
             for key in ['object_name', 'user', 'action', 'allow', 'uuid']:

@@ -9,20 +9,56 @@ from Data.JSON import JSON
 from aiohttp import web
 from App import app
 from pathlib import Path
+from pydantic import Field
 from App.DB.Query.Condition import Condition
 from App.Storage.StorageUnit import StorageUnit
 import asyncio, traceback
 
 class Server(View):
-    async def implementation(self, i):
-        _pre_i = i.get('pre_i')
+    ws_connections: list = Field(default = list())
+    pre_i: Object = Field(default = None)
 
-        _assets = app.app.src.joinpath('assets')
-        _client = _assets.joinpath('client')
+    async def implementation(self, i):
         _host = self.getOption("web.options.host")
         _port = self.getOption("web.options.port")
         _app = web.Application()
-        _ws_connections = list()
+
+        self._register_default_routes(_app, i)
+        self._register_routes(_app, i)
+
+        runner = web.AppRunner(_app)
+        await runner.setup()
+
+        async def _log_ws(to_print, check_categories):
+            for connection in self.ws_connections:
+                await connection.send_str(JSON(data={
+                    'type': 'log',
+                    'event_index': 0,
+                    'payload': to_print.to_json()
+                }).dump())
+
+        app.Logger.addHook('log', _log_ws)
+
+        site = web.TCPSite(
+            runner,
+            host = _host,
+            port = _port
+        )
+
+        await site.start()
+
+        _http = 'http://'
+        self.log("Started server on {0}{1}:{2}".format(_http, _host, _port))
+
+        while True:
+            await asyncio.sleep(3600)
+
+    def _register_routes(self, server_app, i):
+        pass
+
+    def _register_default_routes(self, server_app, i):
+        _assets = app.app.src.joinpath('assets')
+        _pre_i = i.get('pre_i')
 
         def _spa(request):
             return web.Response(
@@ -145,7 +181,7 @@ class Server(View):
             await ws.prepare(request)
             self.log('websocket connection')
 
-            _ws_connections.append(ws)
+            self.ws_connections.append(ws)
 
             async for msg in ws:
                 try:
@@ -172,7 +208,7 @@ class Server(View):
                 except Exception as e:
                     traceback.print_exception(e)
 
-            _ws_connections.remove(ws)
+            self.ws_connections.remove(ws)
 
             return ws
 
@@ -210,34 +246,7 @@ class Server(View):
             ('/rpc', _ws, 'get'),
             ('/api/upload/{storage}', _upload_storage_unit, 'post'),
         ]:
-            getattr(_app.router, 'add_' + route[2])(route[0], route[1])#(route[0], getattr(self, route[1]))
-
-        runner = web.AppRunner(_app)
-        await runner.setup()
-
-        async def _log_ws(to_print, check_categories):
-            for connection in _ws_connections:
-                await connection.send_str(JSON(data={
-                    'type': 'log',
-                    'event_index': 0,
-                    'payload': to_print.to_json()
-                }).dump())
-        
-        app.Logger.addHook('log', _log_ws)
-
-        site = web.TCPSite(
-            runner,
-            host = _host,
-            port = _port
-        )
-
-        await site.start()
-
-        _http = 'http://'
-        self.log("Started server on {0}{1}:{2}".format(_http, _host, _port))
-
-        while True:
-            await asyncio.sleep(3600)
+            getattr(server_app.router, 'add_' + route[2])(route[0], route[1])#(route[0], getattr(self, route[1]))
 
     @classmethod
     def _settings(cls) -> list:
