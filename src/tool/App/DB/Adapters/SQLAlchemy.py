@@ -136,13 +136,19 @@ class SQLAlchemy(ConnectionAdapter):
                 _query._query = self_adapter.getSession().query(_LinkAdapter)
                 _query._model = _LinkAdapter
                 _query.addCondition(Condition(
-                    val1 = 'owner',
+                    val1 = Value(
+                        column = 'owner'
+                    ),
                     operator = '==',
-                    val2 = self.uuid
+                    val2 = Value(
+                        value = self.uuid
+                    )
                 ))
                 _query.addSort(Sort(
                     condition = Condition(
-                        val1 = 'order'
+                        val1 = Value(
+                            column = 'order'
+                        )
                     )
                 ))
 
@@ -178,14 +184,22 @@ class SQLAlchemy(ConnectionAdapter):
                 _query._query = self_adapter.getSession().query(_LinkAdapter)
                 _query._model = _LinkAdapter
                 _query.addCondition(Condition(
-                    val1 = 'owner',
+                    val1 = Value(
+                        column = 'owner'
+                    ),
                     operator = '==',
-                    val2 = self.uuid
+                    val2 = Value(
+                        value = self.uuid
+                    )
                 ))
                 _query.addCondition(Condition(
-                    val1 = 'target',
+                    val1 = Value(
+                        column = 'target'
+                    ),
                     operator = '==',
-                    val2 = link.item.getDbId()
+                    val2 = Value(
+                        value = link.item.getDbId()
+                    )
                 ))
                 if len(link.data.role) > 0:
                     _query.addCondition(Condition(

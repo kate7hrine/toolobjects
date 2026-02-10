@@ -19,13 +19,15 @@ class String(Valueable):
         if val == None:
             return None
 
+        _val = self.asArgument(val)
+
         if self.min_length != None:
-            assert len(val) > self.min_length, 'string is too short'
+            assert len(_val) > self.min_length, 'string is too short'
 
         if self.max_length != None:
-            assert len(val) < self.max_length, 'string is too long'
+            assert len(_val) < self.max_length, 'string is too long'
 
-        return str(val)
+        return _val
 
     @staticmethod
     def cut(string: str, length: int = 100, short_str: str = '...'):

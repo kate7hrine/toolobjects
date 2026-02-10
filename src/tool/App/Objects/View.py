@@ -29,11 +29,11 @@ class View(Executable):
             return False
 
         _allowed = obj._allowed_views()
-        if _allowed == None:
+        if len(_allowed) == 0:
             return True
 
         for item in _allowed:
-            if item._getClassNameJoined() == self._getClassNameJoined():
+            if item.item()._getClassNameJoined() == self._getClassNameJoined():
                 return True
 
     @classmethod
