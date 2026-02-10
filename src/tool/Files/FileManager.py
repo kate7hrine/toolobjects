@@ -10,13 +10,13 @@ class FileManager(Client):
     def getSubmodules(cls):
         return [
             Submodule(
-                module = Dir,
+                item = Dir,
             ),
             Submodule(
-                module = File,
+                item = File,
             ),
             Submodule(
-                module = Navigate,
+                item = Navigate,
                 role = ['wheel']
             )
         ]

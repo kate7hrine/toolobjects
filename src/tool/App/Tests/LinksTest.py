@@ -1,6 +1,6 @@
 from App.Tests.Test import Test
 from Data.Text import Text
-from App.Objects.Link import Link, LinkTypeEnum
+from App.Objects.Link import Link
 
 class LinksTest(Test):
     async def implementation(self, i):
@@ -9,7 +9,6 @@ class LinksTest(Test):
 
         txt.addLink(Link(
             item = txt2,
-            common = True,
-            link_type = LinkTypeEnum.EXTERNAL.value
+            role = ['common'],
         ))
         print(txt.model_dump_json(indent=4))

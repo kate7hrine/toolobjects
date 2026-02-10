@@ -26,9 +26,6 @@ class Wheel(Executable):
 
         modules = []
         for submodule in self.getAllSubmodules():
-            if submodule.value != Submodule.ConnectionEnum.INTERNAL.value:
-                continue
-
             if 'wheel' not in submodule.role:
                 continue
 
@@ -42,7 +39,7 @@ class Wheel(Executable):
 
         self.log(f"Using submodule: {submodule.getClassNameJoined()}", section = ['Execute'])
 
-        extract = _submodule.module()
+        extract = _submodule.item()
 
         return await extract.execute(i)
 
@@ -55,7 +52,7 @@ class Wheel(Executable):
         Iterates got submodules (internal, role=wheel), calling comparer with each submodule, and if at least one (common?) arg is presented in dict, returning it
         '''
         for item in items:
-            decl = Comparer(compare = item.module.getAllArguments(), values = values)
+            decl = Comparer(compare = item.item.getAllArguments(), values = values)
 
             if decl.diff():
                 return item

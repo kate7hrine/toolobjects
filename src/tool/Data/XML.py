@@ -13,7 +13,7 @@ class XML(Object):
 
         return [
             Submodule(
-                module = XMLToJson,
+                item = XMLToJson,
                 role = ['convertation']
             )
         ]

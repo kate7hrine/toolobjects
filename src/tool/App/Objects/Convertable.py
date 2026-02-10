@@ -6,7 +6,7 @@ class Convertable(BaseModel):
     def findConvertationsForClass(cls, for_class: BaseModel) -> list:
         converters = []
         for item in cls.getAllSubmodules():
-            if 'convertation' in item.role and item.module.converts_to == for_class:
+            if 'convertation' in item.role and item.item.converts_to == for_class:
                 converters.append(item)
 
         return converters
@@ -17,5 +17,5 @@ class Convertable(BaseModel):
 
         assert _conv != None, 'no convertation for this'
 
-        _itm = _conv.module()
+        _itm = _conv.item()
         return await _itm.execute(i = {'orig': self})

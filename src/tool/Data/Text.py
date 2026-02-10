@@ -1,5 +1,5 @@
-from App.Objects.Saveable import Saveable
+from App.Objects.Object import Object
 from pydantic import Field
 
-class Text(Saveable):
+class Text(Object):
     text: str = Field(default = '')

@@ -11,3 +11,5 @@ class ObjectMeta(BaseModel):
     original_description: str = Field(default=None)
     thumbnail: dict = Field(default = None)
     duration: int = Field(default = None)
+    role: list[str] = Field(default = None) # dont know yet where to use
+    object_names: list[str] = Field(default = None) # Custom saved_via.object_names

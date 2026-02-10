@@ -37,14 +37,6 @@ class QueueTest(Test):
                 }
             },
             {
-                "predicate": "App.Data.ObjectToSaveable.ObjectToSaveable",
-                "arguments": {
-                    "object": {
-                        "direct_value": "#0"
-                    }
-                }
-            },
-            {
                 "predicate": "App.DB.Flush.Flush",
                 "arguments": {
                     "object": {

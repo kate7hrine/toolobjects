@@ -1,9 +1,5 @@
 from pydantic import Field, BaseModel
-#from App.Objects.Object import Object
-
-class Link(BaseModel):
-    # todo ?????? remove
-    pass
+from App.Objects.Link import Link
 
 class Linkable:
     '''
