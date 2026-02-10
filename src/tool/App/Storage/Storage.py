@@ -26,10 +26,15 @@ class Storage(Object):
         #dbs_dir.mkdir(exist_ok=True)
 
         for item in self.getOption('storage.items'):
+            if item.unused == True:
+                self.log('storage item {0} is disabled'.format(item.name))
+                continue
+
             _names.append(item.name)
 
             item._init_hook()
             self.append(item)
+            self.log('loaded custom storage item {0}'.format(item.name))
 
         default_items = [
             StorageItem(

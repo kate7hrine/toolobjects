@@ -15,12 +15,19 @@ class DaemonList(Object):
         )
 
         for item in cls.getOption('daemons.autostart'):
-            daemons.append(item)
+            daemons.add(item.toPython())
 
         app.mount('DaemonList', daemons)
 
-    def append(self, item):
-        self.items.append(item.toPython())
+    def run_autostart(self):
+        pass
+
+    def add(self, item: Daemon):
+        self.items.append(item)
+
+    def remove(self, item: Daemon):
+        if item in self.items:
+            self.items.remove(item)
 
     @classmethod
     def _settings(cls):
