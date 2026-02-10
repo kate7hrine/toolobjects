@@ -6,10 +6,11 @@ import xml.etree.ElementTree as ET
 
 class Element(Object):
     id: Optional[str] = Field(default = None)
+    guid: Optional[str] = Field(default = None)
     title: Optional[str] = Field(default = None)
     subtitle: Optional[str] = Field(default = None)
     description: Optional[str] = Field(default = None)
-    link_item: Optional[Link] = Field(default = None)
+    link_items: Optional[list[Link]] = Field(default = [])
 
     def from_xml(self, data: ET):
         pass

@@ -1,6 +1,7 @@
 from App.Objects.View import View
 from App.Objects.Object import Object
 from App.Objects.Arguments.Argument import Argument
+from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Responses.Error import Error
 
 from Data.Types.String import String
@@ -19,7 +20,7 @@ import asyncio, traceback
 import socket
 from App.Objects.Threads.ExecutionThread import ExecutionThread
 
-from typing import Optional, Coroutine
+from typing import Optional, Coroutine, ClassVar
 from aiohttp import web
 from App import app
 
@@ -28,6 +29,8 @@ class Run(View):
     pre_i: Object = Field(default = None)
     _app: Any = None
     _pre_i: Any = None
+
+    protect_storage_units: ClassVar[bool] = True
 
     @classmethod
     def _settings(cls) -> list:
@@ -53,6 +56,16 @@ class Run(View):
                 orig = String
             )
         ]
+
+    @classmethod
+    def _arguments(cls) -> ArgumentDict:
+        return ArgumentDict(items = [
+            Argument(
+                name = 'ignore_autostart',
+                orig = Boolean,
+                default = False
+            )
+        ])
 
     async def _implementation(self, i):
         _host = self.getOption("web.options.host")
@@ -92,7 +105,8 @@ class Run(View):
         _http = 'http://'
         self.log("Started server on {0}{1}:{2}".format(_http, self._get_ip(_host), _port))
 
-        asyncio.create_task(app.Autostart.start_them(i.get('pre_i')))
+        if i.get('ignore_autostart') == False:
+            asyncio.create_task(app.Autostart.start_them(i.get('pre_i')))
 
         while True:
             await asyncio.sleep(3600)
@@ -171,9 +185,10 @@ class Run(View):
         return web.FileResponse(static_file)
 
     def _get_storage_unit(self, request):
-        _user = self._auth(dict(request.rel_url.query))
-        if _user == None:
-            raise web.HTTPForbidden(reason="access denied")
+        if self.protect_storage_units == True:
+            _user = self._auth(dict(request.rel_url.query))
+            if _user == None:
+                raise web.HTTPForbidden(reason="access denied")
 
         uuid = int(request.match_info.get('uuid', ''))
         _storage = request.match_info.get('storage', '')

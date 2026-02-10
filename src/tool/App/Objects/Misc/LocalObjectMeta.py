@@ -13,6 +13,7 @@ class LocalObjectMeta(Model):
 
     created_at: Optional[datetime] = Field(default_factory=lambda: datetime.now())
     edited_at: Optional[datetime] = Field(default=None)
+    updated_at: Optional[datetime] = Field(default=None)
 
     public: Optional[bool] = Field(default=False)
     role: Optional[list[str]] = Field(default = [])
@@ -27,3 +28,9 @@ class LocalObjectMeta(Model):
 
     def make_public(self):
         self.public = True
+
+    def set_edited(self):
+        self.edited_at = datetime.now()
+
+    def set_updated(self):
+        self.updated_at = datetime.now()
