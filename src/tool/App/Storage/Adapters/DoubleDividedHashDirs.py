@@ -4,6 +4,7 @@ from pydantic import Field
 from pathlib import Path
 from App import app
 import secrets
+import shutil
 
 class DoubleDividedHashDirs(StorageAdapter):
     protocol_name = 'double_divided_hash_dirs'
@@ -19,7 +20,7 @@ class DoubleDividedHashDirs(StorageAdapter):
             if self._path.exists() == False:
                 self._path.mkdir()
         else:
-            dbs_dir = app.app.storage.joinpath('dbs')
+            dbs_dir = app.app.storage
             self._path = dbs_dir.joinpath(self._storage_item.name)
             self._path.mkdir(exist_ok=True)
 
@@ -31,7 +32,7 @@ class DoubleDividedHashDirs(StorageAdapter):
 
         return _upper, _upper.joinpath(hash)
 
-    def getStorageUnit(self) -> StorageUnit:
+    def get_storage_unit(self) -> StorageUnit:
         _bytes = 32
 
         _item = StorageUnit()
@@ -56,8 +57,14 @@ class DoubleDividedHashDirs(StorageAdapter):
             if change_common == True:
                 unit._root_path = _hash[1]
         except AssertionError as e:
-            unit.log_raw(e)
+            unit.log_error(e, exception_prefix = 'Error when moving storage unit: ')
             pass
+
+    def clear(self):
+        assert self._storage_item.name == 'tmp' and self.getStorageDir().relative_to(app.app.storage) != None, "clear it manually"
+
+        shutil.rmtree(self.getStorageDir())
+        self.getStorageDir().mkdir(exist_ok = True)
 
     def getStorageDir(self):
         return self._path.joinpath(self.storage_dir_name)

@@ -7,7 +7,7 @@ class Storage(Test):
 
         self.log('content db:' + str(app.Storage.get('common')))
         self.log('content db dir: ' + str(app.Storage.get('common').get_storage_adapter().getStorageDir()))
-        _unit = app.Storage.get('common').get_storage_adapter().getStorageUnit()
+        _unit = app.Storage.get('common').get_storage_adapter().get_storage_unit()
         __name = _unit.getDir().joinpath('tmp')
         __name_2 = _unit.getDir().joinpath('txt.txt')
         _file = open(__name, 'w', encoding='utf-8')

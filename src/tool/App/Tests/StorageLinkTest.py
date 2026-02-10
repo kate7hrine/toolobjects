@@ -11,7 +11,7 @@ class StorageLinkTest(Test):
         '''
 
         _url = ""
-        _unit = storage.get_storage_adapter().getStorageUnit()
+        _unit = storage.get_storage_adapter().get_storage_unit()
 
         item = app.DownloadManager.addURL(_url, _unit, 'image.png')
         await item.start()

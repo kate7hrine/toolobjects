@@ -7,6 +7,7 @@ from pathlib import Path
 class Image(FileType):
     width: int = Field(default = None)
     height: int = Field(default = None)
+    _img = None
 
     @classmethod
     def _required_modules(cls):
@@ -19,9 +20,13 @@ class Image(FileType):
     def _read_file(self):
         from PIL import Image
 
-        _img = Image.open(str(self.get_file().getPath()))
+        if self._img == None:
+            self._img = Image.open(str(self.get_file().getPath()))
 
-        return _img
+        return self._img
+
+    def _reset_file(self):
+        self._img = None
 
     def _set_dimensions(self, data):
         self.width = data.size[0]

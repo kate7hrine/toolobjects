@@ -22,8 +22,8 @@ class Storage(Object):
 
     def init_hook(self):
         _names = []
-        dbs_dir = app.app.storage.joinpath('dbs')
-        dbs_dir.mkdir(exist_ok=True)
+        #dbs_dir = app.app.storage.joinpath('dbs')
+        #dbs_dir.mkdir(exist_ok=True)
 
         for item in self.getOption('storage.items'):
             _names.append(item.name)
@@ -48,11 +48,13 @@ class Storage(Object):
                 name = 'logs',
                 allowed_objects = ['App.Logger.Log'],
                 db_type = 'App.DB.Adapters.SQLite',
-                db = {
-                    #'auto_commit': False
-                    'auto_commit': True
-                }
-            )
+                db = {}
+            ),
+            StorageItem(
+                name = 'bin',
+                db_type = 'App.DB.Adapters.SQLite',
+                db = {}
+            ),
         ]
 
         for item in default_items:

@@ -48,6 +48,10 @@ class ObjectMeta(Model):
     def add_thumbnail(self, thumb: Thumbnail):
         self.thumbnail.append(thumb)
 
+    def add_thumbnails(self, thumbs: list[Thumbnail]):
+        for thumb in thumbs:
+            self.thumbnail.append(thumb)
+
     def make_public(self):
         self.public = True
 
