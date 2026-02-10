@@ -41,7 +41,7 @@ class Item(Object):
     def getPath(self):
         return Path(self.download_dir).joinpath(self.name)
 
-    async def start(self, new_headers: dict = {}) -> asyncio.Task:
+    async def start(self, new_headers: dict = None) -> asyncio.Task:
         async with self._manager_link.getSession() as session:
             self.log(f"URL: {self.url}")
             self.started_at = datetime.datetime.now()
@@ -50,9 +50,10 @@ class Item(Object):
 
             return self._task
 
-    async def download(self, session, new_headers: RequestHeaders = {}):
+    async def download(self, session, new_headers: RequestHeaders = None):
         _headers = self._manager_link.getHeaders().to_minimal_json()
-        _headers.update(new_headers.to_minimal_json())
+        if new_headers != None:
+            _headers.update(new_headers.to_minimal_json())
 
         self.log('making call to {0} with headers {1}'.format(self.url, _headers))
 

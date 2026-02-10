@@ -4,6 +4,7 @@ from typing import Optional
 from App.Objects.Mixins.Model import Model
 from App.Objects.Misc.Source import Source
 from App.Objects.Misc.SavedVia import SavedVia
+from App.Objects.Misc.Geo import Geo
 
 class ObjectMeta(Model):
     saved_via: SavedVia = Field(default = None)
@@ -21,6 +22,7 @@ class ObjectMeta(Model):
     updated_at: Optional[datetime] = Field(default=None)
 
     # other fields
+    geo: Optional[Geo] = Field(default = None) # Why?????? Why not
     width: Optional[int] = Field(default = None)
     height: Optional[int] = Field(default = None)
     duration: Optional[int] = Field(default = None)
