@@ -19,7 +19,7 @@ class Image(Media):
         return [
             Submodule(
                 item = ResizeByPercentage, # You don't need a thumbnail when all files are stored locally
-                role = ['thumbnail', 'thumbnail_disabled_default']
+                role = ['thumbnail']#, 'thumbnail_disabled_default'] # no... probaly need
             )
         ]
 

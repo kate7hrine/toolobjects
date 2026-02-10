@@ -90,7 +90,7 @@ class Linkable():
                 if link.item == item:
                     return link
 
-    def getLinkedItems(self, ignore_db: bool = False, with_role: list[str] = None) -> Generator[Link]:
+    def getLinkedItems(self, ignore_db: bool = False, with_role: str = None) -> Generator[Link]:
         '''
         Returns linked items.
         Non-overridable!
@@ -98,29 +98,39 @@ class Linkable():
 
         if self.getDb() != None and ignore_db == False:
             for item in self.getDb().getLinks(with_role = with_role):
+                _item = item.toPython()
+
+                if with_role:
+                    _role = list()
+                    if type(_item.data) != list:
+                        _role = _item.data.get('role', [])
+
+                    if with_role not in _role:
+                        continue
+
+                yield _item.item
+        else:
+            for item in self.local_obj.links:
+                if with_role:
+                    if with_role not in item.data.role:
+                        continue
+
                 yield item
 
-        for item in self.local_obj.links:
-            if with_role:
-                if with_role not in item.data.role:
-                    continue
-
-            yield item
-
-    def _get_virtual_linked(self) -> Generator[Link]:
+    def _get_virtual_linked(self, with_role: str = None) -> Generator[Link]:
         '''
         Returns linked items. This method can be overriden
         '''
         return self.getLinkedItems()
 
-    def getLinked(self, ignore_virtual: bool = False) -> Generator[Link]:
+    def getLinked(self, ignore_virtual: bool = False, with_role: str = None) -> Generator[Link]:
         '''
         Return dynamic links or real links
         '''
         if self.local_obj.dynamic_links == True and ignore_virtual == False:
-            return self._get_virtual_linked()
+            return self._get_virtual_linked(with_role = with_role)
         else:
-            return self.getLinkedItems()
+            return self.getLinkedItems(with_role = with_role)
 
     def getLinksRecurisvely(self, current_level = 0, max_depth = 10) -> Generator[Link]:
         if current_level >= max_depth:

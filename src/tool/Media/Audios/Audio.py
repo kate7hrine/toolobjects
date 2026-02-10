@@ -2,7 +2,6 @@ from Media.Media import Media
 from Media.Images.Image import Image
 from typing import ClassVar
 from pydantic import Field
-from App.Objects.Misc.Thumbnail import Thumbnail
 from Media.ByPath import ByPath
 
 class Audio(Media):

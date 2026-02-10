@@ -16,7 +16,7 @@ class LinkAdapter(AbstractAdapter):
 
     def _parseData(self) -> list:
         if self.data != None:
-            return JSON().fromText(self.data)
+            return JSON().fromText(self.data).data
 
         return []
 

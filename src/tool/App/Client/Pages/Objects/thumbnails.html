@@ -7,15 +7,15 @@ Thumbnails
 {% block body %}
     <style>
         img {
-            width: 100%;
+            max-width: 100%;
         }
     </style>
     {% for thumb in thumbnails %}
         <div>
-            {% if 'image' in thumb.role %}
+            {% if thumb._getNameJoined() == "Media.Images.Image" %}
                 <div>
-                    <a target="_blank" href="{{thumb._get('obj').get_url(True)}}">
-                        <img src="{{thumb._get('obj').get_url(True)}}">
+                    <a target="_blank" href="{{thumb.get_url(True)}}">
+                        <img src="{{thumb.get_url(True)}}">
                     </a>
                 </div>
             {% else %}

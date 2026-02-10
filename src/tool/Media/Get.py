@@ -6,7 +6,6 @@ from App.Objects.Arguments.ListArgument import ListArgument
 from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App.Objects.Responses.Response import Response
-from App.Objects.Misc.Thumbnail import Thumbnail
 from Data.Types.Boolean import Boolean
 from Data.Types.String import String
 from Data.Types.Dict import Dict
@@ -85,10 +84,7 @@ class Get(ExtendedWheel):
                     _resp = await thumb_item().execute(current_thumbnail_settings)
 
                     for thumb_result in _resp.getItems():
-                        item.local_obj.add_thumbnail(Thumbnail(
-                            obj = thumb_result,
-                            role = _obj.thumbnail_type,
-                        ))
+                        item.add_thumbnail(thumb_result)
 
                     self.log('thumbnail for item {0}, {1}'.format(item_count, thumb_item._getNameJoined()), role = ['thumbnail'])
                 except Exception as e:

@@ -133,6 +133,8 @@ class SQLAlchemy(ConnectionAdapter):
 
             # Link functions
             def getLinks(self, with_role: str = None) -> Generator[CommonLink]:
+                from sqlalchemy import func
+
                 _query = self_adapter.QueryAdapter()
                 _query._query = self_adapter.getSession().query(_LinkAdapter)
                 _query._model = _LinkAdapter
@@ -145,17 +147,8 @@ class SQLAlchemy(ConnectionAdapter):
                         value = self.uuid
                     )
                 ))
-                if with_role:
-                    _query.addCondition(Condition(
-                        val1 = Value(
-                            column = 'data',
-                            json_fields = ['role']
-                        ),
-                        operator = 'in',
-                        val2 = Value(
-                            value = with_role
-                        )
-                    ))
+                #if with_role:
+                #    _query._query = _query._query.select_from(func.json_each(func.json_extract(_LinkAdapter.data, '$.role'))).where(func.json_each.c.value == with_role)
 
                 _query.addSort(Sort(
                     condition = Condition(
@@ -165,14 +158,7 @@ class SQLAlchemy(ConnectionAdapter):
                     )
                 ))
                 for link in _query.getAll():
-                    _res = link.toPython()
-                    if link == None or _res == None:
-                        yield CommonLink(
-                            item = UnknownObject()
-                        )
-                        continue
-
-                    yield _res
+                    yield link
 
             @classmethod
             def getQuery(cls):
@@ -256,7 +242,8 @@ class SQLAlchemy(ConnectionAdapter):
             # idk how to shrink this
             class OperatorOverride(Operator):
                 def _condition_get(self, query, db_query, condition):
-                    return self._condition_get(query, db_query, condition) == query._get_part(condition, 1)
+                    pass
+                    #return self._condition_get(query, db_query, condition) == query._get_part(condition, 1)
 
                 def _implementation(self, query, db_query, condition):
                     return db_query.filter(self._condition_get(query, db_query, condition))
@@ -321,6 +308,17 @@ class SQLAlchemy(ConnectionAdapter):
                 def _implementation(self, value_item, column, value):
                     return column % value_item.args[0]
 
+            class JSONContains(Function):
+                operator = 'json_contains'
+
+                def _implementation(self, value_item, column, value):
+                    from sqlalchemy import func
+
+                    return getattr(func, self.operator)(column, value)
+
+            class JSONEach(JSONContains):
+                operator = 'json_each'
+
             class Random(Function):
                 operator = 'random'
 
@@ -330,7 +328,7 @@ class SQLAlchemy(ConnectionAdapter):
                     return func.random()
 
             _cls.operators = [Equals, NotEquals, In, NotIn, Lesser, Greater, LesserOrEqual, GreaterOrEqual, Contains]
-            _cls.functions = [Mod, Random]
+            _cls.functions = [Mod, Random, JSONContains, JSONEach]
 
         # Method that receives part from condition
         def _get_part(self, condition: Condition, val_num: int = 0):
@@ -354,7 +352,7 @@ class SQLAlchemy(ConnectionAdapter):
                 if _item.func:
                     for _func in self.functions:
                         if _func.operator == _item.func:
-                            return _func()._condition_get(_item, _val, self._get_part(condition, 1))
+                            return _func()._implementation(_item, _val, self._get_part(condition, 1))
 
                 return _val
 

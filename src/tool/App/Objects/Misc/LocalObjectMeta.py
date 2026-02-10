@@ -1,7 +1,6 @@
 from pydantic import Field
 from App.Objects.Mixins.Model import Model
 from App.Objects.Misc.SavedVia import SavedVia
-from App.Objects.Misc.Thumbnail import Thumbnail
 from typing import Optional
 from datetime import datetime, timezone
 from App.Objects.Relations.Link import Link
@@ -25,16 +24,8 @@ class LocalObjectMeta(Model):
     geo: Optional[list[Geo]] = Field(default = None)
     public: Optional[bool] = Field(default=False)
     role: Optional[list[str]] = Field(default = [])
-    thumbnail: Optional[list[Thumbnail]] = Field(default = [])
 
     links: list[Link] = Field(default=[], exclude = True, repr = False)
-
-    def add_thumbnail(self, thumb: Thumbnail):
-        self.thumbnail.append(thumb)
-
-    def add_thumbnails(self, thumbs: list[Thumbnail]):
-        for thumb in thumbs:
-            self.thumbnail.append(thumb)
 
     def make_public(self):
         self.public = True

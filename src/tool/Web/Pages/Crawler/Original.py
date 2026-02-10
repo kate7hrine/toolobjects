@@ -11,7 +11,6 @@ from Data.Types.Float import Float
 from App.Objects.Misc.Increment import Increment
 
 from Web.Pages.Screenshot.MakeScreenshot import MakeScreenshot
-from App.Objects.Misc.Thumbnail import Thumbnail as ThumbnailObject
 
 from Web.Pages.Page import Page
 from Web.Pages.Assets.Asset import Asset
@@ -102,10 +101,7 @@ class Original(Object):
             })
 
             for thumb in thumbs.getItems():
-                page.local_obj.add_thumbnail(ThumbnailObject(
-                    role = ['image'],
-                    obj = page.link(thumb, role = ['thumbnail']).toInsert()
-                ))
+                page.add_thumbnail(thumb)
 
         html = PageHTML.from_html(await page._page.get_html())
         if page.html.encoding == None:

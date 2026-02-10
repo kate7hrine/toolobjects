@@ -3,7 +3,6 @@ from App.Objects.Arguments.ListArgument import ListArgument
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Responses.ObjectsList import ObjectsList
-from App.Objects.Misc.Thumbnail import Thumbnail
 from App.Objects.Act import Act
 from Data.Types.String import String
 
@@ -33,8 +32,5 @@ class AddThumbnails(Act):
             _role = i.get('role')
 
         for item in i.get('items'):
-            _object.local_obj.add_thumbnail(Thumbnail(
-                obj = item,
-                role = _role,
-            ))
+            _object.add_thumbnail(item)
             _object.save()
