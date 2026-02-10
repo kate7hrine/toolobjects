@@ -4,9 +4,9 @@ from typing import Literal, ClassVar, Any
 
 class Displayment(Executable):
     '''
-    Class that display
-
+    Class that display object some way
     '''
+
     role: ClassVar[list[Literal['str', 'js'] | str]] = []
 
     def implementation(self, i: dict) -> Any:
@@ -14,4 +14,6 @@ class Displayment(Executable):
         The object to display is passed in i.get("object")
         '''
 
-        pass
+        orig = i.get('orig')
+
+        return '0'

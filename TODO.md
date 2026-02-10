@@ -102,5 +102,5 @@ others:
 - [ ] restrictedpython when importing
 - [ ] Example: App.Storage.Movement.Import. mount_name is None by default, and if its not, its sets that the name from last part. and maybe its better to set default as lambda function?
 - [ ] App.Storage.Movement.Save and App.Storage.Movement.Export are the same
-- [ ] App.Objects.Displayment and App.Objects.View are similar
+- [ ] App.Objects.View can be imagined as App.Objects.Displayment
 - [ ] App.Object.Paginable

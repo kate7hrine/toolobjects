@@ -27,13 +27,9 @@ class ConsoleView(View):
                 self.log('nothing returned', role = ['empty_response', 'view_message'])
                 return
 
-            if print_as != 'json' and isinstance(results, ObjectsList):
+            if print_as == 'str' and isinstance(results, ObjectsList):
                 for item in results.getItems():
-                    _disp = item.displayAs(print_as)
-                    if item.hasDb():
-                        _disp += f" [{item.getDbId()}]"
-
-                    self.log_raw(_disp)
+                    self.log_raw(item.displayAsString())
             else:
                 self.log_raw(JSON(data = results.to_json()).dump(indent = 4))
 

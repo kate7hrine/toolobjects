@@ -1,10 +1,13 @@
 from pydantic import BaseModel
-from typing import Any, Callable
+from typing import Any, Callable, Generator
 
 class Convertable(BaseModel):
+    '''
+    Convertable and Displayable
+    '''
+
     @classmethod
     def findConvertationsForClass(cls, for_class: BaseModel) -> list:
-        # wtf ...
         converters = []
         for submodule in cls.getAllSubmodules(with_role=['convertation']):
             obj_in = submodule.item.getAllSubmodules(with_role=['object_out'])
@@ -23,10 +26,33 @@ class Convertable(BaseModel):
         _itm = _conv.item()
         return await _itm.execute(i = {'orig': self})
 
-    def displayAs(self, as_type: str) -> Callable:
-        for displayment_probaly in self.getAllSubmodules(with_role=['displayment']):
-            if as_type in displayment_probaly.item.role:
-                return displayment_probaly.item().implementation(i = {'object': self})
+    @classmethod
+    def getDisplayments(cls) -> list[BaseModel]:
+        return None
 
-        if as_type == 'str':
-            return f"<{self.class_name}>"
+    @classmethod
+    def getAllDisplayments(cls) -> Generator[BaseModel]:
+        for item in cls.getMRO():
+            if hasattr(item, 'getDisplayments') == True:
+                new = item.getDisplayments()
+                if new == None:
+                    continue
+
+                for item in new:
+                    yield item
+
+    def displayAs(self, as_type: str) -> str | Any:
+        for displayment_probaly in self.getAllDisplayments():
+            if as_type in displayment_probaly.role:
+                return displayment_probaly.implementation(i = {'orig': self})
+
+    def displayAsString(self) -> str:
+        _def = f"<{self.class_name}>"
+        _res = self.displayAs(as_type = 'str')
+        if _res != None:
+            _def = _res
+
+        if self.hasDb():
+            _def += f" [{self._db._adapter._storage_item.name}_{self._db.uuid}]"
+
+        return _def
