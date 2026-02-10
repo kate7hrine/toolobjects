@@ -28,7 +28,7 @@ class LoadedObject(Object):
     is_submodule: bool = False
     mounted: bool = False
 
-    def constructor(self):
+    def init_hook(self):
         _path = Path(self.path)
         _ext = _path.suffix[1:] # its always "py", why moving it lol
 

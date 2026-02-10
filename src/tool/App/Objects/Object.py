@@ -6,8 +6,6 @@ from .Mixins.Linkable import Linkable
 from .Mixins.Convertable import Convertable
 from .Mixins.ModuleRequireable import ModuleRequireable
 from .Mixins.Submodulable import Submodulable
-from .Misc.ObjectMeta import ObjectMeta
-from .Misc.SavedVia import SavedVia
 from App.ACL.Limitable import Limitable
 from App.DB.DBInsertable import DBInsertable
 from typing import ClassVar
@@ -27,15 +25,6 @@ class Object(BaseModel,
 
     self_name: ClassVar[str] = 'Object'
     model_config = ConfigDict(extra='allow')
-
-    obj: ObjectMeta = Field(default = ObjectMeta())
-
-    @model_validator(mode='after')
-    def _saved_via(self):
-        self.obj.saved_via = SavedVia()
-        self.obj.saved_via.object_name = self.getClassNameJoined()
-
-        return self
 
     @classmethod
     def _documentation(cls):

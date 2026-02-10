@@ -72,7 +72,7 @@ class Argument(Object):
         for assertion in self.assertions:
             assertion.check(self)
 
-    def constructor(self):
+    def init_hook(self):
         if self.auto_apply == True:
             self.autoApply()
 

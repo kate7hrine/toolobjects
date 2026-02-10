@@ -30,7 +30,7 @@ class App(Object):
     executables_id: Increment = None
     view: Any = None
 
-    def constructor(self):
+    def init_hook(self):
         _args = self._parse_argv(sys.argv[1:])
         self.argv = _args[0]
         self.conf_override = _args[1]

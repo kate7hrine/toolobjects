@@ -22,7 +22,7 @@ class ConnectionAdapter(Object):
     ObjectAdapter: Any = None
     LinkAdapter: Any = None
 
-    def _set_id_get(self):
+    def _set_id_gen(self):
         self._id_gen = SnowflakeGenerator(32)
 
     def flush(self, item: Object):

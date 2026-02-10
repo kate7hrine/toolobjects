@@ -28,10 +28,10 @@ core:
 - [x] daemon, App.Daemons.StartDaemon, implementation_cycle() (?)
 - [x] name of object required twice
 - [x] namespace: load submodules
-- [ ] remove Optional required by model_validate
+- [x] ~~remove Optional required by model_validate~~
 - [ ] keep spaces in brackets in _parse_argv, choose another argparser
-- [ ] App.Objects.Operations.Edit
-- [ ] App.ReloadModules
+- [x] App.Objects.Operations.Edit
+- [x] App.ReloadModules
 
 db and storage:
 
@@ -59,25 +59,25 @@ db and storage:
 - [ ] storageunit generates hash randomly but maybe hash the common file?
 - [ ] storageunit flush_hook and getCommonDir(): pathlib parts are duplicated and its better to move to HashDir class
 - [ ] links order
-- [ ] links are not optimized
-- [ ] VirtualPath pagination (adapter pagination also)
+- [ ] links are not optimized and paginated
 - [ ] multifile config
-- [ ] link to storageunit file
+- [x] link to storageunit file (StorageUnitLink)
 - [ ] remove console and to_json differences
 - [ ] advanced Conditions (val1 % val2 > 0 or smth)
 
-- [ ] ItemPermission for dbs
+- [ ] VirtualPath
 
 auth:
 
 - [x] App.ACL.AuthLayer
-- [ ] tokens
+- [ ] ItemPermission for dbs
+- [ ] ~~tokens~~
 
 modules:
 
 - [x] Data.XML
 - [x] Files.FileManager.Navigate
-- [ ] File.FileTypes.Image
+- [ ] move File.FileTypes.Image
 - [ ] App.Config.Set
 - [ ] App.Config.Get
 - [ ] App.Logger.List
@@ -85,12 +85,6 @@ modules:
 - [ ] Web.RSS.GetFeed
 - [x] Data.Text.Text
 - [x] Abstract.TODO or Abstract.Checkmarks
-
-documentation:
-
-- [ ] objects
-- [ ] objects loading
-- [ ] link
 
 web:
 

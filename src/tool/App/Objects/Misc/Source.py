@@ -1,6 +1,6 @@
-from App.Objects.Mixins.BaseModel import BaseModel
+from App.Objects.Mixins.Model import Model
 from pydantic import Field
 
-class Source(BaseModel):
-    obj: BaseModel = Field()
+class Source(Model):
+    obj: Model = Field()
     is_common: bool = Field(default = False)

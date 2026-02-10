@@ -229,7 +229,7 @@ class SQLAlchemy(ConnectionAdapter):
     def _constructor(self):
         connection_string = self.protocol_name + self.delimiter + self.getConnectionStringContent()
 
-        self._set_id_get()
+        self._set_id_gen()
         self._get_engine(connection_string)
         self._init_models()
 

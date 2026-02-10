@@ -27,7 +27,7 @@ class Namespace(Object):
 
     items: DictList = Field(default = None)
 
-    def constructor(self):
+    def init_hook(self):
         self.items = DictList(items=[])
 
         # Allows to import objects from other namespaces
@@ -53,8 +53,8 @@ class Namespace(Object):
                     self.noticeModuleLoaded(item)
                 else:
                     self.log(f"{item.name}: loaded but not imported", role=['objects_loading', 'module_skipped'])
-            except AssertionError:
-                pass
+            except AssertionError as exception:
+                self.log_error(exception, role=['objects_loading'])
             except Exception as exception:
                 item.is_success = False
                 self.log_error(f"{item.name} not imported", role=['objects_loading'])

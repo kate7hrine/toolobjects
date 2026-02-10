@@ -18,7 +18,7 @@ class StorageItem(Object):
 
     name: str = Field()
     directory: str = Field(default = None)
-    db: dict = Field(default = None)
+    db: dict = Field(default = None) # "adapter" and any other params. sorry but not annotated >_<
     root_uuid: int = Field(default = None)
 
     # display_name: str = Field(default = None)
@@ -51,7 +51,7 @@ class StorageItem(Object):
     def hasAdapter(self) -> bool:
         return self.adapter != None
 
-    def constructor(self):
+    def init_hook(self):
         self._initStorage()
         if self.db != None:
             self.adapter = self.getDBAdapterByName(self.db.get('adapter'))

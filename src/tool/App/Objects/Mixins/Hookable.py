@@ -16,7 +16,7 @@ class Hookable():
         '''
         return []
 
-    def constructor(self):
+    def init_hook(self):
         super().constructor()
 
         self._hooks = {}

@@ -84,7 +84,7 @@ class DefaultExecutorWheel(Act):
             ),
             ListArgument(
                 name = 'save_to',
-                default = [],
+                default = ['tmp'],
                 single_recommended = True,
                 documentation = Documentation(
                     name = Key(

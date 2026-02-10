@@ -53,7 +53,7 @@ class Convertable(BaseModel):
 
             return '[not flushed]'
     
-        _ret = f"<{self.class_name}>"
+        _ret = f"<{self.getClassNameJoined()}>"
         _res = self.displayAs(as_type = 'str')
         if _res != None:
             _ret = _res

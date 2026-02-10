@@ -1,12 +1,12 @@
 from pydantic import Field, field_serializer
-from App.Objects.Mixins.BaseModel import BaseModel
+from App.Objects.Mixins.Model import Model
 from datetime import datetime
 from typing import Optional
 from .Source import Source
 from .Thumbnail import Thumbnail
 from .SavedVia import SavedVia
 
-class ObjectMeta(BaseModel):
+class ObjectMeta(Model):
     saved_via: SavedVia = Field(default = None)
     custom_saved_via: Optional[list[SavedVia]] = Field(default = [])
 

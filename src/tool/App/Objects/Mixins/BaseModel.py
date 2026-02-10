@@ -2,45 +2,20 @@ from pydantic import BaseModel as PydanticBaseModel, computed_field, model_seria
 from App.Objects.Relations.LinkInsertion import LinkInsertion
 from typing import Literal, ClassVar, Any
 from datetime import datetime
+from App.Objects.Misc.ObjectMeta import ObjectMeta
+from App.Objects.Misc.SavedVia import SavedVia
+from App.Objects.Mixins.Model import Model
+from pydantic import Field, model_validator
 
-class BaseModel(PydanticBaseModel):
-    '''
-    Pydantic BaseModel with some functions
-    '''
-    _unserializable: ClassVar[list[str]] = ['_dump_options', '_unserializable']
+class BaseModel(Model):
+    obj: ObjectMeta = Field(default = ObjectMeta())
 
-    # model_dump does not checks this params, so doing workaround. TODO remove
-    _dump_options: ClassVar[dict] = {
-        'convert_links': False,
-        'include_extra': True,
-        'excludes': None,
-        'internal_fields': ['meta', 'saved_via', 'links', 'db_info'],
-        'only_class_fields': False,
-        'exclude_none': False,
-        'exclude_defaults': False
-    }
+    @model_validator(mode='after')
+    def _saved_via(self):
+        self.obj.saved_via = SavedVia()
+        self.obj.saved_via.object_name = self.getClassNameJoined()
 
-    @computed_field
-    @property
-    def class_name(self) -> str:
-        return self.getClassNameJoined()
-
-    # we can't use __init__ because of fields initialization, so we creating second constructor
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.__class__.constructor(self)
-
-    # *args and **kwargs are not passed
-    def constructor(self):
-        pass
-
-    def isInstance(self, object: PydanticBaseModel) -> bool:
-        return self.getClassNameJoined() == object.getClassNameJoined()
-
-    @classmethod
-    def isSame(cls, object: PydanticBaseModel) -> bool:
-        return cls.getNameJoined() == object.getNameJoined()
+        return self
 
     def minimal_json(self, include_self_name: bool = False):
         _data = self.to_json(only_class_fields=True, by_alias=True)
@@ -78,12 +53,12 @@ class BaseModel(PydanticBaseModel):
         for item in exclude:
             excludes.append(item)
 
-        BaseModel._dump_options['include_extra'] = include_extra
-        BaseModel._dump_options['excludes'] = excludes
-        BaseModel._dump_options['convert_links'] = convert_links == 'unwrap'
-        BaseModel._dump_options['only_class_fields'] = only_class_fields
-        BaseModel._dump_options['exclude_none'] = exclude_none
-        BaseModel._dump_options['exclude_defaults'] = exclude_defaults
+        Model._dump_options['include_extra'] = include_extra
+        Model._dump_options['excludes'] = excludes
+        Model._dump_options['convert_links'] = convert_links == 'unwrap'
+        Model._dump_options['only_class_fields'] = only_class_fields
+        Model._dump_options['exclude_none'] = exclude_none
+        Model._dump_options['exclude_defaults'] = exclude_defaults
 
         results = self.model_dump(mode = 'json', 
                 exclude_none = exclude_none,
@@ -105,64 +80,6 @@ class BaseModel(PydanticBaseModel):
     @classmethod
     def asArgument(cls, val: Any):
         return cls.asClass(val)
-
-    @classmethod
-    def getMRO(cls) -> list:
-        return cls.__mro__
-
-    @classmethod
-    def canBeExecuted(cls):
-        return hasattr(cls, 'execute')
-
-    @classmethod
-    def getClassName(cls):
-        '''
-        Path to the current class + class name:
-
-        a.b.c.d.d or something
-        '''
-
-        return cls.getName() + [cls.getModuleName()]
-
-    @classmethod
-    def getModuleName(cls):
-        return cls.__name__
-
-    @classmethod
-    def getNameJoined(self):
-        return ".".join(self.getName())
-
-    @classmethod
-    def getClassNameJoined(cls, last_names_doubling: bool = False):
-        '''
-        getClassName() but joined
-        '''
-
-        _name = cls.getClassName()
-        if last_names_doubling == False:
-            _name = _name[:-1]
-
-        return ".".join(_name)
-
-    @classmethod
-    def getName(self) -> list:
-        _class = self.__mro__[0]
-        _module = _class.__module__
-        _parts = _module.split('.')
-        #_parts = _parts[1:]
-
-        return _parts
-
-    @classmethod
-    def getClassModule(cls) -> str:
-        return cls.__module__
-
-    @classmethod
-    def getAllowedViews(cls) -> list:
-        '''
-        Get View classes where. if None > allowed everywhere
-        '''
-        return None
 
     @classmethod
     def mount(cls):

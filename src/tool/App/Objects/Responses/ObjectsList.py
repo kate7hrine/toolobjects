@@ -62,3 +62,7 @@ class ObjectsList(Response):
         new = ObjectsList(items = items)
 
         return new
+
+    def join(self, objects_list: Response):
+        for item in objects_list.getItems():
+            self.append(item)

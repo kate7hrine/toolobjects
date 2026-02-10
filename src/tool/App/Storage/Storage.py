@@ -19,7 +19,7 @@ class Storage(Object):
 
         app.mount('Storage', storage)
 
-    def constructor(self):
+    def init_hook(self):
         dbs_dir = app.app.storage.joinpath('dbs')
         dbs_dir.mkdir(exist_ok=True)
 

@@ -19,7 +19,7 @@ class ConfigItem(Object):
     def file(self) -> Path:
         return self.path.joinpath(self.name)
 
-    def constructor(self):
+    def init_hook(self):
         if self.values == None:
             self.values = ArgumentValues(
                 compare = ArgumentDict(items=[]),

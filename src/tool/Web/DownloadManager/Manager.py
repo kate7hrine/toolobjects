@@ -16,7 +16,7 @@ class Manager(Object):
         items: list = None
         downloads: Type[Increment] = None
 
-        def constructor(self):
+        def init_hook(self):
             self.items = []
             self.downloads = Increment()
 
