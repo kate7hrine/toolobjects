@@ -43,7 +43,7 @@ class ExecutionThread(Object):
             result = await coro
             return result
         except asyncio.CancelledError:
-            self.log_error('task {0} was cancelled'.format(self.global_id))
+            self.log_error('Task {0} was cancelled'.format(self.global_id))
         except Exception as e:
             raise e
         finally:

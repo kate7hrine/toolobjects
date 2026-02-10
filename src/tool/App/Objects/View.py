@@ -12,26 +12,23 @@ class View(Executable):
 
     app: Any = None
 
+    def _implementation(self, i):
+        # the default View is created at the startup, but it will throw an abstract method exception if no dummy func
+        pass
+
     def setApp(self, app: App) -> None:
         self.app = app
 
     def setAsCommon(self):
-        '''
-        Sets link that can be used as
-
-        from App import app
-
-        app.Logger.log(...)
-        '''
         from App import app
 
         app.setView(self)
 
-    def _implementation(self, i: dict = {}):
-        pass
-
     def canUseObject(self, obj) -> bool:
-        _allowed = obj.getAllowedViews()
+        if obj.isInstance(View):
+            return False
+
+        _allowed = obj._allowed_views()
         if _allowed == None:
             return True
 
