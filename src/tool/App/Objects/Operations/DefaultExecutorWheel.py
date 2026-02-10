@@ -74,7 +74,7 @@ class DefaultExecutorWheel(Act):
             results.append(item_that_executed)
 
         if results.isInstance(ObjectsList):
-            if results.should_be_saved() == True:
+            if results.should_be_saved() == True and i.get('do_save'):
                 save_to = i.get('save_to')
                 if save_to != None and len(save_to) > 0:
                     await Save().execute({
@@ -108,6 +108,11 @@ class DefaultExecutorWheel(Act):
                         value = 'Main object'
                     )
                 ),
+            ),
+            Argument(
+                name = 'do_save',
+                default = True,
+                orig = Boolean
             ),
             ListArgument(
                 name = 'save_to',

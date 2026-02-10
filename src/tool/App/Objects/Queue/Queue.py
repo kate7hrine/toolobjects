@@ -1,7 +1,10 @@
 from App.Objects.Object import Object
+from App.Objects.Arguments.Argument import Argument
+from App.Objects.Arguments.ArgumentValues import ArgumentValues
 from App.ACL.User import User
 from App.Objects.Responses.Responses import Responses
 from App.Objects.Queue.Item import Item
+from App.Objects.Queue.PrestartItem import PrestartItem
 from App.Objects.Queue.OutputItem import OutputItem
 from App.Objects.Operations.DefaultExecutorWheel import DefaultExecutorWheel
 from App.Objects.Misc.Increment import Increment
@@ -20,13 +23,16 @@ class Queue(Object):
     You can reference results by "$" for prestart and "#" for items
     '''
 
-    prestart: list[Item] = []
+    prestart: list[PrestartItem] = []
     items: list[Item] = []
     output: list[OutputItem] = []
     repeat: int = Field(default = 1)
     return_index: int = Field(default = None)
 
-    async def run(self, auth: User):
+    async def run(self, i: ArgumentValues):
+        auth = i.get('auth')
+        prestart_from_args = i.get('prestart_from_args')
+
         _prestart = list()
         _items = list()
 
@@ -34,8 +40,18 @@ class Queue(Object):
         iterator = Increment()
 
         for prestart_item in self.prestart:
-            _item = prestart_item.get_predicate()
-            _prestart.append(_item(**prestart_item.get_build_arguments(_prestart, _items)))
+            #_item = prestart_item.get_predicate()
+            _item = Argument(**prestart_item.get_build_arguments(_prestart, _items))
+            _item.orig = prestart_item.get_orig()
+
+            if prestart_from_args:
+                _arg_name = _item.name
+                _new_value = i.get(_arg_name)
+                if _new_value != None:
+                    self.log('set {0} value to {1}'.format(_arg_name, _new_value))
+                    _item.set_input_value(_new_value)
+
+            _prestart.append(_item)
 
         _wheel = DefaultExecutorWheel()
 

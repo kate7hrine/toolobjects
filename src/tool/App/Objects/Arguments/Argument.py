@@ -14,7 +14,7 @@ class Argument(NameContainable):
     name: str = Field()
     orig: list[Any] | Any = Field(default = None, exclude = True)
     default: Any | Callable = Field(default = None)
-    inputs: str = Field(default = None) # workaround for assertions
+    inputs: Any | str = Field(default = None) # workaround for assertions
 
     is_class_returns: bool = Field(default = False)
     is_sensitive: bool = Field(default = False)
@@ -117,6 +117,14 @@ class Argument(NameContainable):
     def sensitive_default(self) -> Any:
         return self.default
 
+    @computed_field
+    @property
+    def arg_value(self) -> Any:
+        '''
+        Gets value from "inputs" field. Can be used in Queue.
+        '''
+        return self.getValue(self.inputs)
+
     def checkAssertions(self):
         for assertion in self.assertions:
             assertion.check(self)
@@ -154,3 +162,6 @@ class Argument(NameContainable):
     @field_serializer('inputs')
     def get_inputs(self, inputs) -> str:
         return None
+
+    def set_input_value(self, value):
+        self.inputs = value
