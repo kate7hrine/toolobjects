@@ -1,17 +1,15 @@
 from Data.Explorer.ExplorerProtocol import ExplorerProtocol
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from Data.String import String
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App.Storage.VirtualPath.Path import Path as VirtualPath
+from App.DB.Search import Search
 from App import app
 
 class Navigate(ExplorerProtocol):
     '''
-    Navigates by db
-
-    path format: db:/item1/item2
+    allows to view db items hierarchically as in file manager. Basically search wrapper
     '''
 
     @classmethod
@@ -21,7 +19,8 @@ class Navigate(ExplorerProtocol):
                 name = 'path',
                 orig = String
             )
-        ])
+        ],
+        missing_args_inclusion=True)
 
     async def implementation(self, i):
         _path = i.get('path')
@@ -33,6 +32,9 @@ class Navigate(ExplorerProtocol):
             return _list
 
         path = VirtualPath.from_str(_path)
-        print(path)
+        _vals = path.to_args().copy()
+        _vals.update(i.values)
 
-        #return path.getContent()
+        _vals['storage'] = path.get_root().name
+
+        return await Search().execute(_vals)

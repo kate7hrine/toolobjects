@@ -69,10 +69,6 @@ class ArgumentDict(DictList):
         Appends another ArgumentDict's items to current ArgumentDict
         '''
 
-        # WORKAROUNDDD. do not write code when sleepy. I dont know why it returns as 
         _items = another_dict.items
-        #if hasattr(_items, 'toList'):
-        #    _items = _items.items
-
         for item in _items:
             self.items.append(item)
