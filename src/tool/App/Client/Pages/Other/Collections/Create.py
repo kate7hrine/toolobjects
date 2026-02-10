@@ -30,7 +30,7 @@ class Create(Displayment):
             if root:
                 root.link(new_item)
 
-            #new_item.save()
+            new_item.save()
 
             return self.redirect('/?i=App.Objects.Object&uuids=' + new_item.getDbIds())
 

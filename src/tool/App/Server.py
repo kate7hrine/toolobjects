@@ -170,7 +170,7 @@ class Server(View):
             ('/', self._index, ['get', 'post']),
             ('/static/{path:.*}', self._get_asset, 'get'),
             ('/storage/{storage}/{uuid}/{path:.*}', self._get_storage_unit, 'get'),
-            ('/api', self._single_call, 'get'),
+            ('/api', self._single_call, ['get', 'post', 'options']),
             ('/rpc', self._ws, 'get'),
             ('/api/upload/{storage}', self._upload_storage_unit, 'post'),
         ]:
@@ -285,8 +285,6 @@ class Server(View):
         _json = JSON(data = {})
         results = None
 
-        self._auth(args)
-
         try:
             pre_i.add_variables_hook(on_event)
 
@@ -307,16 +305,38 @@ class Server(View):
         return _json
 
     async def _single_call(self, request):
-        pre_i = self._pre_i()
-        #i = request.match_info.__dict__()
-        _i = await request.json()
-        self.log('Calling, i={0}'.format(_i.get('i')))
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': '86400'
+        }
+        if request.method == 'OPTIONS':
+            return web.Response(
+                text = None,
+                content_type = 'application/json',
+                headers = headers
+            )
 
-        _json = self._call_shortcut(pre_i, _i)
+        pre_i = self._pre_i()
+        _i = dict()
+        #i = request.match_info.__dict__()
+        if request.method == 'POST':
+            _i = await request.post()
+        else:
+            _i = await request.json()
+
+        _i = dict(_i)
+
+        self.log('Single call, i={0}'.format(_i.get('i')))
+        self._auth(_i, request)
+
+        _json = await self._call_shortcut(pre_i, _i, -4)
 
         return web.Response(
             text = _json.dump(),
-            content_type = 'application/json'
+            content_type = 'application/json',
+            headers = headers
         )
 
     async def _ws(self, request):
@@ -356,6 +376,7 @@ class Server(View):
             }).dump())
 
         pre_i = pre_i()
+        self._auth(_payload, None)
         results = await self._call_shortcut(pre_i, _payload, _event_index, _handle_variable_message)
 
         await ws.send_str(JSON(data={

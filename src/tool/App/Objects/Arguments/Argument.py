@@ -71,7 +71,7 @@ class Argument(NameContainable):
             else:
                 is_in = True
 
-            assert is_in == True, 'not allowed value'
+            assert is_in == True, '{0}: not allowed value {1}'.format(self.name, original_value)
 
         if self.check_json == True and JSON.isStringValidJson(original_value) == True:
             val = JSON.fromText(original_value).data
@@ -111,7 +111,7 @@ class Argument(NameContainable):
                 return app.Config.get(self.config_fallback[0])
             else:
                 _where = 'config'
-                if self.config_fallback[1]:
+                if self.config_fallback[1] == True:
                     _where = 'env'
 
                 return app.Config.get(self.config_fallback[0], role = _where)

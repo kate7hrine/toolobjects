@@ -37,6 +37,10 @@ class Downloader(Object):
                 default = 1,
                 orig = Float
             ),
+            Argument(
+                name = 'web.crawler.webdriver',
+                orig = String,
+            ),
         ]
         '''ListArgument(
             name = 'web.crawler.cookies',
@@ -72,7 +76,8 @@ class Downloader(Object):
                 name = 'webdriver',
                 orig = Webdriver,
                 by_id = True,
-                assertions = [NotNone()]
+                #assertions = [NotNone()],
+                config_fallback = ['web.crawler.webdriver', False]
             ),
             Argument(
                 name = 'webdriver.headless',

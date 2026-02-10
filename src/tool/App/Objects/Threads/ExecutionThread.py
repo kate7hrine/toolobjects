@@ -76,4 +76,4 @@ class ExecutionThread(Object):
             raise
         except Exception as e:
             self.log(f"Task raised exception")
-            raise
+            raise e
