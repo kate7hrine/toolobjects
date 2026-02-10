@@ -10,9 +10,6 @@ from App.Objects.Relations.Submodule import Submodule
 from Web.Feeds.Elements.Channel import Channel
 from Web.Feeds.Elements.Feed import Feed
 
-from bs4 import BeautifulSoup
-
-
 class Get(Extractor):
     @classmethod
     def _submodules(cls):
@@ -38,13 +35,13 @@ class Get(Extractor):
         self.log(f"downloading feed url: {url}")
 
         response_xml = await Feed.download(url)
-        root = BeautifulSoup(response_xml, 'xml')
+        root = Feed.parse(response_xml)
         _type = Feed.detect_type(root)
 
         assert _type != None, 'unknown type of feed'
 
         protocol = _type()
-        channels = protocol._get_channels(root)
+        channels = await protocol._get_channels(root)
 
         for channel in channels:
             _new_time = None

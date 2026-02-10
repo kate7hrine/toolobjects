@@ -3,36 +3,39 @@ from Web.Feeds.Elements.Channel import Channel
 from Web.Feeds.Elements.Link import Link
 from Web.Feeds.Elements.Entry import Entry
 from Web.Feeds.Elements.EntryContent import EntryContent
-import xml.etree.ElementTree as ET
-from typing import ClassVar, Generator
+from Web.Feeds.Elements.Author import Author
+from Web.Feeds.Elements.Category import Category
+from typing import ClassVar, Generator, AsyncGenerator
 from email.utils import parsedate_to_datetime
 from datetime import datetime
 
 class Atom(FeedProtocol):
     protocol_name = 'atom'
-    namespaces: ClassVar[dict] = {
-        'xmlns':"http://www.w3.org/2005/Atom"
-    }
 
-    async def _get_entries(self, channel: Channel, data: ET) -> Generator[Entry]:
-        for entry in data.findall('./xmlns:entry', self.namespaces):
+    async def _get_channels(self, data):
+        channels = list()
+        for item in data.find_all('feed', recursive=False):
+            channel = Channel()
+
+            if item.find('title') != None:
+                channel.obj.name = item.find('title').text
+
+            for link in item.find_all('link'):
+                channel.link_items.append(self._get_link(link))
+
+            if item.find('updated') != None:
+                channel.obj.created_at = self._date_to_str(item.find('updated').text)
+
+            if item.find('id') != None:
+                channel.id = item.find('id').text
+
+            channels.append(channel)
+
+        return channels
+
+    async def _get_entries(self, channel: Channel, data, i) -> AsyncGenerator[Entry]:
+        for entry in data.find_all('entry'):
             yield await self._get_entry(entry)
-
-    def _get_channels(self, data: ET):
-        channel = Channel()
-        for key in ['title', 'subtitle', 'id', 'link']:
-            _val = data.find('./xmlns:'+key, self.namespaces)
-
-            match(key):
-                case 'title':
-                    channel.obj.name = _val.text
-                case 'link':
-                    channel.link_items.append(self._get_link(_val))
-                case _:
-                    if _val != None:
-                        setattr(channel, key, _val.text)
-
-        return [channel]
 
     def _get_link(self, data):
         _self = Link()
@@ -42,6 +45,24 @@ class Atom(FeedProtocol):
                 set_key = 'value'
 
             setattr(_self, set_key, data.get(key))
+
+        return _self
+
+    def _get_author(self, data):
+        _self = Author()
+        if data.find('name') != None:
+            _self.name = data.find('name').text
+        if data.find('email') != None:
+            _self.name = data.find('email').text
+
+        return _self
+
+    def _get_category(self, data):
+        _self = Category()
+        if data.get('term'):
+            _self.term = data.get('term')
+        if data.get('label'):
+            _self.label = data.get('label')
 
         return _self
 
@@ -56,10 +77,10 @@ class Atom(FeedProtocol):
             except ValueError:
                 continue
 
-    async def _get_entry(self, data: ET):
-        _title = data.find('./xmlns:title', self.namespaces)
-        _summary = data.find('./xmlns:summary', self.namespaces)
-        _content = data.find('./xmlns:content', self.namespaces)
+    async def _get_entry(self, data):
+        _title = data.find('title')
+        _summary = data.find('summary')
+        _content = data.find('content')
 
         entry = Entry()
 
@@ -74,18 +95,23 @@ class Atom(FeedProtocol):
             )
             await entry.content.update()
 
-        for link in data.find('./xmlns:link', self.namespaces):
+        for link in data.find_all('link'):
             entry.link_items.append(self._get_link(link))
 
-        _published = data.find('./xmlns:published', self.namespaces)
-        _edited = data.find('./xmlns:updated', self.namespaces)
+        for author in data.find_all('author'):
+            entry.author.append(self._get_author(author))
+
+        for item in data.find_all('category'):
+            entry.author.append(self._get_category(item))
+
+        _published = data.find('published')
+        _edited = data.find('updated')
         if _published != None:
             entry.obj.created_at = self._date_to_str(_published.text)
+            if _edited != None:
+                entry.obj.updated_at = self._date_to_str(_edited.text)
         else:
             if _edited != None:
                 entry.obj.created_at = self._date_to_str(_edited.text)
-
-        if _edited != None:
-            entry.obj.updated_at = self._date_to_str(_edited.text)
 
         return entry

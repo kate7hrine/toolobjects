@@ -4,8 +4,6 @@ from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from Web.Feeds.Elements.Channel import Channel
 from Web.Feeds.Elements.Feed import Feed
-import xml.etree.ElementTree as ET
-from Web.Feeds.Elements.Feed import Feed
 
 class Update(Act):
     @classmethod
@@ -22,7 +20,7 @@ class Update(Act):
     async def _implementation(self, i):
         _channel = i.get('channel')
         response_xml = await Feed.download(_channel.get_original_url())
-        root = ET.fromstring(response_xml)
+        root = Feed.parse(response_xml)
         _type = Feed.detect_type(root)
 
         assert _type != None, 'unknown type of feed'

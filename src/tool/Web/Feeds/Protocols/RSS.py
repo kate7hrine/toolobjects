@@ -7,7 +7,6 @@ from Web.Feeds.Elements.Link import Link
 from Media.Images.Image import Image
 from App.Objects.Misc.Increment import Increment
 from email.utils import parsedate_to_datetime
-import xml.etree.ElementTree as ET
 from typing import AsyncGenerator
 from typing import ClassVar, Generator
 
@@ -16,7 +15,7 @@ class RSS(FeedProtocol):
         'media': ""
     }
 
-    def _get_channels(self, data: ET):
+    async def _get_channels(self, data):
         items = list()
 
         i = Increment()
@@ -51,14 +50,14 @@ class RSS(FeedProtocol):
 
         return items
 
-    async def _get_entries(self, channel: Channel, data: ET, i: dict) -> AsyncGenerator[Entry]:
+    async def _get_entries(self, channel: Channel, data, i: dict) -> AsyncGenerator[Entry]:
         for entry in data.find_all('item'):
             yield await self._get_entry(entry, i)
 
     def _date_to_str(self, val: str):
         return parsedate_to_datetime(val)
 
-    async def _get_entry(self, data: ET, i: dict):
+    async def _get_entry(self, data, i: dict):
         entry = Entry()
 
         for item in data.find_all('title', recursive=False):

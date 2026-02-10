@@ -100,6 +100,9 @@ class Linkable():
             for item in self.getDb().getLinks(with_role = with_role):
                 _item = item.toPython()
 
+                if _item == None:
+                    continue
+
                 if with_role:
                     _role = list()
                     if type(_item.data) != list:
@@ -108,7 +111,7 @@ class Linkable():
                     if with_role not in _role:
                         continue
 
-                yield _item.item
+                yield _item
         else:
             for item in self.local_obj.links:
                 if with_role:

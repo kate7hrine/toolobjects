@@ -12,10 +12,10 @@ Thumbnails
     </style>
     {% for thumb in thumbnails %}
         <div>
-            {% if thumb._getNameJoined() == "Media.Images.Image" %}
+            {% if thumb.item._getNameJoined() == "Media.Images.Image" %}
                 <div>
-                    <a target="_blank" href="{{thumb.get_url(True)}}">
-                        <img src="{{thumb.get_url(True)}}">
+                    <a target="_blank" href="{{thumb.item.get_url(True)}}">
+                        <img src="{{thumb.item.get_url(True)}}">
                     </a>
                 </div>
             {% else %}

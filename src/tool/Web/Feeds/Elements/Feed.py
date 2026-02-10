@@ -1,10 +1,10 @@
 from App.Objects.Object import Object
 from Web.Feeds.Protocols.RSS import RSS
 from Web.Feeds.Protocols.Atom import Atom
-import xml.etree.ElementTree as ET
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from Data.Types.Boolean import Boolean
+from bs4 import BeautifulSoup
 
 class Feed(Object):
     @classmethod
@@ -19,12 +19,16 @@ class Feed(Object):
         return response_xml
 
     @classmethod
-    def detect_type(cls, data: ET):
+    def detect_type(cls, data):
         if data.find('rss'):
             return RSS
 
         if data.find('feed'):
             return Atom
+
+    @classmethod
+    def parse(self, data: str):
+        return BeautifulSoup(data, 'xml')
 
     @classmethod
     def getArguments(cls):
