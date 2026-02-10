@@ -1,6 +1,7 @@
 from App.Objects.Object import Object
 from App.Objects.Section import Section
 from pathlib import Path
+from pydantic import ConfigDict
 from typing import Any
 from .Index.List import List as ObjectsList
 import asyncio

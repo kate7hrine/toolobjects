@@ -46,7 +46,7 @@ class LoadedObject(Object):
         self.is_success = False
         self.log_error(exception)
 
-        if isinstance(exception, AssertionError) == False:
+        if isinstance(exception, AssertionError) == False and isinstance(exception, ModuleNotFoundError) == False:
             raise exception
 
     def get_module(self):
@@ -67,8 +67,8 @@ class LoadedObject(Object):
 
         try:
             common_object.hooks.trigger('loaded')
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
         return common_object
 

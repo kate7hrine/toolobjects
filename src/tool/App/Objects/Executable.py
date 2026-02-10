@@ -6,7 +6,7 @@ class Executable(Object):
     class _Hooks(Object._Hooks):
         @property
         def events(self) -> list:
-            return ('before_execute', 'after_execute')
+            return ['before_execute', 'after_execute']
 
     @classmethod
     def getArguments(cls) -> ArgumentsDict:

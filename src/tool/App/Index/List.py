@@ -44,7 +44,7 @@ class List(Object):
                 items.append(plugin)
 
         # adding priority and plugins that are not in priority. Its better to do sort there*?
-        for plugin in  items:
+        for plugin in priority + items:
             # hardcoded check
             if plugin.name in ['', '__pycache__', 'Base.py', 'cli.py']:
                 continue

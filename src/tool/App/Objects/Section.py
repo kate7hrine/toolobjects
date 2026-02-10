@@ -1,9 +1,8 @@
-from App import app
+from App import app, ViewNotLoadedYetError
 
 class Section:
     @property
     def section_name(self) -> list:
-        # it implies that you have extended Object
         return self.meta.name
 
     @property
@@ -14,25 +13,26 @@ class Section:
         kwargs["section"] = self.section_name
         if kwargs.get("sections") != None:
             kwargs["section"] += kwargs.get("sections")
-
         if self.append_prefix != None:
             kwargs["prefix"] = self.append_prefix
 
         try:
             return app.Logger.log(*args, **kwargs)
-        except:
-            print_before_init = True
+        except ViewNotLoadedYetError:
+            pass
+        except Exception as e:
+            print_before_init = False
             if print_before_init == True:
                 print(args[0])
 
     def log_error(self, *args, **kwargs):
-        # from Plugins.App.Logger.LogParts.LogKind import LogKindEnum
+        from App.Logger.LogKind import LogKindEnum
 
-        # kwargs["kind"] = LogKindEnum.error.value
+        kwargs["kind"] = LogKindEnum.error.value
         return self.log(*args, **kwargs)
 
     def log_success(self, *args, **kwargs):
-        #from Plugins.App.Logger.LogParts.LogKind import LogKindEnum
+        from App.Logger.LogKind import LogKindEnum
 
-        # kwargs["kind"] = LogKindEnum.success.value
+        kwargs["kind"] = LogKindEnum.success.value
         return self.log(*args, **kwargs)

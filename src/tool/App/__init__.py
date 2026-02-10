@@ -1,3 +1,6 @@
+class ViewNotLoadedYetError(Exception):
+    pass
+
 class _Wrap:
     '''
     Allows to access the current view
@@ -6,8 +9,15 @@ class _Wrap:
     def __init__(self):
         self._view = None
 
-    def mount(self, name, item):
-        setattr(self._view.app.app, name, item)
+    def mount(self, name: str, item):
+        msg = f"Mounted {name} into globals"
+        try:
+            self.Logger.log(msg, section = ['Wrap'])
+        except:
+            print(msg)
+
+        # Not an Model, so we can attach any property
+        setattr(self, name, item)
 
     def setView(self, view):
         '''
@@ -25,9 +35,12 @@ class _Wrap:
         app.Logger.log(...)
         '''
 
+        if self._view == None:
+            raise ViewNotLoadedYetError('view was not set yet')
+
         if name == "settings":
             return self._view.app.settings
 
-        return getattr(self._view.app, name, None)
+        return getattr(self._view, name, None)
 
 app = _Wrap()

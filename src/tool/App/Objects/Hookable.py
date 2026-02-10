@@ -16,19 +16,29 @@ class Hookable():
         items: dict = {}
 
         def __init__(self):
-            for event in self.events:
+            for event in self.getEventsList():
                 self.items[event] = []
 
         # TODO: move to decorator
         def check_category(self, category: str):
-            assert category in self.events, f"category \"{category}\" not in events list"
+            assert category in self.getEventsList(), f"category \"{category}\" not in events list"
 
             if self.items.get(category) == None:
                 self.items[category] = []
 
         @property
         def events(self) -> list:
+            '''
+            Every class must have "loaded" event. You must duplicate it every time :(
+            '''
             return []
+
+        def getEventsList(self) -> list:
+            '''
+            no, i've done workaround
+            '''
+
+            return self.events + ['loaded']
 
         def register(self):
             pass
@@ -39,34 +49,28 @@ class Hookable():
             return self.items.get(category)
 
         def run(self, hook_func: Callable, *args, **kwargs) -> None:
-            try:
-                if asyncio.iscoroutinefunction(hook_func):
-                    loop = asyncio.get_running_loop()
-                    loop.create_task(hook_func(*args, **kwargs))
-                else:
-                    hook_func(*args, **kwargs)
-            except Exception as e:
-                self.log(str(e))
+            if asyncio.iscoroutinefunction(hook_func):
+                loop = asyncio.get_running_loop()
+                return loop.create_task(hook_func(*args, **kwargs))
+
+            print(hook_func)
+            return hook_func(*args, **kwargs)
 
         def add(self, category: str, hook: Callable) -> None:
             self.check_category(category)
-
             self.items.get(category).append(hook)
 
         def remove(self, category: str, hook: Callable) -> None:
             self.check_category(category)
-
-            try:
-                self.items.get(category).remove(hook)
-            except Exception:
-                pass
+            self.items.get(category).remove(hook)
 
         # TODO: Add HookCategory class
         def trigger(self, category: str, *args, **kwargs) -> None:
             self.check_category(category)
 
+            print(self.items)
             for hook in self.items.get(category):
-                self.run(hook, *args, **kwargs)
+                print(self.run(hook, *args, **kwargs))
 
         # TODO
         async def await_trigger(self, category: str, *args, **kwargs) -> None:

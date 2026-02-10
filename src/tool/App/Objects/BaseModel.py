@@ -53,7 +53,7 @@ class BaseModel(PydanticBaseModel):
 
         @property
         def can_be_executed(self):
-            return self.is_abstract() == False and self.is_hidden() == False # and self.outer hasclass Execute
+            return self.is_abstract == False and self.is_hidden == False # and self.outer hasclass Execute
 
         @property
         def get_not_installed_required_modules(cls) -> list:
