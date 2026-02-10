@@ -26,7 +26,7 @@ class List(Collection):
         class DisplayAsString(Act):
             def _implementation(self, i):
                 orig = i.get('orig')
-                _out = f"Checkmarks list \"{str(orig.obj.any_name)}\""
+                _out = f"Checkmarks list \"{str(orig.obj.name)}\""
                 _out += "\n"
 
                 for checkmark in orig.getCheckmarks():

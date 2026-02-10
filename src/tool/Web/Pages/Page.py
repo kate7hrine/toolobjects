@@ -17,7 +17,7 @@ class Page(Object):
     relative_url: str = Field(default = None)
 
     def set_title(self, title: str):
-        self.obj.original_name = title
+        self.obj.name = title
 
     def create_file(self, storage: StorageItem):
         storage_unit = storage.storage_adapter.get_storage_unit()
