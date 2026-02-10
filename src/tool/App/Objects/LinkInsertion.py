@@ -7,10 +7,12 @@ class LinkInsertion(BaseModel, DBInsertable):
     field: list[str] = Field(default = [])
 
     def _getLink(self):
-        # fuck my life
-        # what im fuckin doin😭😭😭
         if type(self.link) == int:
-            return self.getDb().Link.getById(self.link).getLink()
+            _lnk = self.getDb().Link.getById(self.link)
+            if _lnk == None:
+                return None
+
+            return _lnk.getLink()
 
         return self.link
 
@@ -30,7 +32,8 @@ class LinkInsertion(BaseModel, DBInsertable):
     def serialize(self) -> dict:
         vals = dict()
         vals['field'] = self.field
-        if self._getLink().getDb() != None:
+        _lnk = self._getLink()
+        if _lnk != None and _lnk.getDb() != None:
             vals['link'] = self._getLink().getDbId()
 
         return vals

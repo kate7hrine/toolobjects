@@ -20,7 +20,6 @@
 - [ ] ~~App.Objects.Submodules.Submodule, App.Objects.Configurable.Configurable: MROThing (?)~~
 - [x] move App.Data.DictList to App.Objects.DictList
 - [ ] ~~object that can contain self subtypes (?)~~
-- [x] Files.FileManager.Navigate
 - [x] logger: section skips
 - [x] logger: output to file
 - [x] ~~App.Executables.Call list~~ List of running executables
@@ -30,8 +29,8 @@
 - [x] Executable.common_object: move to submodule with common name
 - [x] declare requirements that module uses
 - [x] db flush: move links
-- [ ] allow to replace some field with link
-- [ ] db flush: replaced links
+- [x] allow to replace some field with link
+- [x] db flush: replaced links
 - [ ] ~~custom object can contain "source" and "meta" fields in it and replace the original (?)~~
 - [x] db flush: when loading from db save the link to db's item and add sync between them
 - [x] objects list: split to Namespace, allow to add another object lists
@@ -42,8 +41,8 @@
 - [ ] db flush: export between dbs
 - [ ] objectlist adapter
 - [ ] pathes like {db name}:/{object}/{object id or name}
-- [ ] Web.DownloadManager.Manager
 - [x] Data.XML
+- [x] Files.FileManager.Navigate
 - [ ] File.FileTypes.Image
 - [ ] App.Config.Set
 - [ ] App.Config.Get
@@ -51,5 +50,6 @@
 - [ ] App.Logger.GetFile
 - [ ] App.ACL.Auth ?
 - [ ] Web.RSS.GetFeed
+- [ ] Web.DownloadManager.Manager
 - [ ] DisplayType (?) submodule=displayment
 - [ ] Data.Text

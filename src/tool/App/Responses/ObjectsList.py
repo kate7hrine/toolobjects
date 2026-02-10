@@ -2,9 +2,14 @@ from App.Responses.Response import Response
 from App.Objects.Object import Object
 from App.Objects.Submodule import Submodule
 from pydantic import Field
+from typing import Generator
 
 class ObjectsList(Response):
     items: list[Object] = Field(default = [])
+
+    def getItems(self) -> Generator[Object]:
+        for item in self.items:
+            yield item
 
     def getPrevailingObjects(self) -> list[dict]:
         '''

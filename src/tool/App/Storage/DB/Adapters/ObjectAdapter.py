@@ -1,5 +1,6 @@
 from Data.JSON import JSON
 from App import app
+from typing import Any
 
 class ObjectAdapter():
     '''
@@ -9,6 +10,9 @@ class ObjectAdapter():
     '''
 
     def getById(self, id: int):
+        pass
+
+    def _constructor(self, storage_item: Any = None):
         pass
 
     def getObject(self):

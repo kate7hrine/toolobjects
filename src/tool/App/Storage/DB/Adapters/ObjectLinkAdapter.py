@@ -10,7 +10,9 @@ class ObjectLinkAdapter():
         pass
 
     def getLink(self):
-        _role = JSON().fromText(self.role)
+        _role = []
+        if self.role != None:
+            _role = JSON().fromText(self.role)
 
         _link = Link(item = None)
         _link.item = self.getTarget().getObject()

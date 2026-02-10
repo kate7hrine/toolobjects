@@ -38,7 +38,7 @@ class Linkable(BaseModel):
         '''
 
         if self.getDb() != None:
-            return self.getDb().getLinks()
+            return list(self.getDb().getLinks())
 
         return self.links
 

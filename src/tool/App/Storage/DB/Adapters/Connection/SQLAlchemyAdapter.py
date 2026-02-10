@@ -2,8 +2,9 @@ from App.Storage.DB.Adapters.ConnectionAdapter import ConnectionAdapter
 from App.Storage.DB.Adapters.ObjectAdapter import ObjectAdapter
 from App.Storage.DB.Adapters.ObjectLinkAdapter import ObjectLinkAdapter
 from App.Objects.Object import Object
+from App.Objects.Link import Link as CommonLink
 from snowflake import SnowflakeGenerator
-from typing import Any
+from typing import Any, Generator
 import json
 
 class SQLAlchemyAdapter(ConnectionAdapter):
@@ -35,31 +36,35 @@ class SQLAlchemyAdapter(ConnectionAdapter):
                 uuid = Column(Integer(), primary_key=True)
                 owner = Column(Integer())
                 target = Column(Integer())
-                role = Column(String())
+                role = Column(String(), nullable = True)
 
                 def getTarget(self):
                     return ObjectUnit.getById(self.target)
 
                 @classmethod
                 def getById(cls, id: int):
-                    return session.query(cls).get(id)
+                    return session.query(cls).filter(cls.uuid == id).first()
 
             @classmethod
             def getById(cls, id: int):
-                return session.query(cls).get(id)
+                return session.query(cls).filter(cls.uuid == id).first()
 
-            def getLinks(self) -> list:
-                pass
+            def getLinks(self) -> Generator[CommonLink]:
+                links = session.query(self.Link).filter(self.Link.owner == self.uuid)
+                for link in links:
+                    yield link.getLink()
 
             def addLink(self, link):#, session):
                 _link = self.Link()
+                link.setDb(_link)
+
                 _link.owner = self.uuid
                 _link.target = link.item.getDbId()
-                _link.role = str(link.role)
+                if len(link.role) > 0:
+                    _link.role = str(link.role)
+
                 session.add(_link)
                 session.commit()
-
-                link.setDb(_link)
 
             def removeLink(self, link):
                 pass
@@ -84,8 +89,7 @@ class SQLAlchemyAdapter(ConnectionAdapter):
                 session.commit()
 
                 if current_level < max_depth:
-                    _items = obj.getLinkedItems()
-                    for link in _items:
+                    for link in obj.getLinkedItems():
                         _obj = self.__class__()
                         _obj.flush(
                             obj = link.item,
