@@ -2,7 +2,6 @@ from App.Objects.Object import Object
 from App.Console.PrintLog import PrintLog
 from App.Logger.HideCategory import HideCategory
 from .Log import Log
-from .LogKind import LogKind, LogKindEnum
 from .LogFile import LogFile
 from .LogSection import LogSection
 from .LogPrefix import LogPrefix
@@ -43,8 +42,7 @@ class Logger(Object):
     def log(self, 
             message: str | Exception, 
             section: str | list = ['Nonce'],
-            types: list[str] = [],
-            kind: str = LogKindEnum.message.value,
+            role: list[str] = [],
             prefix: dict[str, int] = None, 
             exception_prefix: str = '',
             trigger: bool = True):
@@ -56,9 +54,9 @@ class Logger(Object):
 
         msg = Log(
             message = write_message,
+            role=role
         )
         msg.section = LogSection(value = section)
-        msg.kind =  LogKind(value = kind)
         if prefix != None:
             msg.prefix = LogPrefix(**prefix)
 
@@ -108,7 +106,7 @@ class Logger(Object):
             {
                 "section": [],
                 "wildcard": true,
-                "kind": ["message"],
+                "role": ["message"],
                 "where": ["console"]
             }
         ],

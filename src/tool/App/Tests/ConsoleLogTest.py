@@ -9,7 +9,7 @@ class ConsoleLogTest(Test):
                 'message': '55555555555',
                 'time': -1,
                 'section': {'value': ['TestSection']},
-                'kind': {'value': 'bright'},
+                'role': ['bright'],
                 'prefix': {'id': 7777777777777777777777777777, 'name': 'PREFIX'} 
             }
         })

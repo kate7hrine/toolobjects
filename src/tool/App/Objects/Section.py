@@ -7,17 +7,18 @@ class Section:
 
     @property
     def append_prefix(self): # -> dict[str, int]
+        '''
+        Thing that shows id of some object like:
+
+        DownloadItem->1
+        '''
         return None
 
-    def log(self, *args, **kwargs):
+    def log_message(self, *args, **kwargs):
+        # It's better to create Log instance here, but it will call recursive import or smth, so doing sh.code
         _sections = self.section_name
         if kwargs.get('section') != None:
             _sections += kwargs.get('section')
-
-        if kwargs.get("sections") != None:
-            kwargs["section"] += kwargs.get("sections")
-        if self.append_prefix != None:
-            kwargs["prefix"] = self.append_prefix
 
         kwargs["section"] = _sections
 
@@ -29,18 +30,25 @@ class Section:
             pass
             #print("logger not initialized; ", args[0])
         except Exception as e:
+            raise (e)
             print("logger error; ", args[0])
 
-    def log_error(self, *args, **kwargs):
-        from App.Logger.LogKind import LogKindEnum
+    def log(self, *args, **kwargs):
+        if self.append_prefix != None:
+            kwargs["prefix"] = self.append_prefix
 
-        kwargs["kind"] = LogKindEnum.error.value
+        return self.log_message(*args, **kwargs)
+
+    def log_error(self, *args, **kwargs):
+        if kwargs.get('role') == None:
+            kwargs['role'] = []
+        kwargs.get('role').append('error')
         return self.log(*args, **kwargs)
 
     def log_success(self, *args, **kwargs):
-        from App.Logger.LogKind import LogKindEnum
-
-        kwargs["kind"] = LogKindEnum.success.value
+        if kwargs.get('role') == None:
+            kwargs['role'] = []
+        kwargs.get('role').append('success')
         return self.log(*args, **kwargs)
 
     def fatal(self, exception):
