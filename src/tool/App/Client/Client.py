@@ -2,13 +2,16 @@ from App.Server import Server
 from App.Objects.Requirements.Requirement import Requirement
 from Data.Types.JSON import JSON
 from App.ACL.Tokens.Get import Get as TokensGet
-from App.Storage.VirtualPath.Navigate import Navigate
 from App import app
 import aiohttp
 import aiohttp_jinja2
 import jinja2
 
+from App.Client.Pages.Index import Index as PageIndex
+
 class Client(Server):
+    displayments: dict = {}
+
     def _before_run(self, i):
         _templates = str(app.app.src.joinpath('assets').joinpath('client').joinpath('templates'))
         aiohttp_jinja2.setup(self._app, 
@@ -111,43 +114,24 @@ class Client(Server):
 
         return response
 
+    def init_hook(self):
+        for item in app.ObjectsList.getObjectsByCategory(['App', 'Client', 'Pages']):
+            module = item.getModule()
+            if self.displayments.get(module.for_object) == None:
+                self.displayments[module.for_object] = []
+
+            self.displayments[module.for_object].append(module)
+
     @check_login
     async def _index(self, request):
         _context = self._get_template_context(request)
-        file_name = 'index.html'
         query = request.rel_url.query
-        _object_name = query.get('i')
-        if _object_name != None:
-            match (_object_name):
-                case 'App.Objects.Index.ObjectsList':
-                    file_name = 'namespaces.html'
-                    _items = None
+        object_name = query.get('i', 'App.Client.Client')
+        displayment = self.displayments.get(object_name)
 
-                    if query.get('name') != None:
-                        _items = app.ObjectsList.get_namespace_with_name(query.get('name')).getItems()
+        if displayment == None or len(displayment) == 0:
+            _context.update({'error': 'Not found displayment for this'})
 
-                    _context.update({
-                        'namespaces': app.ObjectsList.namespaces,
-                        'objects': _items
-                    })
-                case 'App.Storage.Item.List':
-                    file_name = 'storages.html'
+            return await PageIndex().render_as_page(request, _context)
 
-                    _context.update({
-                        'storages': app.Storage.items,
-                    })
-                case 'App.Storage.VirtualPath.Navigate':
-                    file_name = 'virtual_path.html'
-                    path = query.get('path')
-
-                    _context.update({
-                        'path': path,
-                        'items': await Navigate().execute({
-                            'path': path,
-                            'count': 20,
-                        }),
-                    })
-                case _:
-                    _context.update({'error': 'Not found displayment for this'})
-
-        return aiohttp_jinja2.render_template(file_name, request, _context)
+        return await displayment[0]().render_as_page(request, _context)
