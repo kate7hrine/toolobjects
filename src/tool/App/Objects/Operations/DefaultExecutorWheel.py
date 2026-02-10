@@ -36,7 +36,7 @@ class DefaultExecutorWheel(Act):
             _item.integrate(i.values)
             results = await _item.execute(i = i)
         else:
-            _vals = i.getValues(exclude = ['force_flush', 'i', 'pre_i', 'as_args'])
+            _vals = i.getValues(exclude = app.app.view.getCompareKeys() + self.getCompareKeys())
             results = ObjectsList(items = [])
             _item = executable()
 

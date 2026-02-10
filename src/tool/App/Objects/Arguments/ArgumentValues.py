@@ -99,6 +99,7 @@ class ArgumentValues(Object):
 
     def getValues(self, exclude: list[str]) -> dict:
         vals = dict()
+
         for key, val in self.values.items():
             if key in exclude:
                 continue

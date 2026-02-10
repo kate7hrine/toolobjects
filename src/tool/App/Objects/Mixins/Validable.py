@@ -6,6 +6,13 @@ class Validable:
     Mixin that contains function with arguments lists that can be used for validation
     '''
 
+    def getCompareKeys(self) -> list:
+        _keys = list()
+        for item in self.getAllArguments().toList():
+            _keys.append(item.name)
+
+        return _keys
+
     @classmethod
     def getArguments(cls) -> ArgumentDict:
         '''
