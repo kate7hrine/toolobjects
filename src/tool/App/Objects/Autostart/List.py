@@ -2,13 +2,13 @@ from App.Objects.Object import Object
 from App.Objects.Arguments.ListArgument import ListArgument
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Threads.ExecutionThread import ExecutionThread
+from App.Objects.Autostart.Item import Item
 from Data.Boolean import Boolean
-from Data.Dict import Dict
 from pydantic import Field
 from App import app
 
 class List(Object):
-    items: list[dict] = Field(default = [])
+    items: list[Item] = Field(default = [])
 
     @classmethod
     def mount(cls):
@@ -29,9 +29,12 @@ class List(Object):
 
         _pre_i = pre_i()
 
-        for args in self.items:
+        for item in self.items:
+            if item.unused:
+                continue
+
             try:
-                _copied = args.copy()
+                _copied = item.args.copy()
                 if _copied.get('auth') == 'root' and as_root:
                     _copied['auth'] = app.AuthLayer.getUserByName('root')
                 else:
@@ -58,6 +61,6 @@ class List(Object):
             ListArgument(
                 name = 'app.autostart.items',
                 default = [],
-                orig = Dict,
+                orig = Item,
             )
         ]
