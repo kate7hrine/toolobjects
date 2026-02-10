@@ -1,5 +1,6 @@
 from App.Objects.Object import Object
 from App.Arguments.ArgumentsDict import ArgumentsDict
+from App.Objects.DictList import DictList
 from .Argument import Argument
 from pydantic import Field
 from App import app
@@ -9,8 +10,8 @@ class Comparer(Object):
     Runs every Argument with raw value and returns dict with result
     '''
 
-    compare: ArgumentsDict = Field(default=None)
-    values: dict | ArgumentsDict = Field(default={})
+    compare: DictList | ArgumentsDict = Field(default=None)
+    values: dict | DictList = Field(default={})
 
     raise_on_assertions: bool = Field(default=False)
     missing_args_inclusion: bool = Field(default=False)

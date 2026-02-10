@@ -1,7 +1,8 @@
 from App.Objects.Object import Object
+from App.Objects.Index.LoadedObject import LoadedObject
 from App.Objects.Section import Section
 from App.Objects.Increment import Increment
-from App.Objects.Index.List import List as ObjectsList
+from App.Objects.Index.Namespace import Namespace
 from pathlib import Path
 from pydantic import ConfigDict
 from typing import Any
@@ -18,7 +19,6 @@ class App(Object):
     src: str = None
     storage: str = None
     loop: Any = None
-    objects: ObjectsList = None
     hook_thread: Any = None
     executables_id: Increment = None
 
@@ -35,10 +35,6 @@ class App(Object):
         self.executables_id = Increment()
         self.hook_thread = HookThread()
 
-    def loadPlugins(self, search_dir: Path):
-        self.objects = ObjectsList()
-        self.objects.load(search_dir)
-
     def loadView(self) -> None:
         from App.View import View
 
@@ -50,15 +46,41 @@ class App(Object):
         tmp_view = View(app = self)
         tmp_view.setAsCommon()
 
-        self.loadPlugins([self.cwd])
-
+        self.loadObjects()
         view_name = self.argv.get('view', 'App.Console.Console.Console')
         view_class = self.objects.getByName(view_name)
+        print(view_class)
         view: View = view_class.getModule()()
         view.setAsCommon()
         view.setApp(self)
 
         return view
+
+    def loadObjects(self):
+        self.objects = Namespace(
+            name = 'common',
+            root = str(self.cwd),
+            load_before = [
+                LoadedObject(
+                    path = 'App\\Storage\\Config.py'
+                ),
+                LoadedObject(
+                    path = 'App\\Logger\\Logger.py'
+                ),
+                LoadedObject(
+                    path = 'Web\\DownloadManager\\Manager.py'
+                )
+            ],
+            load_after = [
+                LoadedObject(
+                    path = 'App\\Objects\\Index\\ObjectsList.py'
+                ),
+                LoadedObject(
+                    path = 'App\\Storage\\Storage.py'
+                )
+            ]
+        )
+        self.objects.load()
 
     async def runView(self, view) -> None:
         await view.execute(self.argv)

@@ -25,7 +25,7 @@ class Item(Object):
     _id: int = None
 
     def getPredicate(self):
-        plugin = app.app.objects.getByName(self.predicate)
+        plugin = app.ObjectsList.getByName(self.predicate)
         if plugin == None:
             return None
 

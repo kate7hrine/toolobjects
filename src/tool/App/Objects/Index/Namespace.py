@@ -1,0 +1,117 @@
+from App.Objects.Object import Object
+from App.Objects.Index.LoadedObject import LoadedObject
+from App.Objects.DictList import DictList
+from typing import Generator
+from pathlib import Path
+from pydantic import Field
+
+class Namespace(Object):
+    '''
+    Represents dir from which the object classes will be loaded
+
+    name: id of the namespace
+    root: dir 
+    load_before, load_after: will loaded only before or after any other objects
+    '''
+
+    name: str = Field()
+    root: str = Field()
+    load_before: list = Field(default = [])
+    load_after: list = Field(default = [])
+
+    items: DictList = Field(default = None)
+
+    def constructor(self):
+        self.items = DictList(items=[])
+
+    def load(self):
+        load_all = False
+
+        for item in self.scan():
+            try:
+                assert self.verify(item)
+
+                if load_all == True or item.is_prioritized == True:
+                    _module = item.loadModule()
+                    item.setModule(_module)
+                    item.integrateModule(_module)
+
+                    item.is_success = True
+
+                    self.noticeModuleLoaded(item)
+                else:
+                    self.log(f"{item.name}: loaded but not imported", role=['module_skipped'])
+            except Exception as exception:
+                item.is_success = False
+
+                raise exception
+                self.log_error(exception)
+
+                if isinstance(exception, AssertionError) == False and isinstance(exception, ModuleNotFoundError) == False:
+                    raise exception
+
+            self.items.append(item)
+
+    def scan(self) -> Generator[LoadedObject]:
+        '''
+        Scans self.root and returns as Generator
+        '''
+
+        # Wont output because Logger is not loaded at this moment
+        # TODO not load from Custom
+        self.log(f"Namespace {self.name}, loading objects from dir {self.root}")
+
+        global_path = Path(self.root)
+        _side_names = ['', '__init__.py', '__pycache__', 'Base.py', 'tool.py', '.gitkeep']
+
+        for plugin in self.load_before:
+            plugin.is_prioritized = True
+            plugin.root = self.root
+
+            yield plugin
+
+        files = global_path.rglob('*.py')
+        for plugin in files:
+            if plugin.name in _side_names:
+                continue
+
+            yield LoadedObject(
+                path = str(plugin.relative_to(global_path)),
+                root = self.root
+            )
+
+        for plugin in self.load_after:
+            plugin.is_prioritized = True
+            plugin.root = self.root
+
+            yield plugin
+
+    def verify(self, module: LoadedObject):
+        '''
+        If it notices that module's hash not found (where we will take hashes? from github file?) does not allows to import
+        '''
+        return True
+
+    def getByName(self, key: str, class_name: str = None) -> LoadedObject:
+        _item = self.items.get(key)
+        if class_name != None:
+            if class_name != _item.self_name:
+                return None
+
+        return _item
+
+    def getItems(self) -> list:
+        return self.items.items
+
+    def noticeModuleLoaded(self, item: LoadedObject):
+        _role = []
+        if item.is_prioritized:
+            _role.append('priority')
+        if item.is_submodule:
+            _role.append('submodule')
+
+        self.log(f"{item.getModule().self_name.lower()} {item.name}: loaded and imported", role=_role)
+
+    @property
+    def append_prefix(self): # -> LogPrefix
+        return {'name': 'Namespace', 'id': self.name}

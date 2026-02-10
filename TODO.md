@@ -9,27 +9,24 @@
 - [x] switchextractor
 - [x] queue
 - [ ] queue: repeat (or Queue's settings)
-- [ ] App.DB.Flush
-- [ ] App.Storage.ObjectsStorage
+- [ ] App.Queue.ValueWithReplaces
 - [x] App.Storage.StorageUnit
 - [x] App.Storage.StorageUnitStorage
 - [x] App.Objects.Client
 - [x] App.Objects.Submodules
 - [x] App.Objects.Linkable
 - [x] App.Config.Config
-- [ ] App.Queue.ValueWithReplaces
 - [ ] Data.Text
 - [x] App.Console.PrintLog
-- [ ] ~~App.Objects.Submodules.Submodule, App.Objects.Configurable.Configurable: MROThing~~
-- [ ] ~~move App.Data.DictList to App.Objects.DictList~~
+- [ ] App.Objects.Submodules.Submodule, App.Objects.Configurable.Configurable: MROThing (?)
+- [x] move App.Data.DictList to App.Objects.DictList
 - [ ] ~~object that can contain self subtypes (?)~~
 - [x] Files.FileManager.Navigate
 - [x] logger: section skips
 - [x] logger: output to file
-- [ ] ~~App.Executables.Call list~~
-- [ ] flushed object: allow to override name ()
-- [x] ~~add collections?~ and collections that can override getLinks
-- [ ] App.Daemons.Daemon
+- [ ] ~~App.Executables.Call list~~ List of running executables
+- [x] flushed object: allow to override name (ObjectMeta.object_names)
+- [x] ~~add collections?~ allow override getLinks
 - [ ] Web.DownloadManager.Manager
 - [ ] Data.XML
 - [ ] File.FileTypes.Image
@@ -40,6 +37,20 @@
 - [ ] App.ACL.Auth ?
 - [ ] Web.RSS.GetFeed
 - [ ] DisplayType (?)
-- [ ] link insertion
 - [x] get rid of saveable
 - [ ] Executable.common_object move to submodule with common name
+- [ ] declare requirements that module uses
+- [ ] allow to replace some field with link
+- [ ] db flush: move links
+- [ ] db flush: replaced links
+- [ ] custom object can contain "source" and "meta" fields in it and replace the original
+- [ ] db flush: when loading from db save the link to db's item and add sync between them
+- [ ] objects list: split to Namespace, allow to add another object lists
+- [ ] objects list: fallback to common if module not found
+- [ ] arguments strangely passes to executable
+- [ ] daemon, App.Daemons.StartDaemon, implementation_cycle() (?)
+- [ ] Configurable: role to argumnet 'env' or 'config'
+- [ ] db flush: export between dbs
+- [ ] submodule=displayment
+- [ ] objectlist adapter
+- [ ] pathes like {db name}:/{object}/{object id or name}

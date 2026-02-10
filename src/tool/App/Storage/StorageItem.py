@@ -61,7 +61,7 @@ class StorageItem(Object):
         self.getStorageDir().mkdir(exist_ok=True)
 
     def getDBAdapterByName(self, adapter_name: str):
-        for adapter in app.app.objects.getObjectsByNamespace(['App', 'Storage', 'DB', 'Adapters', 'Connection']):
+        for adapter in app.ObjectsList.getObjectsByGroup(['App', 'Storage', 'DB', 'Adapters', 'Connection']):
             _module = adapter.getModule()
             if _module.protocol_name == adapter_name:
                 item = _module()

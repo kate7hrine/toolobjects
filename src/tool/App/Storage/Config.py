@@ -13,19 +13,18 @@ class Config(Object):
 
     def constructor(self):
         self.comparer = Comparer(
+            compare = DictList(items=[]),
+            values = {},
             raise_on_assertions = False,
             default_on_none = True,
             missing_args_inclusion = True
         )
 
-    def getSettingsOfEveryObject(self):
-        settings = []
-
-        for item in app.app.objects.getList():
-            for _item in item.getAllSettings():
-                settings.append(_item)
-
-        return settings
+    def appendSettingsOfModule(self, module) -> None:
+        _settings = module.getSettings()
+        if _settings != None:
+            for item in _settings:
+                self.comparer.compare.append(item)
 
     @property
     def file(self) -> Path:
@@ -37,7 +36,7 @@ class Config(Object):
             path = app.app.storage.joinpath("config")
         )
         configs.checkFile()
-        configs.updateCompare()
+        configs.appendSettingsOfModule(cls)
         configs.comparer.values.update(app.app.conf_override)
 
         app.mount('Config', configs)
@@ -47,7 +46,7 @@ class Config(Object):
             name = 'env.json'
         )
         env.checkFile()
-        env.updateCompare()
+        #env.appendSettingsOfModule()
 
         app.mount('Env', env)
 
@@ -101,8 +100,20 @@ class Config(Object):
 
         self.updateFile()
 
+    '''
     def updateCompare(self):
         self.comparer.compare = DictList(items = self.getSettingsOfEveryObject())
+
+    def getSettingsOfEveryObject(self):
+        settings = []
+
+        for item in app.ObjectsList.getItems():
+            for _item in item.getAllSettings():
+                settings.append(_item)
+
+        return settings
+
+    '''
 
     def __del__(self):
         try:

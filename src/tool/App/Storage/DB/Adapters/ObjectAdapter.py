@@ -15,6 +15,6 @@ class ObjectAdapter():
     def getObject(self):
         _content = JSON().fromText(self.content)
         _object_name = _content.data.get('saved_via').get('object_name')
-        _class = app.app.objects.getByName(_object_name).getModule()
+        _class = app.ObjectsList.getByName(_object_name).getModule()
 
         return _class.model_validate(_content.data, strict = False)

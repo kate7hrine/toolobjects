@@ -1,100 +1,66 @@
 from App.Objects.Object import Object
+from pydantic import Field
 from typing import Any
 from pathlib import Path
 from App import app
-import importlib
+import importlib, sys
 
 class NotAnObjectError(Exception):
     pass
 
 class LoadedObject(Object):
+    '''
+    Filepath that may contain module
+    '''
+
+    path: str = Field()
+    root: str = Field(default = None)
+
+    title: str = None
+    parts: list[str] = None
+    _module: Any = None
+
     is_success: bool = False
     is_prioritized: bool = False
     is_submodule: bool = False
 
-    title: str = None
-    _module: Any = None
-    _attempt_to_name: str = None
+    def constructor(self):
+        _path = Path(self.path)
+        _ext = _path.suffix[1:] # its always "py", why moving it lol
 
-    category: list[str] = None
+        self.title = _path.stem
+        self.parts = []
+        for part in _path.parts:
+            if f".{_ext}" in part:
+                continue
+            self.parts.append(part)
 
     def getModule(self):
-        #self.log('getModule called')
-        if self._module == None:
-            self.selfInit()
+        self.setModule(self.loadModule())
 
         return self._module
 
-    def selfInit(self):
-        try:
-            self._module = self.load_module()
+    def getTitle(self):
+        return self.parts + [self.title]
 
-            # It's strange to put log function to class internals
-            self.succeed_load()
-        except NotAnObjectError:
-            pass
-        except Exception as e:
-            self.failed_load(e)
+    def getTitleWithClass(self):
+        return self.parts + [self.title, self.title]
 
-    @property
-    def name(self) -> str:
-        '''
-        property to get DictList working
-        '''
-        #self.log('object.name called')
-        if self._module == None:
-            return self._attempt_to_name
-            #return '_____' + self.title #don't remember why
+    def setModule(self, module):
+        self._module = module
 
-        return self._module.getClassNameJoined()
+    def loadModule(self):
+        module_name = ".".join(self.getTitle())
 
-    @staticmethod
-    def from_path(path: Path):
-        plugin = LoadedObject()
+        _root = Path(self.root)
+        _mod = _root.joinpath('\\'.join(self.parts))
 
-        plugin.title = path.stem
-        plugin.category = []
+        spec = importlib.util.spec_from_file_location(module_name, _mod.joinpath(self.title + '.py'))
+        assert spec != None, 'spec not found'
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
 
-        ext = path.suffix[1:]
-
-        for part in path.parts:
-            if f".{ext}" in part:
-                continue
-
-            plugin.category.append(part)
-
-        plugin._attempt_to_name = '.'.join(plugin.category + [plugin.title, plugin.title])
-
-        return plugin
-
-    def succeed_load(self):
-        self.is_success = True
-
-        _appends = []
-        if self.is_prioritized:
-            _appends.append('(!)')
-        if self.is_submodule:
-            _appends.append('(submodule)')
-
-        self.log(f"Loaded {self._module.self_name.lower()} {self._module.getClassNameJoined()} {" ".join(_appends)}")
-
-    def failed_load(self, exception: Exception):
-        self.is_success = False
-        self.log_error(exception)
-
-        if isinstance(exception, AssertionError) == False and isinstance(exception, ModuleNotFoundError) == False:
-            raise exception
-
-    def load_module(self):
-        parts = self.category + [self.title]
-        module_name = ".".join(parts)
-
-        assert self.verify_module_hash(module_name), f"module {module_name} not verified"
-
-        _module = importlib.import_module(module_name)
-        assert _module != None, f"module {module_name} not found"
-
-        common_object = getattr(_module, self.title, None)
+        common_object = getattr(module, self.title, None)
         assert common_object != None, f"{module_name}: {self.title} is not found"
 
         try:
@@ -103,23 +69,22 @@ class LoadedObject(Object):
         except TypeError:
             raise NotAnObjectError(f"{module_name} is not a class")
 
-        try:
-            # Hook cannot be triggered for all class, so ive added "mount" hack
-            #common_object.triggerHooks('loaded')
-
-            if app.Config != None:
-                # if config already exists (we loading it firstly), getting settings of the object (probaly getAllSettings needed here) and appendig to global config
-                _settings = common_object.getSettings()
-                if _settings != None:
-                    for item in _settings:
-                        app.Config.comparer.compare.append(item)
-
-            common_object.mount()
-        except Exception as e:
-            raise e
-            self.log_error(e, exception_prefix = "exception when importing: ")
-
         return common_object
 
-    def verify_module_hash(self, module_name: str) -> bool:
-        return True
+    def integrateModule(self, module) -> None:
+        if app.Config != None:
+            app.Config.appendSettingsOfModule(module)
+
+        module.mount()
+
+    @property
+    def name(self) -> str:
+        '''
+        property to get DictList working
+        '''
+
+        return '.'.join(self.getTitleWithClass())
+        if self._module == None:
+            return '.'.join(self.getTitle())
+
+        return self._module.getClassNameJoined()

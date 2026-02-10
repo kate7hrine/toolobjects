@@ -6,7 +6,7 @@ class Executable(Argument):
     str_type: str = Field(default = None)
 
     def implementation(self, original_value: str):
-        obj = app.app.objects.getByName(key = original_value)
+        obj = app.ObjectsList.getByName(key = original_value)
         if obj == None:
             return None
 
