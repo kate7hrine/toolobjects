@@ -1,12 +1,14 @@
 from .Assertions.Assertion import Assertion
 from App.Objects.Object import Object
 from App.Objects.Misc.NameContainable import NameContainable
+from App.Objects.Arguments.AllowedValues import AllowedValues
 from typing import Any, List, Literal, Callable, Generator, Optional
 from pydantic import Field, computed_field, field_serializer
 from App.Locale.Documentation import Documentation
 from App.Storage.StorageUUID import StorageUUID
 from Data.Types.JSON import JSON
 from App.Objects.Index.ModuleData import ModuleData
+from App import app
 
 class Argument(NameContainable):
     name: str = Field()
@@ -19,6 +21,9 @@ class Argument(NameContainable):
     by_id: bool = Field(default = False)
     auto_apply: bool = Field(default = False)
     check_json: bool = Field(default = True)
+
+    config_fallback: Optional[tuple[str, bool]] = Field(default = None) # list, 1 - name of the option, 2 - bool 0 - config 1 - env
+    allowed_values: Optional[AllowedValues] = Field(default = None)
 
     assertions: List[Assertion] = Field(default=[])
     role: Literal['config', 'env'] = Field(default='config')
@@ -41,8 +46,10 @@ class Argument(NameContainable):
         return self.name
 
     def getValue(self, original_value: Any | str) -> Any:
-        if original_value == None and self.default != None:
-            original_value = self.getDefault()
+        if original_value == None:
+            _default = self.getDefault()
+            if _default != None:
+                original_value = _default
 
         if self.orig == None:
             return original_value
@@ -51,6 +58,18 @@ class Argument(NameContainable):
 
     def getImplementation(self, original_value: Any | str):
         self.inputs = original_value
+
+        if self.allowed_values != None:
+            is_in = False
+
+            if self.allowed_values.strict == True:
+                for value in self.allowed_values.values:
+                    if original_value == value:
+                        is_in = True
+            else:
+                is_in = True
+
+            assert is_in == True, 'not allowed value'
 
         if self.check_json == True and JSON.isStringValidJson(original_value) == True:
             val = JSON.fromText(original_value).data
@@ -78,6 +97,16 @@ class Argument(NameContainable):
         return self.orig
 
     def getDefault(self):
+        if self.config_fallback != None:
+            if len(self.config_fallback) == 1:
+                return app.Config.get(self.config_fallback[0])
+            else:
+                _where = 'config'
+                if self.config_fallback[1]:
+                    _where = 'env'
+
+                return app.Config.get(self.config_fallback[0], role = _where)
+
         if callable(self.default):
             return self.default()
         else:

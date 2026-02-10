@@ -1,7 +1,7 @@
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.ArgumentValues import ArgumentValues
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.LiteralArgument import LiteralArgument
+from App.Objects.Arguments.AllowedValues import AllowedValues
 from App.Objects.Executable import Executable
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App.Objects.Responses.NoneResponse import NoneResponse
@@ -73,11 +73,14 @@ class Console(View):
                 orig = Boolean,
                 default = True
             ),
-            LiteralArgument(
+            Argument(
                 name = 'console.print.as',
                 orig = String,
                 default = 'str',
-                values = ['str', 'json']
+                allowed_values = AllowedValues(
+                    values = ['str', 'json'],
+                    strict = True
+                )
             ),
             Argument(
                 name = 'console.print.display_ids',

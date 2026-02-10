@@ -2,8 +2,8 @@ from App.Objects.Act import Act
 from App.Storage.Item.StorageItem import StorageItem
 from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
-from App.Objects.Arguments.LiteralArgument import LiteralArgument
 from App.Objects.Arguments.Argument import Argument
+from App.Objects.Arguments.AllowedValues import AllowedValues
 from Data.Types.Boolean import Boolean
 from Data.Types.String import String
 from App import app
@@ -41,9 +41,11 @@ class Zip(Act):
                 default = None,
                 orig = String
             ),
-            LiteralArgument(
+            Argument(
                 name = 'compression',
-                values = ['ZIP_DEFLATED', 'ZIP_STORED', 'ZIP_BZIP2', 'ZIP_LZMA'],
+                allowed_values = AllowedValues(
+                    values = ['ZIP_DEFLATED', 'ZIP_STORED', 'ZIP_BZIP2', 'ZIP_LZMA']
+                ),
                 default = 'ZIP_DEFLATED',
             )
         ])
