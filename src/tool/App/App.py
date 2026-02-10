@@ -43,7 +43,7 @@ class App(Object):
         self.hook_thread = HookThread()
 
     def loadView(self) -> None:
-        from App.View import View
+        from App.Objects.View import View
 
         '''
         Firstly it creates temp view that allows to mount globals without errors.
@@ -54,7 +54,7 @@ class App(Object):
         tmp_view.setAsCommon()
 
         self.loadObjects()
-        view_name = self.argv.get('view', 'App.Console.ConsoleView.ConsoleView')
+        view_name = self.argv.get('view', 'App.Console.ConsoleView')
         view_class = self.objects.getByName(view_name)
         view: View = view_class.getModule()()
         view.setAsCommon()

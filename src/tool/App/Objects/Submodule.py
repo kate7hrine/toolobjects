@@ -6,11 +6,12 @@ class Submodule(Link):
     '''
     Submodule of an object
 
-    role's:
+    roles:
 
-    common: ????
     object: Object class related to current Object
+
     wheel: used by App.Executables.Wheel
+
     convertation: will be used for convertTo
     '''
 

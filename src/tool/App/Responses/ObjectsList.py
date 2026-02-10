@@ -5,6 +5,10 @@ from pydantic import Field
 from typing import Generator
 
 class ObjectsList(Response):
+    '''
+    The best Response type
+    '''
+
     items: list[Object] = Field(default = [])
     supposed_to_be_single: bool = Field(default = False)
 

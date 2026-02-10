@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Any, Callable
 
 class Convertable(BaseModel):
     @classmethod
@@ -21,3 +22,8 @@ class Convertable(BaseModel):
 
         _itm = _conv.item()
         return await _itm.execute(i = {'orig': self})
+
+    def displayAs(self, as_type: str) -> Callable:
+        for displayment_probaly in self.getAllSubmodules(with_role=['displayment']):
+            if as_type in displayment_probaly.item.role:
+                return displayment_probaly.item().implementation(i = {'object': self})

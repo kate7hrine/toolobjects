@@ -23,6 +23,7 @@ class Namespace(Object):
     load_after: list = Field(default = [])
     ignore_dirs: list = Field(default = [])
     load_once: bool = Field(default = True)
+    load_submodules: bool = Field(default = True)
 
     items: DictList = Field(default = None)
 
@@ -101,10 +102,22 @@ class Namespace(Object):
 
             # "ignore_dirs" param
 
-            yield LoadedObject(
+            _obj = LoadedObject(
                 path = _str_path,
                 root = self.root
             )
+            yield _obj
+
+            if self.load_submodules == True and _obj.hasModuleLoaded():
+                # Not loading for prioritized, xd.
+                for item in _obj.getModule().getAllSubmodules():
+                    _modl = LoadedObject(
+                        path = _str_path,
+                        root = self.root
+                    )
+                    _modl.is_submodule = True
+                    _modl._module = item.item
+                    yield _modl
 
         for plugin in self.load_after:
             plugin.is_prioritized = True

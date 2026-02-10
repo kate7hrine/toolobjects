@@ -40,9 +40,12 @@ class LoadedObject(Object):
 
     def getModule(self):
         if self._module == None:
-            self.setModule(self.loadModule(ignore_modules = True))
+            self.setModule(self.loadModule(ignore_requires = True))
 
         return self._module
+
+    def hasModuleLoaded(self):
+        return self._module != None
 
     def getTitle(self):
         return self.parts + [self.title]
@@ -56,7 +59,7 @@ class LoadedObject(Object):
     def setModule(self, module):
         self._module = module
 
-    def loadModule(self, ignore_modules: bool = False):
+    def loadModule(self, ignore_requires: bool = False):
         module_name = ".".join(self.getTitle())
 
         _root = Path(self.root)
@@ -70,7 +73,7 @@ class LoadedObject(Object):
 
         common_object = getattr(module, self.title, None)
         assert common_object != None, f"{module_name}: {self.title} is not found"
-        if ignore_modules == False and hasattr(common_object, 'getNotInstalledModules') == True:
+        if ignore_requires == False and hasattr(common_object, 'getNotInstalledModules') == True:
             _modules = common_object.getNotInstalledModules()
             assert len(_modules) == 0, f"following modules not installed: {', '.join(_modules)}"
 

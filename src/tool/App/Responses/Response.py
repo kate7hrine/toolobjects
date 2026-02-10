@@ -1,5 +1,4 @@
 from App.Objects.Object import Object
-from typing import Any
 
 class Response(Object):
     '''

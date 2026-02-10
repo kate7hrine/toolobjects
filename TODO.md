@@ -27,6 +27,8 @@ core:
 - [x] Configurable: role of the argument 'env' or 'config'
 - [x] daemon, App.Daemons.StartDaemon, implementation_cycle() (?)
 - [ ] name of object required twice
+- [ ] App.ReloadModules
+- [ ] namespace: load submodules
 
 db and storage:
 
@@ -47,7 +49,7 @@ db and storage:
 - [x] VirtualPath
 - [ ] VirtualPath pagination (adapter pagination also)
 - [ ] App.Object.Paginable
-- [ ] DisplayType (?) submodule=displayment
+- [x] DisplayType (?) submodule=displayment
 - [ ] Web.DownloadManager.Manager
 - [ ] storageunit generates hash randomly but maybe hash the common file?
 - [ ] storageunit flush_hook and getCommonDir(): pathlib parts are duplicated and its better to move to HashDir class
@@ -80,6 +82,7 @@ documentation:
 
 web:
 
+- [ ] WebServer
 - [ ] main blocks
 - [ ] displaytype=js_module
 - [ ] svelte modules
