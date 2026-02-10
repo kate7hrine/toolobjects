@@ -1,9 +1,9 @@
 from pydantic import Field, field_serializer
-from App.Objects.Mixins.Model import Model
 from datetime import datetime
 from typing import Optional
-from .Source import Source
-from .SavedVia import SavedVia
+from App.Objects.Mixins.Model import Model
+from App.Objects.Misc.Source import Source
+from App.Objects.Misc.SavedVia import SavedVia
 
 class ObjectMeta(Model):
     saved_via: SavedVia = Field(default = None)
@@ -17,7 +17,7 @@ class ObjectMeta(Model):
     source: list[Source] = Field(default = [], repr = False)
 
     created_at: Optional[datetime] = Field(default_factory=lambda: datetime.now())
-    edited_at: Optional[datetime] = Field(default=None)
+    updated_at: Optional[datetime] = Field(default=None)
 
     # other fields
     width: Optional[int] = Field(default = None)

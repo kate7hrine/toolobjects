@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 
 class Channel(Element):
     url: str | None = Field(default = None)
-    channel_link: str = Field(default = None, alias='link')
+    channel_link: str = Field(default = None)
     generator: str | None = Field(default = None)
     copyright: str | None = Field(default = None)
     language: str | None = Field(default = None)

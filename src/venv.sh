@@ -9,9 +9,6 @@ tool_path="$location/$tool_name"
 
 pip --version
 
-# termux maybe: python -m pip install pydantic-core --extra-index-url https://termux-user-repository.github.io/pypi/
-# also it requires rust ??
-
 if [ -d "$venv_path" ]; then
     echo "[Venv] An existing Python Virtual Environment found"
 else

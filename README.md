@@ -1,6 +1,6 @@
 ### toolobjects
 
-Experimental framework with object organization
+Experimental framework for object organization
 
 ### Documentation
 
