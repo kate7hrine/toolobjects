@@ -17,7 +17,7 @@ To hide object load messages at the start:
 ```
     "logger.print.exclude": [
         {
-            "role": "objects_loading"  
+            "role": "objects.loading"  
         }
     ]
 ```

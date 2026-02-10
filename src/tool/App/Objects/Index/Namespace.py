@@ -53,13 +53,13 @@ class Namespace(Object):
 
                     self.noticeModuleLoaded(item)
                 else:
-                    self.log(f"{_name}: loaded but not imported", role=['objects_loading', 'module_skipped'])
+                    self.log(f"{_name}: loaded but not imported", role=['objects.loading', 'objects.loading.module.skipped'])
             except AssertionError as exception:
-                self.log_error(exception, role=['objects_loading'])
+                self.log_error(exception, role=['objects.loading'])
             except Exception as exception:
                 item.is_success = False
-                self.log_error(f"{_name} not imported", role=['objects_loading'])
-                self.log_error(exception, role=['objects_loading'])
+                self.log_error(f"{_name} not imported", role=['objects.loading'])
+                self.log_error(exception, role=['objects.loading'])
 
                 if isinstance(exception, AssertionError) == False and isinstance(exception, ModuleNotFoundError) == False and isinstance(exception, NotAnObjectError) == False:
                     raise exception
@@ -76,7 +76,7 @@ class Namespace(Object):
         '''
 
         # wont output because Logger is not loaded at this moment
-        self.log("Namespace {0}, loading objects from dir {1}".format(self.name, self.root), role = ['objects_loading'])
+        self.log("Namespace {0}, loading objects from dir {1}".format(self.name, self.root), role = ['objects.loading'])
 
         global_path = Path(self.root)
         _side_names = ['', '__init__.py', '__pycache__', 'Base.py', 'tool.py', '.gitkeep']
@@ -149,7 +149,7 @@ class Namespace(Object):
             yield item
 
     def noticeModuleLoaded(self, item: LoadedObject):
-        _role = ['objects_loading']
+        _role = ['objects.loading']
         if item.is_prioritized:
             _role.append('priority')
         if item.is_submodule:

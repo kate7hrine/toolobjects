@@ -17,16 +17,16 @@ I may recomend set these values in `storage/config/config.json`:
 ```
     "logger.print.exclude": [
         {
-            "role": "objects_loading"  
+            "role": "objects.loading"  
         },
         {
-            "role": "empty_response"  
+            "role": "console.print.returned.nothing"  
         },
         {
             "section": ["App.Console.ConsoleView"]
         },
         {
-            "role": "auth_from_console"
+            "role": "auth.console"
         },
         {
             "section": ["App.Objects.Operations.DefaultExecutorWheel"]

@@ -34,6 +34,9 @@ class ObjectsList(Response):
 
     @classmethod
     def asArgument(cls, val: str) -> Object:
+        if type(val) == str:
+            val = val.split(',')
+
         if type(val) == list:
             _obj = cls()
             for item in val:

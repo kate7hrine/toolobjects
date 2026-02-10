@@ -108,7 +108,7 @@ class DBInsertable():
 
         _role = ['flushed']
         if into.name == 'tmp':
-            _role.append('flushed_into_tmp')
+            _role.append('storage.flushing.tmp')
 
         self.log(f"flushed item to db {into.name}, uuid: {self.getDbId()}", role = _role)
 

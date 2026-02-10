@@ -2,7 +2,7 @@ from App.Objects.Test import Test
 from App import app
 from App.Storage.Movement.Export import Export as RealExport
 from App.Objects.Responses.ObjectsList import ObjectsList
-from App.Storage.StorageItem import StorageItem
+from App.Storage.Item.StorageItem import StorageItem
 from Media.Text.Text import Text
 
 class Export(Test):

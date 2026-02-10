@@ -1,35 +1,30 @@
 from App.Objects.Act import Act
 from datetime import datetime
-from App.Storage.StorageItem import StorageItem
+from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from Data.String import String
-from Data.Int import Int
 from Data.Boolean import Boolean
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
 from App.Objects.Responses.ObjectsList import ObjectsList
-from App.Objects.Responses.AnyResponse import AnyResponse
+from App.Storage.Item.Create import Create
+from App.Storage.Item.PackToZip import PackToZip
 
 class Export(Act):
-    '''
-    Creates new StorageItem, moves items to it
-    '''
-
     @classmethod
     def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
             Argument(
                 name = 'items',
+                assertions = [NotNoneAssertion()],
                 orig = ObjectsList
             ),
             Argument(
-                name = 'export_name',
+                name = 'name',
                 default = None,
                 orig = String
             ),
             Argument(
                 name = 'dir',
-                assertions = [NotNoneAssertion()],
                 orig = String
             ),
             Argument(
@@ -37,36 +32,25 @@ class Export(Act):
                 default = False,
                 orig = Boolean
             ),
-            Argument(
-                name = 'link_max_depth',
-                default = 10, # TODO move to const
-                orig = Int
-            )
         ])
 
     async def implementation(self, i):
-        self.log('Exporting')
-
-        export_name = i.get("export_name")
+        export_name = i.get("name")
         if export_name == None:
             export_name = f"{int(datetime.now().timestamp())}_export"
 
-        news = StorageItem(
-            name = export_name,
-            directory = str(i.get('dir')),
-            db_type = 'App.DB.Adapters.SQLite',
-            db = {
-                'auto_commit': True
-            }
-        )
-        news._init_hook()
-
-        self.log(f"Created new StorageItem {export_name}, dir is {str(i.get('dir'))}")
+        _create_items = await Create().execute({
+            'name': export_name,
+            'dir': i.get('dir')
+        })
+        export_storage = _create_items.items[0]
 
         for item in i.get('items').getItems():
-            item.flush(news)
+            item.flush(export_storage)
 
         if i.get('as_zip') == True:
-            self.log('not implemented')
+            await PackToZip().execute(i.change_for(PackToZip).update_values({
+                'remove_dir': True
+            }))
 
-        return AnyResponse.fromItems(news)
+        return _create_items

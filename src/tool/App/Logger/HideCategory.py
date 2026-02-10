@@ -19,7 +19,7 @@ class HideCategory(Object):
     '''
 
     section: list = Field(default = None)
-    role: str = Field(default = None)
+    role: list[str] = Field(default = None)
     where: list[Literal['console', 'db']] = Field(default = None)
     wildcard: bool = Field(default = False)
     unused: bool = Field(default = False)
@@ -41,21 +41,26 @@ class HideCategory(Object):
 
         return True
 
-    def isSectionMeets(self, section: list[str]) -> bool:
+    def isSectionMeets(self, log_section: list[str]) -> bool:
         if self.section == None:
             return True
 
         if self.wildcard == True:
-            if len(section) == 0:
+            if len(log_section) == 0:
                 return True
 
-            return ".".join(section).startswith(".".join(self.section))
+            return ".".join(log_section).startswith(".".join(self.section))
         else:
-            return ".".join(section) == ".".join(self.section)
+            return ".".join(log_section) == ".".join(self.section)
 
-    def isRoleMeets(self, role: list[str]) -> bool:
+    def isRoleMeets(self, log_role: list[str]) -> bool:
         if self.role != None:
-            return self.role in role
+            _contains = 0
+            for _role in self.role:
+                if _role in log_role:
+                    _contains += 1
+
+            return _contains == len(self.role)
 
         return True
 

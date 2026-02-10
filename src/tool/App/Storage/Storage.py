@@ -1,7 +1,7 @@
 from App.Objects.Object import Object
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ListArgument import ListArgument
-from App.Storage.StorageItem import StorageItem
+from App.Storage.Item.StorageItem import StorageItem
 from pydantic import Field
 from typing import Generator
 from Data.Int import Int
@@ -13,6 +13,7 @@ class Storage(Object):
     '''
 
     items: list[StorageItem] = Field(default = [])
+    default_names: list[str] = Field(default = [])
 
     @classmethod
     def mount(cls):
@@ -27,14 +28,14 @@ class Storage(Object):
 
         for item in self.getOption('storage.items'):
             if item.unused == True:
-                self.log('storage item {0} is disabled'.format(item.name), role = ['storage_load'])
+                self.log('storage item {0} is disabled'.format(item.name), role = ['storage.item.loading'])
                 continue
 
             _names.append(item.name)
 
             item._init_hook()
             self.append(item)
-            self.log('loaded custom storage item {0}'.format(item.name), role = ['storage_load'])
+            self.log('loaded custom storage item {0}'.format(item.name), role = ['storage.item.loading'])
 
         default_items = [
             StorageItem(
@@ -69,12 +70,17 @@ class Storage(Object):
         ]
 
         for item in default_items:
+            self.default_names.append(item.name)
             if item.name not in _names:
                 item._init_hook()
                 self.append(item)
 
     def append(self, item: StorageItem):
         self.items.append(item)
+
+    def remove(self, item: StorageItem):
+        if item in self.items and item.name not in self.default_names:
+            self.items.remove(item)
 
     def getAll(self) -> Generator[StorageItem]:
         for item in self.items:

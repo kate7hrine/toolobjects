@@ -40,7 +40,7 @@ class ConsoleView(View):
     def _print_call(self, results, i):
         if i.get('console.print') == True:
             if results == None or results.isInstance(NoneResponse):
-                self.log('nothing returned', role = ['empty_response', 'view_message'])
+                self.log('nothing returned', role = ['console.print.returned.nothing', 'view.message'])
                 return
 
             if i.get('console.print.as') == 'str' and isinstance(results, ObjectsList):
