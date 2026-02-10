@@ -15,4 +15,4 @@ class Namespace(Displayment):
             'namespace': namespace
         })
 
-        return aiohttp_jinja2.render_template('objects/namespace.html', request, context)
+        return aiohttp_jinja2.render_template('Objects/namespace.html', request, context)

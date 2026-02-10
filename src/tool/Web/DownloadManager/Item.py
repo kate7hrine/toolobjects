@@ -98,7 +98,17 @@ class Item(Object):
     async def saveFile(self, response) -> None:
         self.downloaded_bytes = 0
 
-        encoding = response.get_encoding() or 'utf-8'
+        encoding = 'utf-8'
+
+        '''
+        try:
+            encoding = response.get_encoding() or 'utf-8'
+        except RuntimeError as e:
+            #self.log_error(e)
+
+            encoding = 'utf-8'
+        '''
+
         mode = 'wb' if Mime._is_binary(response.headers.get('Content-Type', '').lower()) else 'w'
         is_binary = mode == 'wb'
 

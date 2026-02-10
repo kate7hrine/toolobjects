@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block title %}
-Storages
+{{ tr("client.storages") }}
 {% endblock %}
 
 {% block body %}
-    <b>storages</b>
+    <b>{{ tr("client.storages") }}</b>
     <div id='storages'>
         {% for item in storages %}
             <div>

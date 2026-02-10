@@ -7,13 +7,13 @@ import aiohttp
 import aiohttp_jinja2
 import jinja2
 
-from App.Client.Pages.Index import Index as PageIndex
+from App.Client.Pages.App.Index import Index as PageIndex
 
 class Client(Server):
     displayments: dict = {}
 
     def _before_run(self, i):
-        _templates = str(app.app.src.joinpath('assets').joinpath('client').joinpath('templates'))
+        _templates = str(app.app.src.joinpath('tool').joinpath('App').joinpath('Client').joinpath('Pages'))
         aiohttp_jinja2.setup(self._app, 
                              loader=jinja2.FileSystemLoader(_templates),
                              auto_reload = True)
@@ -80,7 +80,7 @@ class Client(Server):
 
     async def _login(self, request):
         if request.method == 'GET':
-            return aiohttp_jinja2.render_template('login.html', request, {})
+            return aiohttp_jinja2.render_template('Users/login.html', request, {})
         else:
             try:
                 response = aiohttp.web.HTTPFound('/')
@@ -100,7 +100,7 @@ class Client(Server):
 
                 return response
             except Exception as e:
-                return aiohttp_jinja2.render_template('login.html', request, {'error': str(e)})
+                return aiohttp_jinja2.render_template('Users/login.html', request, {'error': str(e)})
 
     async def _logout(self, request):
         response = aiohttp.web.HTTPFound('/')
@@ -141,4 +141,6 @@ class Client(Server):
             return await displayment[0]().render_as_page(request, _context)
         except Exception as e:
             _context.update({'error_message': str(e)})
+
+            self.log_error(e)
             return await PageIndex().render_as_error(request, _context)

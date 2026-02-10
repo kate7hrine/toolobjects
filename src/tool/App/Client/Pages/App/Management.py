@@ -20,8 +20,8 @@ class Management(Displayment):
             case 'turn_off':
                 exit(-1)
             case 'self_user':
-                return aiohttp_jinja2.render_template('users/user.html', request, context)
+                return aiohttp_jinja2.render_template('Users/user.html', request, context)
             case _:
-                return aiohttp_jinja2.render_template('app/management.html', request, context)
+                return aiohttp_jinja2.render_template('App/management.html', request, context)
 
         return aiohttp.web.HTTPFound('/?i=App')
