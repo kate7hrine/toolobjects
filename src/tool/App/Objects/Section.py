@@ -10,11 +10,16 @@ class Section:
         return None
 
     def log(self, *args, **kwargs):
-        kwargs["section"] = self.section_name
+        _sections = self.section_name
+        if kwargs.get('section') != None:
+            _sections += kwargs.get('section')
+
         if kwargs.get("sections") != None:
             kwargs["section"] += kwargs.get("sections")
         if self.append_prefix != None:
             kwargs["prefix"] = self.append_prefix
+
+        kwargs["section"] = _sections
 
         try:
             return app.Logger.log(*args, **kwargs)
@@ -22,6 +27,8 @@ class Section:
             pass
         except Exception as e:
             print_before_init = False
+            print(e)
+
             if print_before_init == True:
                 print(args[0])
 

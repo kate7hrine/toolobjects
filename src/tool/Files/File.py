@@ -16,6 +16,23 @@ class File(Object):
         self.size = stat.st_size
         # self.stat = dict(stat)
 
+    @staticmethod
+    def fromPath(path: Path):
+        from Files.Dir import Dir
+        from Files.FileTypes.FileType import FileType
+
+        item = None
+        if path.is_dir() == True:
+            item = Dir(
+                path = str(path)
+            )
+        else:
+            item = File(
+                path = str(path)
+            )
+
+        return FileType(file = item)
+
     def getParent(self):
         _upper = Path(self.path)
 

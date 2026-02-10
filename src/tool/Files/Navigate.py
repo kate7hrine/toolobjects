@@ -6,7 +6,6 @@ from App.Responses.AnyResponse import AnyResponse
 from pathlib import Path
 
 from Files.File import File
-from Files.Dir import Dir
 
 class Navigate(Act):
     @classmethod
@@ -22,17 +21,8 @@ class Navigate(Act):
 
     async def implementation(self, i):
         _path = Path(str(i.get('path')))
-        _item = None
-
-        if _path.is_dir() == True:
-            _item = Dir(
-                path = _path.as_posix()
-            )
-        else:
-            _item = File(
-                path = _path.as_posix()
-            )
+        _item = File.fromPath(_path)
 
         return AnyResponse(
-            data = _item.getContent()
+            data = _item.file.getContent()
         )

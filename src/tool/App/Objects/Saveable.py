@@ -6,9 +6,10 @@ from .Saved import Saved
 from .Source import Source
 from .ObjectMeta import ObjectMeta
 from .Linkable import Linkable
+from .AllowExtraFields import AllowExtraFields
 from typing import ClassVar
 
-class Saveable(Object, Linkable):
+class Saveable(Object, Linkable, AllowExtraFields):
     '''
     Item that can be flushed into DB
 
