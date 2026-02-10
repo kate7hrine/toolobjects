@@ -89,7 +89,7 @@ class ConsoleView(View):
             ),
             Argument(
                 name = 'auth',
-                # orig = String, Do not comparing
+                # orig = String, do not comparing
                 default = None
             )
         ],

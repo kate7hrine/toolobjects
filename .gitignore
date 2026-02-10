@@ -10,5 +10,6 @@ src/venv/
 src/assets/app*
 storage/*
 src/storage/*
+src/config/*
 *node_modules*
 *package-lock.json
