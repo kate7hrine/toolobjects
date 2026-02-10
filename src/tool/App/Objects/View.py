@@ -36,7 +36,7 @@ class View(Executable):
             return True
 
         for item in _allowed:
-            if item.getClassNameJoined() == self.getClassNameJoined():
+            if item._getClassNameJoined() == self._getClassNameJoined():
                 return True
 
     @classmethod

@@ -11,7 +11,7 @@ class BaseModel(Model, Section):
     @model_validator(mode='after')
     def _saved_via(self):
         self.obj.saved_via = SavedVia()
-        self.obj.saved_via.object_name = self.getClassNameJoined()
+        self.obj.saved_via.object_name = self._getClassNameJoined()
 
         return self
 
@@ -51,4 +51,4 @@ class BaseModel(Model, Section):
 
     @classmethod
     def _get_locale_key(self, data: str):
-        return self.getClassNameJoined() + '.' + data
+        return self._getClassNameJoined() + '.' + data

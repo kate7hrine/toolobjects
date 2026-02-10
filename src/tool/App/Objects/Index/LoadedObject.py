@@ -99,7 +99,7 @@ class LoadedObject(NameContainable):
         if self._module == None:
             return
 
-        _name = self._module.getClassNameJoined()
+        _name = self._module._getClassNameJoined()
         if _name in sys.modules:
             sys.modules.pop(_name)
 

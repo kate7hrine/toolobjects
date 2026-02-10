@@ -35,7 +35,7 @@ class Linkable():
 
         if self.hasDb() == True:
             if link.item.hasDb() == False:
-                self.log('addLink: {0} {1} item is flushed, {2} is not, so we will flush item that we link'.format(self.getClassNameJoined(), self.getDbId(), link.item.getClassNameJoined()))
+                self.log('addLink: {0} {1} item is flushed, {2} is not, so we will flush item that we link'.format(self._getClassNameJoined(), self.getDbId(), link.item._getClassNameJoined()))
 
                 link.item.setDb(link.item.flush(self.getDb()._adapter._storage_item))
             else:
@@ -53,7 +53,7 @@ class Linkable():
             pass
             #self.log('current item does not has db!')
 
-        self.log('linked items with classes {0}, {1}'.format(self.getClassNameJoined(), link.item.getClassNameJoined()))
+        self.log('linked items with classes {0}, {1}'.format(self._getClassNameJoined(), link.item._getClassNameJoined()))
         self.links.append(link)
 
         return link

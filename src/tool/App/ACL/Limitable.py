@@ -5,7 +5,7 @@ class Limitable():
     def canBeUsedBy(cls, user):
         if user == None:
             return Permission.check(Permission(
-                object_name = cls.getClassNameJoined(),
+                object_name = cls._getClassNameJoined(),
                 #user = None,
                 action = 'call',
                 #allow = True

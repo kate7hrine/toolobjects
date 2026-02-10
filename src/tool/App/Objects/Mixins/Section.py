@@ -11,7 +11,7 @@ class Section:
         Section that will be appended to Log.
         Its taken to "property" to allow to override
         '''
-        return self.getName()
+        return self._getName()
 
     @property
     def append_prefix(self): # -> LogPrefix
@@ -22,7 +22,7 @@ class Section:
         '''
         return None
 
-    def log_shortcut(self, *args, _role = [], **kwargs):
+    def _log_shortcut(self, *args, _role = [], **kwargs):
         _sections = self.section_name
         if self.append_prefix != None:
             kwargs["prefix"] = self.append_prefix
@@ -45,13 +45,13 @@ class Section:
             self.log_raw("logger error; ", args[0])
 
     def log(self, *args, **kwargs):
-        return self.log_shortcut(*args, **kwargs)
+        return self._log_shortcut(*args, **kwargs)
 
     def log_error(self, *args, **kwargs):
-        return self.log_shortcut(*args, _role=['error'], **kwargs)
+        return self._log_shortcut(*args, _role=['error'], **kwargs)
 
     def log_success(self, *args, **kwargs):
-        return self.log_shortcut(*args, _role=['success'], **kwargs)
+        return self._log_shortcut(*args, _role=['success'], **kwargs)
 
     def log_raw(self, anything: str):
         '''

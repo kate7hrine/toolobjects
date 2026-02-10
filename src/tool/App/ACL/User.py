@@ -23,7 +23,7 @@ class User(Object):
             raise TokenExpiredError('token expired')
 
         return Permission.check(Permission(
-            object_name = object.getClassNameJoined(),
+            object_name = object._getClassNameJoined(),
             user = self.name,
             action = action,
             allow = True

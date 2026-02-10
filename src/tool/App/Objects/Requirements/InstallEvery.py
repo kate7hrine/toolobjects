@@ -16,7 +16,7 @@ class InstallEvery(Act):
                 _len = len(_reqs)
 
                 if _len > 0:
-                    self.log("module {0} has {1} requirements".format(_module.getClassNameJoined(), _len))
+                    self.log("module {0} has {1} requirements".format(_module._getClassNameJoined(), _len))
 
                     for req in _reqs:
                         _modules.append(req)

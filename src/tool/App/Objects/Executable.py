@@ -72,7 +72,7 @@ class Executable(Object, Variableable, Validable):
                 if _auth != None:
                     _name = _auth.name
 
-                assert self.canBeUsedBy(_auth), "access denied (executable={0}, every_call_permission_check=true, user={1})".format(self.getClassNameJoined(), _name)
+                assert self.canBeUsedBy(_auth), "access denied (executable={0}, every_call_permission_check=true, user={1})".format(self._getClassNameJoined(), _name)
 
         passing = self._compare(i.toDict(), check_arguments = check_arguments, raise_on_assertions = raise_on_assertions)
 

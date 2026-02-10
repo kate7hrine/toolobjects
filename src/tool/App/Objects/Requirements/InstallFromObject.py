@@ -20,7 +20,7 @@ class InstallFromObject(Act):
         _object = i.get('object')
         _requirements = _object.getNotInstalledModules()
         if len(_requirements) < 1:
-            self.log(f"plugin {_object.getNameJoined()} does not contains uninstalled modules")
+            self.log(f"plugin {_object._getNameJoined()} does not contains uninstalled modules")
         else:
             await Install().execute({
                 'requirements': _requirements

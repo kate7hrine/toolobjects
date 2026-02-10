@@ -35,7 +35,7 @@ class Hookable():
 
         return self._hooks.get(category)
 
-    def runHook(self, hook_func: Callable, *args, **kwargs) -> None:
+    def _runHook(self, hook_func: Callable, *args, **kwargs) -> None:
         if asyncio.iscoroutinefunction(hook_func) == False:
             return hook_func(*args, **kwargs)
 
@@ -55,7 +55,7 @@ class Hookable():
 
         for hook in self._hooks.get(category):
             try:
-                self.runHook(hook, *args, **kwargs)
+                self._runHook(hook, *args, **kwargs)
             except Exception as e:
                 self.log_error(e, exception_prefix = 'hook caused error: ')
 

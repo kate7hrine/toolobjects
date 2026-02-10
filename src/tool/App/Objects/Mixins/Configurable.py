@@ -32,7 +32,7 @@ class Configurable:
         return alls
 
     @classmethod
-    def getAllEnvSettings(cls):
+    def getEnvSettings(cls):
         return cls.getSettings(where='env')
 
     @classmethod

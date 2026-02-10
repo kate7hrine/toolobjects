@@ -25,7 +25,7 @@ class DefaultExecutorWheel(Act):
 
         assert executable != None, 'not found object'
         assert app.app.view.canUseObject(executable), 'object cannot be used at this view'
-        assert executable.canBeUsedBy(i.get('auth')), 'access denied to executable {0}'.format(executable.getClassNameJoined())
+        assert executable.canBeUsedBy(i.get('auth')), 'access denied to executable {0}'.format(executable._getClassNameJoined())
 
         results = None
         if force_flush == False:
@@ -51,7 +51,7 @@ class DefaultExecutorWheel(Act):
             else:
                 _keys = dict()
                 # outside arguments can get there, so saving only values from fields
-                for key in _item.getFieldsNames():
+                for key in _item._getFieldsNames():
                     if _vals.get(key) == None:
                         continue
 

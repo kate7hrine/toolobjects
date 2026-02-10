@@ -7,9 +7,10 @@ from App.Storage.StorageUUID import StorageUUID
 
 class ObjectsList(Response):
     '''
-    The best Response type; represents list of objects.
+    represents list of objects
 
-    unsaveable - means that objects in list are already flushed, and they shouldn't be written again
+    Properties:
+        unsaveable - means that objects in list are already flushed, and they shouldn't be written again
     '''
 
     items: list[Object] = Field(default = [])
