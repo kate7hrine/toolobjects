@@ -24,7 +24,7 @@ class Navigate(ExplorerProtocol):
 
     async def _implementation(self, i):
         path = i.get('path')
-        if path == None or path.has_parts() is False:
+        if path == None or path.has_parts is False:
             _list = ObjectsList()
             for item in app.Storage.getAll():
                 _list.append(item)

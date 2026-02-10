@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Object
+{{ obj.get_name_for_dictlist() }}
 {% endblock %}
 
 {% block body %}
@@ -61,11 +61,13 @@ Object
             </table>
         {% endif %}
 
-        <div>
-            <hr>
+        {% if obj.is_inited %}
             <div>
-                <a href="/?i=App.Objects.Operations.DefaultExecutorWheel&obj=">Execute</a>
+                <hr>
+                <div>
+                    <a href="/?i=App.Objects.Operations.DefaultExecutorWheel&name={{obj.getModule()._getNameJoined()}}">Execute</a>
+                </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 {% endblock %}

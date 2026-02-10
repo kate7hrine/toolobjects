@@ -81,11 +81,18 @@ class Argument(NameContainable):
         return self._implementation(original_value)
 
     def _implementation(self, val: Any | str) -> Any:
+        _orig = self.getOrig()
+        assert hasattr(_orig, 'asArgument'), 'orig item is not an object'
+
         if self.by_id == True:
             if StorageUUID.validate(val):
-                return StorageUUID.fromString(val).toPython()
+                _val = StorageUUID.fromString(val).toPython()
+                # for listargument
+                if callable(_orig) == False:
+                    return _orig.asArgumentAsInstance(_val)
 
-        _orig = self.getOrig()
+                return _val
+
         if self.is_class_returns:
             return _orig.asClass(val)
 
@@ -153,6 +160,16 @@ class Argument(NameContainable):
             return _module
         else:
             return ModuleData.from_module(orig)
+
+    def get_str_default(self):
+        _str = self.get_default(self.default)
+        if type(_str) == bool:
+            _str = int(_str)
+
+        if type(_str) == list:
+            _str = JSON(data = _str).dump()
+
+        return _str
 
     @field_serializer('default')
     def get_default(self, default) -> str:

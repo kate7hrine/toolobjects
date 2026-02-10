@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit
+{% endblock %}
+
+{% block body %}
+    <form method="post">
+        <div>
+            <span>Name</span>
+            <div>
+                <input type="text" name="name" value="{{item.local_obj.name or ''}}">
+            </div>
+        </div>
+        <div>
+            <span>Description</span>
+            <div>
+                <textarea name="description" id="">{{item.local_obj.description or ''}}</textarea>
+            </div>
+        </div>
+        <div>
+            <span>Collection</span>
+            <div>
+                <input value="1" type="checkbox" name="collection" {% if item.local_obj.collection %}checked{% endif %}>
+            </div>
+        </div>
+        <div>
+            <span>Public</span>
+            <div>
+                <input value="1" type="checkbox" name="public" {% if item.local_obj.public %}checked{% endif %}>
+            </div>
+        </div>
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}

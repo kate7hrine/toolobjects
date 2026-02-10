@@ -5,6 +5,7 @@ from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ListArgument import ListArgument
 from Data.Types.Int import Int
+from Data.Types.String import String
 from Data.Types.Boolean import Boolean
 from App.DB.Query.Condition import Condition
 from App.DB.Query.Values.Value import Value
@@ -21,8 +22,18 @@ class Search(Act):
                 orig = StorageItem,
                 assertions = [NotNone()]
             ),
+            Argument(
+                name = 'q',
+                orig = String,
+                default = None
+            ),
             ListArgument(
-                name = 'conditions',
+                name = 'conditions', # Conditions that will be applied before count()
+                default = [],
+                orig = Condition
+            ),
+            ListArgument(
+                name = 'offset_conditions', # Conditions that will be applied after count(), offset or something
                 default = [],
                 orig = Condition
             ),
@@ -40,6 +51,11 @@ class Search(Act):
                 name = 'only_public',
                 orig = Boolean,
                 default = True
+            ),
+            ListArgument(
+                name = 'only_object',
+                orig = String,
+                default = []
             ),
             ListArgument(
                 name = 'linked_to',
@@ -63,19 +79,17 @@ class Search(Act):
         _storage = i.get('storage')
 
         _query = _storage.adapter.getQuery()
-        if i.get('limit') > 0:
-            _query.limit(i.get('limit'))
-
         for condition in i.get('conditions'):
             _query.addCondition(condition)
 
         for key in ['linked_to', 'not_linked_to']:
             _operator = {'linked_to': 'in', 'not_linked_to': 'not_in'}[key]
             _ids = list()
-            if len(i.get(key)) == 0:
+            _val = i.get(key)
+            if len(_val) == 0:
                 continue
 
-            for link in i.get(key):
+            for link in _val:
                 _item = link.getItem()
                 if _item == None:
                     self.log(f"{link.getId()}: not exists in this db")
@@ -123,8 +137,53 @@ class Search(Act):
                 )
             ))
 
+        q = i.get('q')
+        if q and len(q) > 0:
+            _query.addCondition([Condition(
+                val1 = Value(
+                    column = 'content',
+                    json_fields = ['local_obj', 'name']
+                ),
+                operator = 'contains',
+                val2 = Value(
+                    value = q
+                )
+            ),
+            Condition(
+                val1 = Value(
+                    column = 'content',
+                    json_fields = ['obj', 'name']
+                ),
+                operator = 'contains',
+                val2 = Value(
+                    value = q
+                )
+            )
+            ])
+
+        only_objects = i.get('only_object')
+        if only_objects and len(only_objects) > 0:
+            _query.addCondition(Condition(
+                val1 = Value(
+                    column = 'content',
+                    json_fields = ['obj', 'saved_via', 'object_name']
+                ),
+                operator = 'in',
+                val2 = Value(
+                    value = only_objects
+                )
+            ))
+
         for condition in i.get('sort'):
             _query.addSort(condition)
+
+        _objects.total_count = _query.count()
+
+        for condition in i.get('offset_conditions'):
+            _query.addCondition(condition)
+
+        if i.get('limit') > 0:
+            _query.limit(i.get('limit'))
 
         for item in _query.getAll():
             try:
@@ -132,5 +191,4 @@ class Search(Act):
             except Exception as e:
                 self.log_error(e, exception_prefix = f"{item.uuid} not printing: ")
 
-        _objects.total_count = _query.count()
         return _objects

@@ -7,11 +7,11 @@ class Get(Displayment):
 
     async def render_as_page(self, request, context):
         query = request.rel_url.query
-        do_load = query.get('load') == '1'
         obj = app.ObjectsList.getByName(query.get('name'))
+        do_load = query.get('load') == '1'
         mro_items = None
 
-        if do_load:
+        if do_load or obj.is_inited:
             obj.loadModuleLater()
 
             mro_items = list()

@@ -58,8 +58,10 @@ class Client(Server):
             'app_name': self.getOption('app.name'),
             'user': self._get_current_user(request),
             'tr': app.Locales.get,
+            'request': request,
             'current_url': request.rel_url,
-            'categories': categories
+            'global_app_categories': categories,
+            'len': len
         }
 
     def _auth(self, args: dict, request):
@@ -115,7 +117,7 @@ class Client(Server):
 
                 return response
             except Exception as e:
-                return aiohttp_jinja2.render_template('Users/login.html', request, {'error': str(e)})
+                return aiohttp_jinja2.render_template('Users/login.html', request, {'special_message': str(e)})
 
     async def _logout(self, request):
         response = aiohttp.web.HTTPFound('/')
@@ -153,7 +155,11 @@ class Client(Server):
             return await PageIndex().render_as_error(request, _context)
 
         try:
-            return await displayment[0]().render_as_page(request, _context)
+            item = displayment[0]()
+            item.request = request
+            item.context = _context
+            item.auth = self._get_current_user(request)
+            return await item.render_as_page(request, _context)
         except Exception as e:
             _context.update({'error_message': str(e)})
 

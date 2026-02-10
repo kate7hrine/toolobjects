@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ obj._getNameJoined() }} (execute)
+{% endblock %}
+
+{% block body %}
+    <a href="/?i=App.Objects.Index.Get&name={{obj._getNameJoined()}}"><<< Object</a>
+    <h2>{{ obj._getNameJoined() }}</h2>
+
+    <form method="post">
+        <div>
+            {% if arguments %}
+                {% for argument in arguments.toList() %}
+                    <div>
+                        <b>{{ argument.name }}</b>
+                        <div>
+                            <textarea name="{{argument.name}}">{{argument.get_str_default() or ''}}</textarea>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div id='custom_args'></div>
+                <div>
+                    <label><input type="checkbox" checked value="1" name="stay">Stay on page</label>
+                </div>
+            {% endif %}
+            <div>
+                <div>
+                    {% if arguments and arguments.missing_args_inclusion == False %}
+                        <div><b>Notice: custom arguments will not be counted.</b></div>
+                    {% endif %}
+                    <input type="text" id="_add_name">
+                    <input type="button" onclick="_add()" value="Insert argument">
+                </div>
+            </div>
+        </div>
+        <input type="submit" value="Execute">
+    </form>
+
+    <script>
+        function _add(name) {
+            if (name == null) {
+                name = document.querySelector('#_add_name').value
+                document.querySelector('#_add_name').value = ''
+            }
+            if (name == '') {
+                return
+            }
+            document.querySelector('#custom_args').insertAdjacentHTML('beforeend', `
+                <div>
+                    <b>${escapeHtml(name)}</b>
+                    <div>
+                        <textarea name="${escapeHtml(name)}"></textarea>
+                    </div>
+                </div>
+            `)
+        }
+    </script>
+
+    {% if data %}
+        <div>
+            <hr>
+            <textarea class="heighted" name="results">{{data}}</textarea>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -10,6 +10,7 @@ from App.Objects.Mixins.BaseModel import BaseModel
 
 class Query(BaseModel, ABC):
     conditions: list[Condition] = []
+    or_conditions: list[Condition] = []
     sorts: list[Sort] = []
     _limit: int = None
     operators: ClassVar[list] = []
@@ -47,7 +48,7 @@ class Query(BaseModel, ABC):
     def getLimit(self) -> int:
         return self._limit
 
-    def addCondition(self, condition: Condition) -> Self:
+    def addCondition(self, condition: Condition | list[Condition]) -> Self:
         self.conditions.append(condition)
 
         return self
@@ -59,6 +60,19 @@ class Query(BaseModel, ABC):
 
     def _applyConditions(self) -> Self:
         for item in self.conditions:
+            if type(item) == list:
+                br = True
+                for _item in item:
+                    if _item.applied:
+                        br = False
+
+                    _item.applied = True
+
+                if br:
+                    self._applyOrCondition(item)
+
+                continue
+
             if item.applied == True:
                 continue
 

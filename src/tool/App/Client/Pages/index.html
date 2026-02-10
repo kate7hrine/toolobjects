@@ -6,18 +6,6 @@
 
 {% block body %}
     <div>
-        {% for key, item in categories.items() %}
-            {% if len(item) > 0 %}
-                <b>{{ tr(key) }}</b>
-
-                <div>
-                    {% for category_item in item %}
-                        <div>
-                            <a href="{{ category_item.get_url() }}">{{ category_item.get_name() }}</a>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endfor %}
+        {% include "Components/menu.html" %}
     </div>
 {% endblock %}

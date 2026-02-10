@@ -342,7 +342,7 @@ class SQLAlchemy(ConnectionAdapter):
                 if _item.func:
                     for _func in self.functions:
                         if _func.operator == _item.func:
-                            return _func()._implementation(_item, _val, self._get_part(condition, 1))
+                            return _func()._condition_get(_item, _val, self._get_part(condition, 1))
 
                 return _val
 
@@ -363,8 +363,21 @@ class SQLAlchemy(ConnectionAdapter):
                     return self
 
             self.log('error: can\'t find operator function')
+
+            # This won't work, but we can't get further
             self._query = getattr(self, condition.operator)(condition)
             return self
+
+        def _applyOrCondition(self, conditions):
+            from sqlalchemy import or_
+
+            conds = list()
+            for condition in conditions:
+                for val in self.operators:
+                    if condition.operator == val.operator:
+                        conds.append(val()._condition_get(self, self._query, condition))
+
+            self._query = self._query.filter(or_(*conds))
 
         def _applySort(self, sort: Sort):
             from sqlalchemy import desc

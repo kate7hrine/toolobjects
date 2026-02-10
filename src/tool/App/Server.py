@@ -24,6 +24,7 @@ from App.Objects.Threads.ExecutionThread import ExecutionThread
 from typing import Optional, Coroutine, ClassVar
 from aiohttp import web
 from App import app
+from pathlib import Path
 
 class Server(View):
     roles: ClassVar[dict] = {
@@ -245,11 +246,12 @@ class Server(View):
             return web.HTTPNotFound(text="Item is not a storage unit")
 
         storage_path = storage_unit.getDir()
-        file = storage_path / path
+        file: Path = storage_path.joinpath(path)
 
         try:
-            file.resolve().relative_to(storage_path.resolve())
-        except (ValueError, RuntimeError):
+            file.absolute().relative_to(storage_path.resolve())
+        except (ValueError, RuntimeError) as e:
+            self.log_error(e)
             raise web.HTTPForbidden(reason="Access denied")
 
         if not file.is_file():

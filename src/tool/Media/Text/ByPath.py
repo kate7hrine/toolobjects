@@ -76,8 +76,8 @@ class ByPath(ByPath):
             obj = i.get('object')()
             if copy_file == False:
                 obj.value = text
-                obj.has_set_from_file = True
             else:
                 obj.set_storage_unit(storage_unit)
+                obj.has_set_from_file = False
 
             yield obj

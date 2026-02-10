@@ -11,12 +11,12 @@ class ArgumentDict(DictList):
 
     missing_args_inclusion: bool = Field(default = False)
 
+    '''
     def add(self, name: str, argument: Argument):
-        '''
         Appends new argument by name
-        '''
 
         self.items[name] = argument
+    '''
 
     def get(self, name: str, default: str | Any = None) -> Any:
         '''
@@ -65,7 +65,7 @@ class ArgumentDict(DictList):
         else:
             return inputs
 
-    def join(self, another_dict) -> Self:
+    def join(self, another_dict, except_those: Optional[list[str]] = []) -> Self:
         '''
         Appends another ArgumentDict's items to current ArgumentDict
         '''
@@ -73,7 +73,8 @@ class ArgumentDict(DictList):
         _names = self.toNames()
 
         for item in another_dict.items:
-            if item.get_name_for_dictlist() in _names:
+            _name = item.get_name_for_dictlist()
+            if _name in _names or _name in except_those:
                 # self.log('\"{0}\" is already exists'.format(item.get_name_for_dictlist()))
                 continue
 

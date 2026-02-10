@@ -8,7 +8,6 @@ class Index(Displayment):
     async def render_as_page(self, request, context):
         context.update({
             'is_index': True,
-            'len': len
         })
 
         return aiohttp_jinja2.render_template('index.html', request, context)
