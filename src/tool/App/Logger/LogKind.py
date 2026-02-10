@@ -22,7 +22,7 @@ class LogKind(Object):
     value: LogKindEnum = Field(default = LogKindEnum.message)
 
     def get_color(self) -> ColorsEnum:
-        match(self.kind.value):
+        match(self.value.value):
             case LogKindEnum.error.value:
                 return ColorsEnum.red.value
             case LogKindEnum.success.value:

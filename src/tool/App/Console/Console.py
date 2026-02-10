@@ -8,7 +8,10 @@ from App.Logger.Log import Log
 class Console(View):
     @staticmethod
     def printLog(to_print: Log = None):
-        print(to_print.toStr())
+        try:
+            print(to_print.toStr())
+        except Exception as e:
+            print(e)
 
     async def implementation(self, i: dict = {}):
         executable = i.get('i')

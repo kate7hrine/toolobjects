@@ -3,6 +3,9 @@ from typing import Any
 from pathlib import Path
 import importlib
 
+class NotAnObjectError(Exception):
+    pass
+
 class LoadedObject(Object):
     is_success: bool = False
     is_submodule: bool = False
@@ -61,12 +64,17 @@ class LoadedObject(Object):
         assert common_object != None, f"{module_name}: {self.title} is not found"
 
         try:
-            assert issubclass(common_object, Object), f"{module_name} probaly is not an Object"
+            if issubclass(common_object, Object) == False:
+                raise NotAnObjectError(f"{module_name} probaly is not an Object")
         except TypeError:
-            raise AssertionError(f"{module_name} is not a class")
+            raise NotAnObjectError(f"{module_name} is not a class")
 
         try:
             common_object.hooks.trigger('loaded')
+
+            # hack to mount singletone. Must be moved to 'hooks'
+            if hasattr(common_object, 'mount') == True:
+                common_object.mount()
         except Exception as e:
             print(e)
 

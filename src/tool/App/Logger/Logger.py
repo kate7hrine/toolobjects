@@ -12,22 +12,17 @@ class Logger(Object):
         def events(self) -> list:
             return ['log']
 
-        def __init__(self):
-            super().__init__()
+    @classmethod
+    def mount(cls):
+        from App import app
 
-            def _mount():
-                from App import app
-                traceback.print_list(traceback.extract_stack())
+        #app.Config.updateCompare()
+        logger = cls(
+            #skip_file = app.Config.get("logger.output.to_file"),
+            #limiter = LogLimiter(skip_categories = app.Config.get("logger.output.filters")),
+        )
 
-                #app.Config.updateCompare()
-                logger = Logger(
-                    #skip_file = app.Config.get("logger.output.to_file"),
-                    #limiter = LogLimiter(skip_categories = app.Config.get("logger.output.filters")),
-                )
-
-                app.mount('Logger', logger)
-
-            self.add('loaded', _mount)
+        app.mount('Logger', logger)
 
     def constructor(self):
         if True:

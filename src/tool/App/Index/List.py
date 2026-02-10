@@ -4,7 +4,8 @@ from Data.DictList import DictList
 from App import app
 from pathlib import Path
 from typing import Generator
-from .LoadedObject import LoadedObject
+from .LoadedObject import LoadedObject, NotAnObjectError
+import traceback
 
 class List(Object):
     id: Increment = None
@@ -26,6 +27,8 @@ class List(Object):
             try:
                 plugin.module = plugin.get_module()
                 plugin.succeed_load()
+            except NotAnObjectError:
+                pass
             except Exception as e:
                 plugin.failed_load(e)
 

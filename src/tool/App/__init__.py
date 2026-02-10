@@ -14,7 +14,7 @@ class _Wrap:
         try:
             self.Logger.log(msg, section = ['Wrap'])
         except:
-            print(msg)
+            pass
 
         # Not an Model, so we can attach any property
         setattr(self, name, item)

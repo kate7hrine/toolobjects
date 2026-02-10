@@ -53,7 +53,6 @@ class Hookable():
                 loop = asyncio.get_running_loop()
                 return loop.create_task(hook_func(*args, **kwargs))
 
-            print(hook_func)
             return hook_func(*args, **kwargs)
 
         def add(self, category: str, hook: Callable) -> None:
@@ -68,9 +67,8 @@ class Hookable():
         def trigger(self, category: str, *args, **kwargs) -> None:
             self.check_category(category)
 
-            print(self.items)
             for hook in self.items.get(category):
-                print(self.run(hook, *args, **kwargs))
+                self.run(hook, *args, **kwargs)
 
         # TODO
         async def await_trigger(self, category: str, *args, **kwargs) -> None:

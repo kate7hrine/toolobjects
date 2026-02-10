@@ -26,5 +26,4 @@ class Log(Object):
         return parts
 
     def toStr(self) -> str:
-        print(self.toParts())
         return " ".join(self.toParts()).replace("\\n", "\n")
