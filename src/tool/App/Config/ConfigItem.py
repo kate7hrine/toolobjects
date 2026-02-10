@@ -46,8 +46,10 @@ class ConfigItem(Object):
 
         self.values.values = {}
 
-    def get(self, option: str, default: str = None):
+    def get(self, option: str, default: str = None, raw: bool = False):
         got = self.values.get(option)
+        if raw == True:
+            got = self.values.values.get(option)
         if got == None:
             return default
 

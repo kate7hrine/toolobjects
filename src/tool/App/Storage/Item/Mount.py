@@ -22,4 +22,4 @@ class Mount(Act):
 
         assert _check_storage == None, 'storage item with this name is already mounted'
 
-        app.Storage.add(_item)
+        app.Storage.append(_item)

@@ -26,12 +26,12 @@ class Validable:
         Joins ArgumentDicts from all extended classes
         '''
 
-        # Takes current ArgumentDict cuz it can contain properties
+        # Takes current ArgumentDict
         _list = cls._arguments()
 
-        # Slicing 1 because first arguments already got
+        # Slicing current class
         for _class in cls.getMRO()[1:]:
-            if hasattr(_class, '_arguments') == True:
+            if hasattr(_class, '_arguments'):
                 new_arguments = _class._arguments()
                 if new_arguments == None:
                     continue

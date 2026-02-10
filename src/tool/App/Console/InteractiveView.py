@@ -30,7 +30,7 @@ class InteractiveView(ConsoleView):
 
                 _args['auth'] = i.get('auth')
                 results = await pre_i.execute(_args)
-                self._print_call(results, i.get('console_view.print_result'), i.get('console_view.print_as'))
+                self._print_call(results, i)
 
                 prev = _i
             except Exception as e:
