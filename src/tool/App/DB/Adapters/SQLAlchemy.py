@@ -10,6 +10,7 @@ from App.Objects.Requirements.Requirement import Requirement
 from App.Objects.Misc.UnknownObject import UnknownObject
 from Data.Increment import Increment
 from typing import Any, Generator
+from pydantic import Field
 import json
 
 class SQLAlchemy(ConnectionAdapter):
@@ -18,7 +19,15 @@ class SQLAlchemy(ConnectionAdapter):
         _query: Any = None
 
         def _getComparement(self, condition: Condition):
+            from sqlalchemy import func
+
+            if condition.json_fields != None:
+                _fields = '.'.join(condition.json_fields)
+                return func.json_extract(getattr(self._model, condition.getFirst()), '$.' + _fields)
+
             return getattr(self._model, condition.getFirst())
+
+            # return getattr(self._model, condition.getFirst())
 
         # naaah
         def _op_equals(self, condition):
@@ -90,7 +99,7 @@ class SQLAlchemy(ConnectionAdapter):
     # we have to put this into function :(to have links to the connection class and session)
     def _init_models(self_adapter):
         from sqlalchemy.ext.declarative import declarative_base
-        from sqlalchemy import Column, Integer, event, String
+        from sqlalchemy import Column, BigInteger, Integer, event, String, Text
 
         Base = declarative_base()
 
@@ -98,11 +107,11 @@ class SQLAlchemy(ConnectionAdapter):
             __tablename__ = 'links'
             _adapter = self_adapter
 
-            uuid = Column(Integer(), primary_key=True)
-            owner = Column(Integer(), nullable = True) # if null its links to db
-            target = Column(Integer())
-            role = Column(String(), nullable = True)
-            order = Column(Integer())
+            uuid = Column(BigInteger(), primary_key=True)
+            owner = Column(BigInteger(), nullable = True) # if null its links to db
+            target = Column(BigInteger())
+            role = Column(String(1000), nullable = True)
+            order = Column(BigInteger())
 
             def reorder(self, order: int = 0):
                 self.order = order
@@ -151,8 +160,8 @@ class SQLAlchemy(ConnectionAdapter):
             _orig = None
             order_index = None
 
-            uuid = Column(Integer(), primary_key=True)
-            content = Column(String(), nullable=False)
+            uuid = Column(BigInteger(), primary_key=True)
+            content = Column(Text(), nullable=False)
 
             def get_order_index(self):
                 if self.order_index == None:
@@ -252,17 +261,28 @@ class SQLAlchemy(ConnectionAdapter):
                 version = '2.0.44'
             ),
             Requirement(
+                name = 'SQLAlchemy-Utils'
+            ),
+            Requirement(
                 name = 'snowflake-id'
             )
         ]
 
-    def _init_hook(self):
-        connection_string = self.protocol_name + self.delimiter + self.getConnectionStringContent()
+    def _before_init_models(self):
+        pass
 
+    def _init_hook(self):
         self._set_id_gen()
-        self._get_engine(connection_string)
+        self._get_engine(self._get_sqlalchemy_connection_string_with_protocol())
+        self._before_init_models()
         self._init_models()
         # self._links_count = Increment(value = self._session.query(self.LinkAdapter).count())
+
+    def _get_sqlalchemy_connection_string(self):
+        return "{0}:{1}@{2}:{3}/{4}".format(self.username, self.password, self.host, self.port, self.db_name)
+
+    def _get_sqlalchemy_connection_string_with_protocol(self) -> str:
+        return self.protocol_name + self.delimiter + self._get_sqlalchemy_connection_string()
 
     def _get_engine(self, connection_str: str):
         from sqlalchemy import create_engine
@@ -279,3 +299,4 @@ class SQLAlchemy(ConnectionAdapter):
 
     _engine: Any = None
     _session: Any = None
+    delimiter: str = Field(default = '://')

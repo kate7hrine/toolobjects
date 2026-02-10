@@ -14,8 +14,6 @@ class ConnectionAdapter(Object, Protocol):
     __abstract__ = True
     _unserializable = ['_storage_item', '_id_gen', 'ObjectAdapter', 'LinkAdapter']
 
-    protocol: str = Field(default = 'none')
-    delimiter: str = Field(default = ':///')
     name: str = Field(default = 'objects')
     auto_commit: bool = Field(default = True)
 

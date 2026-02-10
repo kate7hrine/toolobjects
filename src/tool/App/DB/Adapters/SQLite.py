@@ -5,18 +5,9 @@ from pydantic import Field
 class SQLite(SQLAlchemy):
     protocol_name = 'sqlite'
     content: str = Field(default = None)
+    delimiter: str = Field(default = '://')
 
-    class QueryAdapter(SQLAlchemy.QueryAdapter):
-        def _getComparement(self, condition: Condition):
-            from sqlalchemy import func
-
-            if condition.json_fields != None:
-                _fields = '.'.join(condition.json_fields)
-                return func.json_extract(getattr(self._model, condition.getFirst()), '$.' + _fields)
-
-            return getattr(self._model, condition.getFirst())
-
-    def getConnectionStringContent(self):
+    def _get_sqlalchemy_connection_string(self):
         if self.content != None:
             return str(self.content)
         else:
