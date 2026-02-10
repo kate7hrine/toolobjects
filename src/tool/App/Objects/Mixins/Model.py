@@ -94,7 +94,7 @@ class Model(PydanticBaseModel):
         return None
 
     def to_minimal_json(self):
-        return self.to_json(only_class_fields=True, by_alias=True)
+        return self.to_json(only_class_fields=True, by_alias=True, exclude_defaults = True)
 
     def to_extended_json(self):
         return self.to_json(

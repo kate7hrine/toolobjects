@@ -29,7 +29,7 @@ class MountToConfig(Act):
 
         for item in _conf_val:
             assert item.get('name') != _item.name, "already in config"
-            assert _item.name not in app.Storage.default_names, "is default"
+            assert _item.name not in app.Storage.default_names, "already in config"
 
         _conf_val.append(_item.to_minimal_json())
         app.Config.getItem().set(_conf_name, _conf_val)

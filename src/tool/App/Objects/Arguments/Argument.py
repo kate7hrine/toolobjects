@@ -26,6 +26,11 @@ class Argument(NameContainable):
 
     current: Any = Field(default=None)
 
+    # Messages
+
+    not_passed_message: str = Field(default = '{0} not passed')
+    none_message: str = Field(default = '{0} with value {1} is None')
+
     def get_name_for_dictlist(self) -> str:
         return self.name
 
@@ -82,14 +87,6 @@ class Argument(NameContainable):
 
     def autoApply(self):
         self.current = self.getValue(None)
-
-    @property
-    def not_passed_message(self):
-        return 'not passed'
-
-    @property
-    def none_message(self):
-        return 'returned None'
 
     @field_serializer('orig')
     def get_orig(self, orig) -> str:
