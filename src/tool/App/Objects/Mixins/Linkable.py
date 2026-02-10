@@ -46,7 +46,8 @@ class Linkable(BaseModel):
         '''
 
         if self.getDb() != None:
-            return self.getDb().getLinks()
+            for item in self.getDb().getLinks():
+                yield item
 
         for item in self.links:
             yield item

@@ -8,6 +8,7 @@ from Data.Int import Int
 from App.Storage.DB.Adapters.Search.Condition import Condition
 from App.Storage.DB.Adapters.Search.Sort import Sort
 from App.Storage.StorageItem import StorageItem
+from App.Storage.StorageUUID import StorageUUID
 
 class Search(Act):
     @classmethod
@@ -35,19 +36,43 @@ class Search(Act):
             ),
             ListArgument(
                 name = 'linked_to',
-                default = [],
-                orig = Int
+                default = None,
+                orig = StorageUUID
+            ),
+            ListArgument(
+                name = 'not_linked_to',
+                default = None,
+                orig = StorageUUID
             )
         ])
 
     async def implementation(self, i) -> ObjectsList:
         _objects = ObjectsList(items = [])
         _storage = i.get('storage')
-        _links = i.get('linked_to')
 
         _query = _storage.adapter.getQuery()
         for condition in i.get('conditions'):
             _query.addCondition(condition)
+
+        for key in ['linked_to', 'not_linked_to']:
+            _operator = {'linked_to': 'in', 'not_linked_to': 'not_in'}[key]
+            _ids = list()
+            if i.get(key) == None:
+                continue
+
+            for link in i.get(key):
+                _item = link.getItem()
+                if _item == None:
+                    self.log(f"{link.getId()}: not exists in this db")
+
+                for linked_item in link.getItem().toPython().getLinked():
+                    _ids.append(linked_item.item.getDb().uuid)
+
+            _query.addCondition(Condition(
+                val1 = 'uuid',
+                operator = _operator,
+                val2 = _ids
+            ))
 
         for condition in i.get('sort'):
             _query.addSorting(condition)

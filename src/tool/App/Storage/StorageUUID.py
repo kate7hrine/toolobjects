@@ -25,6 +25,9 @@ class StorageUUID(Object):
 
         return _storage
 
+    def getId(self):
+        return f"{self.storage}_{self.uuid}"
+
     def getStorage(self):
         return app.Storage.get(self.storage)
 
@@ -37,3 +40,6 @@ class StorageUUID(Object):
         assert _storage != None, "storage with name {0} not found".format(self.storage)
 
         return _storage.adapter.ObjectAdapter.getById(self.uuid)
+
+    def toPython(self):
+        return self.getItem().toPython()

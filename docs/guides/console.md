@@ -26,7 +26,7 @@ change preexecutor:
 python tool.py -pre_i {wheel name}
 ```
 
-If you dont want to exit:
+Initialization is takes too long (~ 6 seconds), so if you dont want to exit:
 
 ```
 python tool.py -view App.Console.InteractiveView

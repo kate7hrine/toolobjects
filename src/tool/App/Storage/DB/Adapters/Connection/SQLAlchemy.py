@@ -23,7 +23,7 @@ class SQLAlchemy(ConnectionAdapter):
             return self._query.filter(self._getComparement(condition).in_(condition.getLast()))
 
         def _op_not_in(self, condition):
-            return self._query.filter(self._getComparement(condition).not_in_(condition.getLast()))
+            return self._query.filter(self._getComparement(condition).not_in(condition.getLast()))
 
         def _op_lesser(self, condition):
             return self._query.filter(self._getComparement(condition) < condition.getLast())
@@ -126,9 +126,9 @@ class SQLAlchemy(ConnectionAdapter):
 
             # Link functions
             def getLinks(self) -> Generator[CommonLink]:
-                links = _session.query(_LinkAdapter).filter(self.Link.owner == self.uuid)
+                links = _session.query(_LinkAdapter).filter(_LinkAdapter.owner == self.uuid)
                 for link in links:
-                    yield link.getLink()
+                    yield link.toPython()
 
             @classmethod
             def getQuery(cls):
