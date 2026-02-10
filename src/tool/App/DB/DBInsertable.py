@@ -130,16 +130,18 @@ class DBInsertable():
         if commit == True and self._db._adapter.auto_commit == False:
             self._db._adapter.commit()
 
-    def save(self) -> bool:
+    def save(self, do_commit: bool = True) -> bool:
         '''
         Updates linked db item if exists (save_hook)
         '''
+
+        self.save_hook()
 
         if self.hasDb() == False:
             return True
 
         self.getDb().flush_content(self)
-        if self._db._adapter.auto_commit == False:
+        if do_commit and self._db._adapter.auto_commit == False:
             self._db._adapter.commit()
 
         return True
@@ -148,4 +150,8 @@ class DBInsertable():
         pass
 
     def deletion_hook(self) -> None:
+        pass
+
+    def save_hook(self) -> None:
+        # Runs before save
         pass

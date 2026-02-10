@@ -57,7 +57,7 @@ class Hookable():
             try:
                 self._runHook(hook, *args, **kwargs)
             except Exception as e:
-                self.log_error(e, exception_prefix = 'hook caused error: ')
+                self.log_raw('[hooks] Hook caused error: {0}'.format(e))
 
     # TODO
     async def awaitTriggerHooks(self, category: str, *args, **kwargs) -> None:

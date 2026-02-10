@@ -150,4 +150,4 @@ class DefaultExecutorWheel(Act):
                 ),
             )
         ],
-        missing_args_inclusion = True).join_class(Save, ['link_to', 'link_max_depth'])
+        missing_args_inclusion = True).join_class(Save, ['link_to', 'link_max_depth', 'public'])

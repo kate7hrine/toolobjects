@@ -42,7 +42,12 @@ class Save(Act):
                 name = 'ignore_flush_hooks',
                 default = False,
                 orig = Boolean
-            )
+            ),
+            Argument(
+                name = 'public',
+                orig = Boolean,
+                default = True
+            ),
         ])
 
     async def _implementation(self, i):
@@ -58,7 +63,11 @@ class Save(Act):
             assert storage.has_db_adapter(), f"storage {storage.name} does not contains db connection"
 
             for item in i.get('items').getItems():
+                if i.get('public'):
+                    item.local_obj.make_public()
+
                 item.flush(storage, link_max_depth = i.get('link_max_depth'), ignore_flush_hooks = i.get('ignore_flush_hooks'))
+                item.save(do_commit = False)
 
                 results += 1
 
@@ -72,5 +81,3 @@ class Save(Act):
                 storage.adapter.commit()
 
             _i += 1
-
-        return AnyResponse(data = results)

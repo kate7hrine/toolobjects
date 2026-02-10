@@ -1,9 +1,7 @@
 from Media.Media import Media
 from App.Objects.Requirements.Requirement import Requirement
-from App.Objects.Misc.Thumbnail import Thumbnail
 from App.Objects.Relations.Submodule import Submodule
 from Web.HTTP.RequestHeaders import RequestHeaders
-from pathlib import Path
 
 class Image(Media):
     thumbnail_type = ['image']
@@ -68,29 +66,10 @@ class Image(Media):
         self.obj.width = data.size[0]
         self.obj.height = data.size[1]
 
-    def resize_by_percentage(self, data, percentage: float = 0.5):
-        sizes = (data.size[0], data.size[1])
-        new_sizes = (int(sizes[0] * percentage), int(sizes[1] * percentage))
-        resized_img = data.resize(new_sizes)
-        resized_img.convert('RGB')
-
-        thumb_image = Image()
-        thumb_image.move(self)
-        thumb_image._set_dimensions(resized_img)
-
-        filename = Path(data.filename)
-        _new_file_name = filename.stem + '_thumb_' + str(percentage) + filename.suffix
-        _new_name = filename.with_name(_new_file_name)
-        resized_img.save(_new_name)
-
-        thumb_image.set_insertion_name(_new_file_name)
-
-        return thumb_image
-
-    def save(self):
+    def save_hook(self):
         if self.obj.has_dimensions() == False:
+            self.log('setting image dimensions...')
+
             _read = self._read_file()
             self._set_dimensions(_read)
             self._reset_file()
-
-        super().save()

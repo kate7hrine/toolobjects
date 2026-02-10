@@ -15,11 +15,15 @@ class FileType(Object):
             return self.file
 
         if self.storage_unit != None:
-            # WORKAROUND
+            # ???
             self.storage_unit.setDb(self.getDb())
             return self.storage_unit.get_storage_unit().toFile()
 
     def move(self, new: Object):
+        '''
+        Copies "file" fields to this object
+        '''
+
         if new.file != None:
             self.file = new.file
 

@@ -18,7 +18,7 @@ class Video(Media):
         from Media.Download import Download
         from Media.ByStorageUnit import ByStorageUnit
         from Media.ByPath import ByPath
-        from Media.Videos.Thumbnails.FirstFrame import FirstFrame
+        from Media.Videos.Thumbnails.Frames import Frames
 
         return [
             Submodule(
@@ -34,7 +34,7 @@ class Video(Media):
                 role = ['media_method', 'wheel']
             ),
             Submodule(
-                item = FirstFrame,
+                item = Frames,
                 role = ['thumbnail']
             )
         ]
@@ -64,15 +64,17 @@ class Video(Media):
         self._vid = None
 
     def _set_dimensions(self, vid):
+        import av
+
         video_stream = next(s for s in vid.streams if s.type == 'video')
 
         self.obj.width = video_stream.codec_context.width
         self.obj.height = video_stream.codec_context.height
 
-    def save(self):
+        self.obj.duration = round(vid.duration / av.time_base, 5)
+
+    def save_hook(self):
         if self.obj.has_dimensions() == False:
             _read = self._read_file()
             self._set_dimensions(_read)
             self._reset_file()
-
-        super().save()
