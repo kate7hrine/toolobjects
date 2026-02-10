@@ -3,36 +3,10 @@ from typing import Callable
 
 class Convertable(BaseModel):
     @classmethod
-    def getConverters(cls) -> list:
-        pass
-
-    @classmethod
-    def ignorePreviousConverters(cls) -> bool:
-        return False
-
-    @classmethod
-    def getAllConverters(cls) -> list:
-        _all = []
-
-        for item in cls.getMRO():
-            if hasattr(item, 'getConverters') == True:
-                _list = item.getConverters()
-                if _list == None:
-                    continue
-
-                for item in _list:
-                    _all.append(item)
-
-                if item.ignorePreviousConverters() == True:
-                    break
-
-        return _all
-
-    @classmethod
     def findConvertationsForClass(cls, for_class: BaseModel) -> list:
         converters = []
-        for item in cls.getAllConverters():
-            if item.converts_to == for_class:
+        for item in cls.getAllSubmodules():
+            if 'convertation' in item.role and item.module.converts_to == for_class:
                 converters.append(item)
 
         return converters
@@ -43,5 +17,5 @@ class Convertable(BaseModel):
 
         assert _conv != None, 'no convertation for this'
 
-        _itm = _conv()
+        _itm = _conv.module()
         return await _itm.execute(i = {'orig': self})

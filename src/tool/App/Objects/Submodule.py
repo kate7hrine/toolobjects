@@ -14,7 +14,7 @@ class Submodule(BaseModel):
 
     module: Any
     value: ConnectionEnum = Field(default = ConnectionEnum.INTERNAL.value)
-    role: list[Literal['object', 'wheel']] = Field(default = ['object'])
+    role: list[Literal['object', 'wheel', 'convertation']] = Field(default = ['object'])
     '''
     what roles are exists?
     

@@ -1,5 +1,6 @@
 from App.Objects.Object import Object
 from pydantic import Field
+from App.Objects.Submodule import Submodule
 
 class XML(Object):
     '''
@@ -8,7 +9,12 @@ class XML(Object):
     xml: str = Field()
 
     @classmethod
-    def getConverters(cls) -> list:
+    def getSubmodules(cls) -> list:
         from Data.XMLToJson import XMLToJson
 
-        return [XMLToJson]
+        return [
+            Submodule(
+                module = XMLToJson,
+                role = ['convertation']
+            )
+        ]
