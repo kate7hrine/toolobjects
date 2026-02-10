@@ -7,7 +7,8 @@ class Linkable(BaseModel):
     Object that can contain links to other objects
     '''
 
-    links: list[Link] = Field(default=[], exclude = True, repr = False)
+    #links: list[Link] = Field(default=[], exclude = True, repr = False)
+    links: list[Link] = []
 
     def link(self, object, role: list = []):
         _link = Link(
@@ -63,16 +64,28 @@ class Linkable(BaseModel):
     @model_serializer
     def serialize_model_with_links(self) -> dict:
         result = dict()
+        _field_names = list()
         for field_name in self.__class__.model_fields:
+            _field_names.append(field_name)
+        for field_name in self.__class__.model_computed_fields:
+            _field_names.append(field_name)
+
+        for field_name in _field_names:
             value = getattr(self, field_name)
 
-            if self._convert_links == True:
-                if isinstance(value, LinkInsertion):
+            if isinstance(value, LinkInsertion):
+                value.setDb(self.getDb())
+                if self._convert_links == True:
                     result[field_name] = value.unwrap()
-                elif isinstance(value, list) and value and isinstance(value[0], LinkInsertion):
-                    result[field_name] = [item.unwrap() for item in value]
                 else:
                     result[field_name] = value
+            elif (isinstance(value, list) and value and isinstance(value[0], LinkInsertion)):
+                result[field_name] = []
+                for item in value:
+                    item.setDb(self.getDb())
+
+                    if self._convert_links == True:
+                        result.get('field_name').append(item.unwrap())
             else:
                 result[field_name] = value
 

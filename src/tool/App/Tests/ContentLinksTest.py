@@ -1,6 +1,7 @@
 from App.Objects.Test import Test
 from Data.Text import Text
 from Data.JSON import JSON
+from App import app
 
 class ContentLinksTest(Test):
     async def implementation(self, i):
@@ -11,10 +12,21 @@ class ContentLinksTest(Test):
 
         _text.text = _got_link.toInsert(["text"])
 
-        _json = JSON(data = _text.to_json())
-        _json_no_links = JSON(data = _text.to_json(convert_links = False))
+        #_json = JSON(data = _text.to_json())
+        #_json_no_links = JSON(data = _text.to_json(convert_links = False))
 
-        self.log_error('with removed links:')
+        #self.log_error('with removed links:')
+        #self.log_raw(_json.dump(indent = 4))
+        #self.log_error('with links:')
+        #self.log_raw(_json_no_links.dump(indent = 4))
+
+        self.log_success('trying to flush this into db')
+
+        _storage = app.Storage.get('tmp')
+        _item = _storage.adapter.flush(_text)
+
+        self.log_error('returning object')
+
+        _json = JSON(data = _item.getObject().to_json(convert_links = 'unwrap'))
+
         self.log_raw(_json.dump(indent = 4))
-        self.log_error('with links:')
-        self.log_raw(_json_no_links.dump(indent = 4))

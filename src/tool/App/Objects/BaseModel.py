@@ -1,5 +1,6 @@
 from pydantic import BaseModel as PydanticBaseModel, computed_field, Field
 from App.Objects.LinkInsertion import LinkInsertion
+from typing import Literal
 
 class BaseModel(PydanticBaseModel):
     '''
@@ -24,20 +25,30 @@ class BaseModel(PydanticBaseModel):
     def constructor(self):
         pass
 
-    def to_json(self, convert_links: bool = True, exclude_internal: bool = True):
+    def to_json(self, 
+                convert_links: Literal['unwrap', 'none'] = 'none', 
+                exclude_internal: bool = True,
+                exclude_none: bool = False,
+                exclude: list[str] = []):
         '''
         convert_links: replace LinkInsertions with their "unwrap()" function results
 
         exclude_internal: exclude fields from "self._internal_fields"
         '''
-        excludes = set()
 
+        excludes = []
         if exclude_internal == True:
-            excludes = self._internal_fields
+            excludes = list(self._internal_fields)
+        for item in exclude:
+            excludes.append(item)
 
-        self._convert_links = convert_links
+        self._convert_links = False
+        if convert_links == 'unwrap':
+            self._convert_links = True
 
-        return self.model_dump(mode='json', exclude=excludes)
+        return self.model_dump(mode = 'json', 
+                               exclude=excludes, 
+                               exclude_none = exclude_none)
 
     @classmethod
     def getMRO(cls) -> list:

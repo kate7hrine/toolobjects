@@ -6,7 +6,7 @@ from typing import Literal, Any
 from App import app
 
 class Log(Object):
-    class Colors():
+    class ConsoleColors():
         reset = "\033[0m"
         message = "\033[0m"
         section = "\u001b[35m"
@@ -24,20 +24,20 @@ class Log(Object):
     def toParts(self,
                 show_time: bool = True,
                 show_role: bool = False) -> list[str]:
-        RESET = self.Colors.reset
+        RESET = self.ConsoleColors.reset
 
         parts = []
         if show_time == True:
             parts.append(self.time.strftime("%H:%M:%S.%f"))        
 
-        parts.append(self.Colors.section + self.section.toString() + RESET)
+        parts.append(self.ConsoleColors.section + self.section.toString() + RESET)
         if self.prefix != None:
-            parts.append(self.Colors.prefix + self.prefix.toString() + RESET)
+            parts.append(self.ConsoleColors.prefix + self.prefix.toString() + RESET)
 
         if show_role == True:
             if len(self.role) > 0:
                 _role = ", ".join(self.role)
-                parts.append(self.Colors.deprecated + f"<{_role}>" + RESET)
+                parts.append(self.ConsoleColors.deprecated + f"<{_role}>" + RESET)
 
         parts.append(self.getColor() + self.message + RESET)
         parts.append(RESET)
@@ -51,6 +51,6 @@ class Log(Object):
     def getColor(self) -> str:
         for item in ['success', 'error', 'deprecated', 'message']:
             if item in self.role:
-                return getattr(self.Colors, item)
+                return getattr(self.ConsoleColors, item)
 
-        return self.Colors.message
+        return self.ConsoleColors.message

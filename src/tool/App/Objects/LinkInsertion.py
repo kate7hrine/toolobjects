@@ -1,12 +1,21 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_serializer
 from typing import Any
+from App.Storage.DB.DBInsertable import DBInsertable
 
-class LinkInsertion(BaseModel):
-    link: Any = Field()
+class LinkInsertion(BaseModel, DBInsertable):
+    link: int | Any = Field()
     field: list[str] = Field(default = [])
 
+    def _getLink(self):
+        # fuck my life
+        # what im fuckin doin😭😭😭
+        if type(self.link) == int:
+            return self.getDb().Link.getById(self.link).getLink()
+
+        return self.link
+
     def unwrap(self):
-        _item = getattr(self.link, 'item')
+        _item = getattr(self._getLink(), 'item')
 
         if len(self.field) > 0:
             _main_item = _item
@@ -16,3 +25,12 @@ class LinkInsertion(BaseModel):
             return _main_item
 
         return _item
+
+    @model_serializer
+    def serialize(self) -> dict:
+        vals = dict()
+        vals['field'] = self.field
+        if self._getLink().getDb() != None:
+            vals['link'] = self._getLink().getDbId()
+
+        return vals

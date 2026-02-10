@@ -1,11 +1,10 @@
-from pydantic import Field
 from .ObjectMeta import ObjectMeta
 from .SavedVia import SavedVia
 from typing import ClassVar
 from pydantic import Field, computed_field
 
 class Saveable():
-    _internal_fields = ['meta', 'saved_via']
+    _internal_fields: ClassVar[str] = ['meta', 'saved_via', 'links']
     self_name: ClassVar[str] = 'Saveable'
 
     '''

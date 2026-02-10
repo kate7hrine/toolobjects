@@ -2,7 +2,6 @@ from App.Storage.DB.Adapters.ConnectionAdapter import ConnectionAdapter
 from App.Storage.DB.Adapters.ObjectAdapter import ObjectAdapter
 from App.Storage.DB.Adapters.ObjectLinkAdapter import ObjectLinkAdapter
 from App.Objects.Object import Object
-from App.Objects.Link import Link
 from snowflake import SnowflakeGenerator
 from typing import Any
 import json
@@ -38,8 +37,16 @@ class SQLAlchemyAdapter(ConnectionAdapter):
                 target = Column(Integer())
                 role = Column(String())
 
-            def getById(self, id: int):
-                return session.query(self.__class__).get(id)
+                def getTarget(self):
+                    return ObjectUnit.getById(self.target)
+
+                @classmethod
+                def getById(cls, id: int):
+                    return session.query(cls).get(id)
+
+            @classmethod
+            def getById(cls, id: int):
+                return session.query(cls).get(id)
 
             def getLinks(self) -> list:
                 pass
@@ -52,20 +59,26 @@ class SQLAlchemyAdapter(ConnectionAdapter):
                 session.add(_link)
                 session.commit()
 
+                link.setDb(_link)
+
             def removeLink(self, link):
                 pass
+
+            def flush_content(self, obj: Object):
+                _data = obj.to_json(
+                    exclude_internal = True,
+                    exclude = ['links'],
+                    convert_links = False,
+                    exclude_none = True
+                )
+                self.content = json.dumps(_data)
 
             def flush(self, 
                       obj: Object, 
                       current_level: int = 0, 
                       max_depth: int = 10):
 
-                self.content = json.dumps(
-                    obj.to_json(
-                        exclude_internal = False,
-                        convert_links = False
-                    )
-                )
+                self.flush_content(obj)
 
                 session.add(self)
                 session.commit()
@@ -76,16 +89,15 @@ class SQLAlchemyAdapter(ConnectionAdapter):
                         _obj = self.__class__()
                         _obj.flush(
                             obj = link.item,
-                            #session = session,
                             current_level = current_level + 1,
                             max_depth = max_depth
                         )
 
-                        self.addLink(
-                            #session = session, 
-                            link = link)
+                        self.addLink(link = link)
 
                 obj.setDb(self)
+                self.flush_content(obj)
+                session.commit()
 
         @event.listens_for(ObjectUnit, 'before_insert', propagate=True)
         @event.listens_for(ObjectUnit.Link, 'before_insert', propagate=True)
