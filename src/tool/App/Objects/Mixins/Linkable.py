@@ -1,9 +1,8 @@
 from pydantic import Field, model_serializer, BaseModel
 from App.Objects.Relations.Link import Link
-from collections import deque
 from typing import ClassVar, Generator
 
-class Linkable(BaseModel):
+class Linkable():
     '''
     Object that can contain links to other objects
     '''
@@ -11,7 +10,6 @@ class Linkable(BaseModel):
     links: list[Link] = Field(default=[], exclude = True, repr = False)
     dynamic_links: bool = Field(default = False)
     supports_dynamic_links: ClassVar[bool] = False
-    #links: deque[Link] = Field(deque(), exclude = True)
 
     def link(self, object, role: list = []):
         _link = Link(

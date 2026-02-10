@@ -17,9 +17,9 @@ class User(Object):
 
     def can(self, action: str, object: Object):
         # ???
-        return Permission.check(Permission.getPermissions(Permission(
+        return Permission.check(Permission(
             object_name = object.getClassNameJoined(),
             user = self.name,
             action = action,
             allow = True
-        )))
+        ))

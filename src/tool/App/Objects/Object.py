@@ -1,5 +1,4 @@
 from .Mixins.BaseModel import BaseModel
-from .Mixins.Section import Section
 from .Mixins.Hookable import Hookable
 from .Mixins.Configurable import Configurable
 from .Mixins.Linkable import Linkable
@@ -15,7 +14,6 @@ from App import app
 class Object(BaseModel, 
              Linkable, 
              ModuleRequireable, 
-             Section, 
              Submodulable, 
              Hookable, 
              Configurable, 

@@ -1,10 +1,11 @@
-from App.Objects.Mixins.BaseModel import BaseModel
+from App.Objects.Object import BaseModel
+from App.DB.DBInsertable import DBInsertable
 from pydantic import Field
 from typing import Literal
 from App import app
 from App.DB.Query.Condition import Condition
 
-class Permission(BaseModel):
+class Permission(BaseModel, DBInsertable):
     object_name: str = Field()
     user: str = Field()
     uuid: int = Field(default = None)
@@ -33,8 +34,8 @@ class Permission(BaseModel):
                         json_fields = [key]
                     ))
 
-        return _query.getAll()
+        return _query
 
     @classmethod
     def check(cls, likeness: BaseModel = None):
-        return len(list(cls.getPermissions(likeness))) > 0
+        return cls.getPermissions(likeness).count() > 0

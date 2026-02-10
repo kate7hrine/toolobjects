@@ -1,11 +1,11 @@
-from pydantic import BaseModel as PydanticBaseModel
 from typing import Any
 from App.Objects.Misc.ObjectMeta import ObjectMeta
 from App.Objects.Misc.SavedVia import SavedVia
+from App.Objects.Mixins.Section import Section
 from App.Objects.Mixins.Model import Model
 from pydantic import Field, model_validator
 
-class BaseModel(Model):
+class BaseModel(Model, Section):
     obj: ObjectMeta = Field(default = ObjectMeta())
 
     @model_validator(mode='after')

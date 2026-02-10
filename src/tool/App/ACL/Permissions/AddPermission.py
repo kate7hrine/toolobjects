@@ -2,6 +2,7 @@ from App.Objects.Act import Act
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.ACL.Permissions.Permission import Permission
+from App import app
 
 class AddPermission(Act):
     @classmethod
@@ -14,4 +15,4 @@ class AddPermission(Act):
         ])
 
     def implementation(self, i):
-        pass
+        app.AuthLayer.add_permission(i.get('permission'))

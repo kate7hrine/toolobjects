@@ -46,6 +46,9 @@ class AuthLayer(Object):
     def add_user(self, user: User):
         user.flush(app.Storage.get('users'))
 
+    def add_permission(self, permission: Permission):
+        permission.flush(app.Storage.get('users'))
+
     @classmethod
     def mount(cls):
         _layer = cls()
