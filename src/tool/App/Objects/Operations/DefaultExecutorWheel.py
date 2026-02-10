@@ -3,7 +3,7 @@ from App.Objects.Object import Object
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ListArgument import ListArgument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Arguments.Assertions.InputNotInValues import InputNotInValues
 from App.Objects.Arguments.ArgumentValues import ArgumentValues
 from App.Objects.Responses.ObjectsList import ObjectsList
@@ -86,7 +86,7 @@ class DefaultExecutorWheel(Act):
                 # default = 'App.Queue.Run',
                 orig = Object,
                 assertions = [
-                    NotNoneAssertion(),
+                    NotNone(),
                     InputNotInValues(values=['App.Console.ConsoleView', 'App.Console.ConsoleView.ConsoleView'])
                 ],
                 documentation = Documentation(

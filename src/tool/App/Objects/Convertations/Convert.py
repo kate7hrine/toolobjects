@@ -2,7 +2,7 @@ from App.Objects.Act import Act
 from App.Objects.Object import Object
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 
 class Convert(Act):
     @classmethod
@@ -12,12 +12,12 @@ class Convert(Act):
                 name = 'from',
                 id_allow = True,
                 orig = Object,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             Argument(
                 name = 'to',
                 orig = Object,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             )
         ])
 

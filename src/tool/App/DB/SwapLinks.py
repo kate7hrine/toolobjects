@@ -1,7 +1,7 @@
 from App.Objects.Act import Act
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Storage.StorageUUID import StorageUUID
 
 class SwapLinks(Act):
@@ -11,12 +11,12 @@ class SwapLinks(Act):
             Argument(
                 name = 'uuid1',
                 orig = StorageUUID,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             Argument(
                 name = 'uuid2',
                 orig = StorageUUID,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             )
         ])
 

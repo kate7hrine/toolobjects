@@ -2,7 +2,7 @@ from App.Objects.Test import Test
 from App.Objects.Object import Object
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from Data.Int import Int
 from Data.Boolean import Boolean
 from Data.Float import Float
@@ -20,7 +20,7 @@ class ExecuteIterative(Test):
             Argument(
                 name = 'i_2',
                 orig = Object,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             Argument(
                 name = 'start_iteration',

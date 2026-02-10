@@ -1,7 +1,7 @@
 from App.Objects.Act import Act
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Responses.ObjectsList import ObjectsList
 from Data.String import String
 from Data.Boolean import Boolean
@@ -14,7 +14,7 @@ class Get(Act):
             Argument(
                 name = 'name',
                 orig = String,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             Argument(
                 name = 'load_module',

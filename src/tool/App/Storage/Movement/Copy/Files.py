@@ -3,7 +3,7 @@ from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.LiteralArgument import LiteralArgument
 from App.Objects.Responses.ObjectsList import ObjectsList
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from Data.String import String
 from pathlib import Path
 import shutil, datetime
@@ -15,12 +15,12 @@ class Files(Act):
             Argument(
                 name = 'items',
                 orig = ObjectsList,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             Argument(
                 name = 'directory',
                 orig = String,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             LiteralArgument(
                 values = ['{0}.{1}', '{0}_{2}.{1}', '{0}_{3}.{1}'],

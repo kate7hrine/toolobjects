@@ -1,11 +1,11 @@
 from App.Objects.Extractor import Extractor
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Arguments.Argument import Argument
 from Data.String import String
 from Data.Boolean import Boolean
 from Media.Images.Image import Image
-from Media.Images.List import List
+from Media.Images.List.List import List
 from Media.Images.MakeImageThumbnail import MakeImageThumbnail
 from App.Objects.Misc.Source import Source
 from Web.URL import URL
@@ -18,10 +18,10 @@ class Download(Extractor):
             Argument(
                 name = 'url',
                 orig = String,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             ),
             Argument(
-                name = 'gallery',
+                name = 'list',
                 id_allow = True,
                 orig = List
             ),
@@ -46,7 +46,7 @@ class Download(Extractor):
             value = i.get('url')
         )
         filename = i.get('filename')
-        gallery = i.get('gallery')
+        gallery = i.get('list')
         if filename == None:
             filename = _url.get_filename()
             if filename == None:

@@ -7,7 +7,7 @@ from Web.RSS.Response import Response
 from Web.RSS.ChannelItem import ChannelItem
 from pydantic import Field
 from typing import Optional, Self
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 import datetime
@@ -24,7 +24,7 @@ class GetFeed(Extractor):
             Argument(
                 name = 'url',
                 orig = String,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             )
         ])
 

@@ -3,27 +3,29 @@ from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ListArgument import ListArgument
 from App.Objects.Arguments.Assertions.NotNone import NotNone
-from App.Objects.Responses.ObjectsList import ObjectsList
-from Data.String import String
-from App import app
+from Media.Images.List.List import List
+from Media.Media import Media
 
-class Get(Act):
+class Add(Act):
     @classmethod
     def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
+            Argument(
+                name = 'list',
+                orig = List,
+                assertions = [NotNone()]
+            ),
             ListArgument(
-                name = 'key',
-                orig = String,
+                name = 'images',
+                orig = Media,
+                id_allow = True,
                 assertions = [NotNone()]
             )
         ])
 
     def implementation(self, i):
-        _list = ObjectsList(items = [], unsaveable = True)
+        gallery = i.get('list')
+        images = i.get('images')
 
-        for key in i.get('key'):
-            _key = app.Locales.get(key)
-            if _key != None:
-                _list.append(_key)
-
-        return _list
+        for image in images:
+            gallery.link(image)

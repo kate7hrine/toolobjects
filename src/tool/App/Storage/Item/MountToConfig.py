@@ -1,7 +1,7 @@
 from App.Objects.Act import Act
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
-from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Arguments.Assertions.NotNone import NotNone
 from App.Storage.Item.StorageItem import StorageItem
 from App import app
 
@@ -16,7 +16,7 @@ class MountToConfig(Act):
             Argument(
                 name = 'item',
                 orig = StorageItem,
-                assertions = [NotNoneAssertion()]
+                assertions = [NotNone()]
             )
         ])
 
