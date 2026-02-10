@@ -21,7 +21,7 @@ class Item(Object):
     save_to_file: bool = Field(default = True)
     _unserializable = ['_task', '_run_flag']
 
-    def _constructor(self):
+    def _init_hook(self):
         self._run_flag = asyncio.Event()
         self.id = self._manager_link.queue.downloads.getIndex()
 

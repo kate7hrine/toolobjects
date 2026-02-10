@@ -1,9 +1,9 @@
-from App.DB.Adapters.ConnectionAdapter import ConnectionAdapter
-from App.DB.Adapters.Representation.ObjectAdapter import ObjectAdapter
-from App.DB.Adapters.Representation.LinkAdapter import LinkAdapter
-from App.DB.Adapters.Search.Query import Query
-from App.DB.Adapters.Search.Condition import Condition
-from App.DB.Adapters.Search.Sort import Sort
+from App.DB.ConnectionAdapter import ConnectionAdapter
+from App.DB.Representation.ObjectAdapter import ObjectAdapter
+from App.DB.Representation.LinkAdapter import LinkAdapter
+from App.DB.Query.Query import Query
+from App.DB.Query.Condition import Condition
+from App.DB.Query.Sort import Sort
 from App.Objects.Object import Object
 from App.Objects.Relations.Link import Link as CommonLink
 from App.Objects.Requirements.Requirement import Requirement
@@ -171,6 +171,7 @@ class SQLAlchemy(ConnectionAdapter):
 
             def toDB(self, obj: Object):
                 _session.add(self)
+                self.get_permission_to_flush(obj)
                 self._orig = obj
                 self.flush_content(self._orig)
 
@@ -249,7 +250,7 @@ class SQLAlchemy(ConnectionAdapter):
             )
         ]
 
-    def _constructor(self):
+    def _init_hook(self):
         connection_string = self.protocol_name + self.delimiter + self.getConnectionStringContent()
 
         self._set_id_gen()

@@ -17,7 +17,7 @@ class StorageUnit(Object):
     common: str = Field(default = None)
     _common_path: str = None
 
-    def _constructor(self):
+    def _init_hook(self):
         self.getUpper().mkdir(exist_ok=True)
         self.getDir().mkdir(exist_ok=True)
 

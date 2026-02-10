@@ -52,7 +52,7 @@ class Download(Extractor):
         image = Image()
 
         if i.get('download') == True:
-            _unit = app.Storage.get('tmp').getStorageUnit()
+            _unit = app.Storage.get('tmp').get_storage_adapter().getStorageUnit()
 
             item = app.DownloadManager.addURL(_url.value, _unit, filename)
             await item.start()

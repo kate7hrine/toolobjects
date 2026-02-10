@@ -13,7 +13,7 @@ class InteractiveView(ConsoleView):
         is_exit = False
         prev = None
 
-        self.log("pass arguments (-i App.Console.Exit to exit)")
+        self.log("pass values (-i App.Console.Exit to exit)")
 
         while is_exit != True:
             _args_input = input("")

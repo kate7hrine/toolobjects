@@ -64,7 +64,7 @@ class ObjectsList(Object):
 
         return self._items
 
-    def getObjectsByGroup(self, category: list[str]) -> Generator[LoadedObject]:
+    def getObjectsByCategory(self, category: list[str]) -> Generator[LoadedObject]:
         '''
         find by category:
 

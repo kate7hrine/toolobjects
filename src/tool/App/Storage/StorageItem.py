@@ -1,10 +1,8 @@
 from App.Objects.Object import Object
-from App.Storage.StorageUnit import StorageUnit
-from App.DB.Adapters.ConnectionAdapter import ConnectionAdapter
+from App.DB.ConnectionAdapter import ConnectionAdapter
+from App.Storage.StorageAdapter import StorageAdapter
 from pydantic import Field
-from pathlib import Path
 from App import app
-import secrets
 
 class StorageItem(Object):
     '''
@@ -17,68 +15,55 @@ class StorageItem(Object):
     '''
 
     name: str = Field()
-    directory: str = Field(default = None)
+
+    # input
+    storage_type: str = Field(default = 'double_divided_hash_dirs')
+    storage: dict = Field(default = {})
+
     db_type: str = Field(default = None)
-    db: dict = Field(default = None)
+    db: dict = Field(default = {})
+    # /input
+
     root_uuid: int = Field(default = None)
     allowed_objects: list[str] = Field(default = None)
+    forbidden_objects: list[str] = Field(default = None)
 
     # display_name: str = Field(default = None)
 
-    _storage_dir_name = 'storage'
-
+    # Internal usage only
     adapter: ConnectionAdapter = Field(default = None, exclude = True)
-    _path: str = None
+    storage_adapter: StorageAdapter = Field(default = None, exclude = True)
 
-    def getDir(self):
-        return self._path
-
-    def getStorageDir(self):
-        return self._path.joinpath(self._storage_dir_name)
-
-    def getStorageUnit(self) -> StorageUnit:
-        _bytes = 32
-        _hash = secrets.token_hex(_bytes)
-        _item = StorageUnit()
-        _item.fromDir(self.getStorageDir(), _hash)
-        _item._constructor()
-
-        return _item
-
-    def getAdapter(self) -> ConnectionAdapter:
-        assert self.hasAdapter(), "storage item does not has db connection"
+    def get_db_adapter(self) -> ConnectionAdapter:
+        assert self.has_db_adapter(), "storage item {0} does not has db connection".format(self.name)
 
         return self.adapter
 
-    def hasAdapter(self) -> bool:
+    def get_storage_adapter(self) -> StorageAdapter:
+        assert self.has_storage_adapter(), "storage item {0} does not has storage".format(self.name)
+
+        return self.storage_adapter
+
+    def has_db_adapter(self) -> bool:
         return self.adapter != None
 
+    def has_storage_adapter(self) -> bool:
+        return self.storage_adapter != None
+
     def _init_hook(self):
-        self._init_storage()
         if self.db_type != None:
-            self.adapter = self.getDBAdapterByName(self.db_type)
+            self.adapter = self._get_adapter_by_name(self.db_type, self.db)
 
-    def _init_storage(self):
-        if self.directory != None:
-            self._path = Path(self.directory)
-            if self._path.is_file() == True:
-                self.log_error(f"storage item {self.name}: path is file")
-            if self._path.exists() == False:
-                self._path.mkdir()
-        else:
-            dbs_dir = app.app.storage.joinpath('dbs')
-            self._path = dbs_dir.joinpath(self.name)
-            self._path.mkdir(exist_ok=True)
+        if self.storage_type != None:
+            self.storage_adapter = self._get_adapter_by_name(self.storage_type, self.storage, ['App', 'Storage', 'Adapters'])
 
-        self.getStorageDir().mkdir(exist_ok=True)
-
-    def getDBAdapterByName(self, adapter_name: str):
-        for adapter in app.ObjectsList.getObjectsByGroup(['App', 'DB', 'Adapters', 'Connection']):
+    def _get_adapter_by_name(self, adapter_name: str, unwrap_dict: dict = {}, group: list[str] = ['App', 'DB', 'Adapters']):
+        for adapter in app.ObjectsList.getByName(group):
             _module = adapter.getModule()
             if _module.protocol_name == adapter_name:
-                item = _module(**self.db)
+                item = _module(**unwrap_dict)
                 item._storage_item = self
-                item._constructor()
+                item._init_hook()
 
                 return item
 
