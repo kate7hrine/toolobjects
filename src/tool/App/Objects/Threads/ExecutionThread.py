@@ -45,7 +45,7 @@ class ExecutionThread(Object):
         except asyncio.CancelledError:
             self.log_error('Task {0} was cancelled'.format(self.global_id))
         except Exception as e:
-            raise e
+            self.log_error(e)
         finally:
             if app.ThreadsList is not None:
                 app.ThreadsList.remove(self)
