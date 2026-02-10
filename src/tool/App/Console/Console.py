@@ -11,7 +11,7 @@ from Data.Types.String import String
 from App.Objects.View import View
 from App import app
 
-class ConsoleView(View):
+class Console(View):
     '''
     View that represents CMD
     '''

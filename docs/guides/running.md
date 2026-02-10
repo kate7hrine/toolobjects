@@ -23,7 +23,7 @@ I may recomend set these values in `storage/config/config.json`:
             "role": "console.print.returned.nothing"  
         },
         {
-            "section": ["App.Console.ConsoleView"]
+            "section": ["App.Console.Console"]
         },
         {
             "role": "auth.console"
