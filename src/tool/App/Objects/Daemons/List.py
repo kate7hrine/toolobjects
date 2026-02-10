@@ -15,7 +15,10 @@ class List(Object):
         )
 
         for item in cls.getOption('app.daemons.autostart'):
-            daemons.items.append(item.get_item().toPython())
+            try:
+                daemons.items.append(item.get_item().toPython())
+            except AttributeError:
+                daemons.log_error('item does not exists')
 
         app.mount('DaemonList', daemons)
 

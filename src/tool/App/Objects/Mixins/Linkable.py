@@ -1,5 +1,6 @@
 from pydantic import Field, model_serializer, BaseModel
 from App.Objects.Relations.Link import Link
+from App.Objects.Relations.LinkData import LinkData
 from typing import ClassVar, Generator
 
 class Linkable():
@@ -14,7 +15,9 @@ class Linkable():
     def link(self, object, role: list = []):
         _link = Link(
             item = object,
-            role = role
+            data = LinkData(
+                role = role
+            )
         )
         return self.addLink(_link)
 
@@ -26,7 +29,9 @@ class Linkable():
     def unlink(self, item: Link, role: list = []) -> None:
         _link = Link(
             item = item,
-            role = role
+            data = LinkData(
+                role = role
+            )
         )
         return self.removeLink(_link)
 
@@ -77,7 +82,7 @@ class Linkable():
     def find_link(self, item: BaseModel, role: list = None) -> Link:
         for link in self.getLinkedItems():
             if role != None:
-                if ','.join(role) != ','.join(link.role):
+                if ','.join(role) != ','.join(link.data.role):
                     continue
 
             if link.item.hasDb():
@@ -102,7 +107,7 @@ class Linkable():
         for item in self.links:
             yield item
 
-    def getVirtualLinkedItems(self) -> Generator[Link]:
+    def _get_virtual_linked(self) -> Generator[Link]:
         '''
         Returns linked items. This method can be overriden
         '''
@@ -113,7 +118,7 @@ class Linkable():
         Return dynamic links or real links
         '''
         if self.dynamic_links == True and ignore_virtual == False:
-            return self.getVirtualLinkedItems()
+            return self._get_virtual_linked()
         else:
             return self.getLinkedItems()
 

@@ -119,7 +119,7 @@ class SQLAlchemy(ConnectionAdapter):
             uuid = Column(BigInteger(), primary_key=True)
             owner = Column(BigInteger(), nullable = True) # if null its links to db
             target = Column(BigInteger())
-            role = Column(String(1000), nullable = True)
+            data = Column(String(1000), nullable = True)
             order = Column(BigInteger())
 
             def reorder(self, order: int = 0):
@@ -148,8 +148,8 @@ class SQLAlchemy(ConnectionAdapter):
                 self.owner = owner.uuid
                 self.target = link.item.getDbId()
                 self.order = order.getIndex()
-                if len(link.role) > 0:
-                    self.role = json.dumps(link.role)
+                if len(link.data.role) > 0:
+                    self.data = json.dumps(link.data)
 
                 link.setDb(self)
                 self_adapter.log(f"flushed link with target uuid {link.item.getDbId()}")
@@ -260,11 +260,12 @@ class SQLAlchemy(ConnectionAdapter):
                     operator = '==',
                     val2 = link.item.getDbId()
                 ))
-                if len(link.role) > 0:
+                if len(link.data.role) > 0:
                     _query.addCondition(Condition(
-                        val1 = 'role',
+                        val1 = 'data',
+                        json_fields = ['role'],
                         operator = '==',
-                        val2 = json.dumps(link.role)
+                        val2 = json.dumps(link.data)
                     ))
 
                 _items = _query.getAll()
