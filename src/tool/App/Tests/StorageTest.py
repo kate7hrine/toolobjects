@@ -25,5 +25,5 @@ class StorageTest(Test):
         _unit.setCommonFile(__name)
         _unit.files = _unit.genFilesList()
 
-        print(_unit)
+        self.log_raw(_unit)
         await asyncio.sleep(1)

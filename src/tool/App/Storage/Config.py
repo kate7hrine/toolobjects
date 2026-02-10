@@ -1,6 +1,6 @@
 from App.Objects.Object import Object
-from App.Objects.DictList import DictList
-from App.Arguments.Comparer import Comparer
+from App.Arguments.ArgumentDict import ArgumentDict
+from App.Arguments.ArgumentValues import ArgumentValues
 from pathlib import Path
 from pydantic import Field
 from App import app
@@ -9,11 +9,11 @@ import json
 class Config(Object):
     path: Path = Field()
     name: str = Field(default='config.json')
-    comparer: Comparer = None
+    values: ArgumentValues = None
 
     def constructor(self):
-        self.comparer = Comparer(
-            compare = DictList(items=[]),
+        self.values = ArgumentValues(
+            compare = ArgumentDict(items=[]),
             values = {},
             raise_on_assertions = False,
             default_on_none = True,
@@ -24,7 +24,7 @@ class Config(Object):
         _settings = module.getSettings()
         if _settings != None:
             for item in _settings:
-                self.comparer.compare.append(item)
+                self.values.compare.append(item)
 
     @property
     def file(self) -> Path:
@@ -37,7 +37,7 @@ class Config(Object):
         )
         configs.checkFile()
         configs.appendSettingsOfModule(cls)
-        configs.comparer.values.update(app.app.conf_override)
+        configs.values.values.update(app.app.conf_override)
 
         app.mount('Config', configs)
 
@@ -61,7 +61,7 @@ class Config(Object):
 
         self._stream = open(self.file, 'r+', encoding='utf-8')
         try:
-            self.comparer.values = json.load(self._stream)
+            self.values.values = json.load(self._stream)
         except json.JSONDecodeError as __exc:
             self.log("failed to load config json")
             #self.reset()
@@ -69,9 +69,7 @@ class Config(Object):
     def updateFile(self) -> None:
         self._stream.seek(0)
 
-        # double "toDict()" cuz firstly we get ArgumentsDict and then getting actual dict
-
-        json.dump(self.comparer.toDict().toDict(), self._stream, indent=4)
+        json.dump(self.values.values, self._stream, indent=4)
 
         self._stream.truncate()
 
@@ -83,10 +81,10 @@ class Config(Object):
         self._stream.write("{}")
         self._stream.truncate()
 
-        self.comparer.values = {}
+        self.values.values = {}
 
     def get(self, option: str, default: str = None):
-        got = self.comparer.getByName(option)
+        got = self.values.get(option)
         if got == None:
             return default
 
@@ -94,9 +92,9 @@ class Config(Object):
 
     def set(self, option: str, value: str):
         if value == None:
-            del self.comparer.values[option]
+            del self.values.values[option]
         else:
-            self.comparer.values[option] = value
+            self.values.values[option] = value
 
         self.updateFile()
 

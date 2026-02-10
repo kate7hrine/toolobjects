@@ -18,7 +18,7 @@ class Logger(Object):
     log_file: LogFile = Field(default = None)
 
     @classmethod
-    def getClassEventsTypes(cls) -> list:
+    def getClassEventTypes(cls) -> list:
         return ['log']
 
     @classmethod

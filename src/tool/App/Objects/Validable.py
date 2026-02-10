@@ -1,23 +1,23 @@
-from App.Arguments.ArgumentsDict import ArgumentsDict
+from App.Arguments.ArgumentDict import ArgumentDict
 from pydantic import Field
 
 class Validable:
     args: dict = Field(default = {})
 
     @classmethod
-    def getArguments(cls) -> ArgumentsDict:
+    def getArguments(cls) -> ArgumentDict:
         '''
         Arguments for validation
         '''
-        return ArgumentsDict(items = {})
+        return ArgumentDict(items = [])
 
     @classmethod
-    def getAllArguments(cls) -> ArgumentsDict:
+    def getAllArguments(cls) -> ArgumentDict:
         '''
         Joins ArgumentDicts from all extended classes
         '''
 
-        # Takes current ArgumentsDict cuz it can contain properties
+        # Takes current ArgumentDict cuz it can contain properties
         _list = cls.getArguments()
 
         # Slicing 1 because first arguments already got

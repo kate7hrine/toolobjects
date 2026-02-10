@@ -1,5 +1,5 @@
 from App.Objects.Act import Act
-from App.Arguments.ArgumentsDict import ArgumentsDict
+from App.Arguments.ArgumentDict import ArgumentDict
 from App.Arguments.Types.String import String
 from App.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
 from App.Responses.AnyResponse import AnyResponse
@@ -9,8 +9,8 @@ from Files.File import File
 
 class Navigate(Act):
     @classmethod
-    def getArguments(cls) -> ArgumentsDict:
-        return ArgumentsDict.fromList([
+    def getArguments(cls) -> ArgumentDict:
+        return ArgumentDict(items=[
             String(
                 name = 'path',
                 assertions = [

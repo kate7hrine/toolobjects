@@ -13,4 +13,4 @@ class ConverterTest(Test):
 </example>
         """
         _xml = XML(xml=_xml_str)
-        print(await _xml.convertTo(JSON))
+        self.log_raw(await _xml.convertTo(JSON))

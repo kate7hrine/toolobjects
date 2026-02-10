@@ -13,7 +13,7 @@ class Configurable:
     @classmethod
     def getAllSettings(cls):
         '''
-        There are similar by code functions: Configurable.getAllSettings, Validable.getAllArguments, Submodules.getAllSubmodules, Variableable.getAllVariables.
+        There are similar by code functions: Configurable.getAllSettings, Validable.getAllArguments, Submodulable.getAllSubmodules, Variableable.getAllVariables.
         thats not so many, but it's better to move to MROThing or smth
         '''
         alls = []

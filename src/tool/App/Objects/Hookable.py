@@ -10,7 +10,7 @@ class Hookable():
     _hooks: dict[str, list] = {}
 
     @classmethod
-    def getClassEventsTypes(cls):
+    def getClassEventTypes(cls):
         '''
         events of each class
         '''
@@ -21,11 +21,11 @@ class Hookable():
 
         self._hooks = {}
 
-        for event in self.getClassEventsTypes():
+        for event in self.getClassEventTypes():
             self._hooks[event] = []
 
     def checkEventType(self, category: str):
-        assert category in self.getClassEventsTypes(), f"category \"{category}\" not in events list"
+        assert category in self.getClassEventTypes(), f"category \"{category}\" not in events list"
 
         if self._hooks.get(category) == None:
             self._hooks[category] = []

@@ -1,13 +1,15 @@
 from pydantic import BaseModel
-from typing import Callable
 
 class Convertable(BaseModel):
     @classmethod
     def findConvertationsForClass(cls, for_class: BaseModel) -> list:
+        # wtf ...
         converters = []
-        for item in cls.getAllSubmodules():
-            if 'convertation' in item.role and item.item.converts_to == for_class:
-                converters.append(item)
+        for submodule in cls.getAllSubmodules(with_role=['convertation']):
+            obj_in = submodule.item.getAllSubmodules(with_role=['object_out'])
+            for _submodule in obj_in:
+                if _submodule.item is for_class:
+                    converters.append(submodule)
 
         return converters
 

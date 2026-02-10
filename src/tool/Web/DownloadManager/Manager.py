@@ -59,6 +59,7 @@ class Manager(Object):
     @classmethod
     def getSettings(cls):
         from App.Arguments.Types.Int import Int
+        from App.Arguments.Types.String import String
 
         return [
             Int(
@@ -73,7 +74,7 @@ class Manager(Object):
                 name = "download_manager.timeout_seconds",
                 default = 100
             ),
-            Int(
+            String(
                 name = "download_manager.user_agent",
                 default = ""
             ),

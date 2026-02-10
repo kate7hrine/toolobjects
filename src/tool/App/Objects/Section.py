@@ -38,7 +38,7 @@ class Section:
             pass
         except Exception as e:
             raise (e)
-            print("logger error; ", args[0])
+            self.log_raw("logger error; ", args[0])
 
     def log(self, *args, **kwargs):
         return self.log_shortcut(*args, _role=['message'], **kwargs)
@@ -48,6 +48,9 @@ class Section:
 
     def log_success(self, *args, **kwargs):
         return self.log_shortcut(*args, _role=['success'], **kwargs)
+
+    def log_raw(self, anything: str):
+        print(anything)
 
     def fatal(self, exception):
         raise exception

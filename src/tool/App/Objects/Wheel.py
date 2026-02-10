@@ -1,8 +1,8 @@
-from App.Arguments.Comparer import Comparer
+from App.Arguments.ArgumentValues import ArgumentValues
 from App.Responses.Response import Response
 from App.Objects.Executable import Executable
 from App.Objects.Submodule import Submodule
-from App.Arguments.ArgumentsDict import ArgumentsDict
+from App.Arguments.ArgumentDict import ArgumentDict
 
 class Wheel(Executable):
     '''
@@ -12,8 +12,8 @@ class Wheel(Executable):
     '''
 
     @classmethod
-    def getArguments(cls) -> ArgumentsDict:
-        itms = ArgumentsDict()
+    def getArguments(cls) -> ArgumentDict:
+        itms = ArgumentDict()
         itms.missing_args_inclusion = True
 
         return itms
@@ -51,9 +51,9 @@ class Wheel(Executable):
         '''
         Iterates got submodules (internal, role=wheel), calling comparer with each submodule, and if at least one (common?) arg is presented in dict, returning it
         '''
-        for item in items:
-            decl = Comparer(compare = item.item.getAllArguments(), values = values)
 
+        for item in items:
+            decl = ArgumentValues(compare = item.item.getAllArguments(), values = values)
             if decl.diff():
                 return item
 

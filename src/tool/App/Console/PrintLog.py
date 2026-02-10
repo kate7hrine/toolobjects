@@ -1,13 +1,14 @@
 from App.Objects.Executable import Executable
-from App.Arguments.ArgumentsDict import ArgumentsDict
+from App.Arguments.ArgumentDict import ArgumentDict
 from App.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
 from App.Arguments.Objects.Orig import Orig
 from App.Logger.Log import Log
+from App import app
 
 class PrintLog(Executable):
     @classmethod
     def getArguments(cls):
-        return ArgumentsDict.fromList([
+        return ArgumentDict(items=[
             Orig(
                 name = 'log',
                 orig = Log,
@@ -16,4 +17,7 @@ class PrintLog(Executable):
         ])
 
     def implementation(self, i):
-        print(i.get('log').toStr())
+        self.log_raw(Log.toStr(i.get('log').toParts(
+            show_time = app.Config.get('logger.print.console.show_time'),
+            show_role = app.Config.get('logger.print.console.show_role')
+        )))

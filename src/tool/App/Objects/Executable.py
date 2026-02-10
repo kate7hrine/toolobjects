@@ -1,6 +1,6 @@
 from .Object import Object
 from .Validable import Validable
-from App.Arguments.ArgumentsDict import ArgumentsDict
+from App.Arguments.ArgumentValues import ArgumentValues
 from App.Responses.Response import Response
 from App.Objects.Variableable import Variableable
 from typing import ClassVar, Optional
@@ -13,27 +13,24 @@ class Executable(Object, Variableable, Validable):
     Object that has "execute()" interface, single entrypoint.
     
     getArguments(): validation
-
-    common_object: another object that executable can represent
     '''
 
     id: int = 0
     self_name: ClassVar[str] = 'Executable'
-    common_object: ClassVar[Optional[list]] = None
 
     @classmethod
-    def getClassEventsTypes(cls) -> list:
+    def getClassEventTypes(cls) -> list:
         return ['before_execute', 'after_execute']
 
-    async def implementation(self, i: ArgumentsDict) -> Response:
+    async def implementation(self, i: dict) -> Response:
         '''
-        Entry point, must be redefined in your class
+        Entry point, must be overriden in your class
         '''
         pass
 
-    async def implementation_wrap(self, i: ArgumentsDict) -> Response:
+    async def implementation_wrap(self, i: dict) -> Response:
         '''
-        Wrap that can be overriden
+        another checks before implementation(). Can be overriden
         '''
 
         if asyncio.iscoroutinefunction(self.implementation):
@@ -42,28 +39,29 @@ class Executable(Object, Variableable, Validable):
             return self.implementation(i)
 
     async def execute(self, 
-                      i: ArgumentsDict, 
+                      i: ArgumentValues | dict, 
                       check_arguments: bool = True, 
                       raise_on_assertions: bool = True) -> Response:
         '''
         Internal method. Calls module-defined implementation() and returns what it returns
-        (No, it calls implementation_wrap())
         '''
 
         self.id = app.app.executables_id.getIndex()
+        if type(i) == dict:
+            i = ArgumentValues(values = i)
+        else:
+            i.modified = True
 
         args = self.getAllArguments()
+        vals = i.toDict()
         passing = args.compareWith(
-            inputs = i,
+            inputs = vals,
             check_arguments = check_arguments,
             raise_on_assertions = raise_on_assertions,
         )
 
-        # TODO: provide single type
-        #if type(i) == dict:
-        #    self.args = i
-        #else:
-        #    self.args = i.toDict()
+        if i.modified == False:
+            self.args = vals
 
         await self.awaitTriggerHooks('before_execute', i = passing)
 

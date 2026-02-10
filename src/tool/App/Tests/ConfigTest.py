@@ -14,9 +14,9 @@ class ConfigTest(Test):
         self.log(f"the key with name 'test' is now {val_test_2}")
 
         self.log(f"updating compare of config")
-        app.Config.updateCompare()
+        #app.Config.updateCompare()
 
-        self.log(f"all the settings of config: {app.Config.comparer.compare}")
+        self.log(f"all the settings of config: {app.Config.values.compare}")
         self.log(f"env:")
 
         env_test = app.Env.get("test")

@@ -16,5 +16,5 @@ class FlushTest(Test):
         self.log(f'we saved object {_id} to id {_item.uuid}')
         self.log(f'getting object from db item')
 
-        self.log(_item.getObject())
-        self.log(_item.getObject().to_json())
+        self.log_raw(_item.getObject())
+        self.log_raw(_item.getObject().to_json())

@@ -21,19 +21,20 @@ class Log(Object):
     section: LogSection.LogSection = Field(default = LogSection.LogSection())
     prefix: LogPrefix.LogPrefix = Field(default = None)
 
-    def toParts(self) -> list[str]:
+    def toParts(self,
+                show_time: bool = True,
+                show_role: bool = False) -> list[str]:
         RESET = self.Colors.reset
 
         parts = []
-
-        if app.Config.get('logger.print.console.show_time') == True:
+        if show_time == True:
             parts.append(self.time.strftime("%H:%M:%S.%f"))        
 
         parts.append(self.Colors.section + self.section.toString() + RESET)
         if self.prefix != None:
             parts.append(self.Colors.prefix + self.prefix.toString() + RESET)
 
-        if app.Config.get('logger.print.console.show_role') == True:
+        if show_role == True:
             if len(self.role) > 0:
                 _role = ", ".join(self.role)
                 parts.append(self.Colors.deprecated + f"<{_role}>" + RESET)
@@ -43,8 +44,9 @@ class Log(Object):
 
         return parts
 
-    def toStr(self) -> str:
-        return " ".join(self.toParts()).replace("\\n", "\n")
+    @staticmethod
+    def toStr(parts) -> str:
+        return " ".join(parts).replace("\\n", "\n")
 
     def getColor(self) -> str:
         for item in ['success', 'error', 'deprecated', 'message']:

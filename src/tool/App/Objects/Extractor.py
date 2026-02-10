@@ -1,5 +1,5 @@
 from App.Objects.Executable import Executable
-from App.Arguments.ArgumentsDict import ArgumentsDict
+from App.Arguments.ArgumentDict import ArgumentDict
 from App.Responses.ModelsResponse import ModelsResponse
 from App.Objects.Object import Object
 from App.Arguments.Objects.Orig import Orig

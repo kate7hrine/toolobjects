@@ -2,10 +2,10 @@ from App.Objects.Object import Object
 from App import app
 from pydantic import Field
 from typing import Any
-from App.Arguments.ArgumentsDict import ArgumentsDict
+from App.Arguments.ArgumentDict import ArgumentDict
 from App.Queue.LinkValue import LinkValue
 from App.Queue.ValueWithReplaces import ValueWithReplaces
-from App.Arguments.ArgumentsDict import ArgumentsDict
+from App.Arguments.ArgumentDict import ArgumentDict
 
 class Item(Object):
     '''
@@ -41,7 +41,7 @@ class Item(Object):
         for key, val in original_arguments.items():
             final_arguments[key] = self.getArgument(original_arguments, key, val)
 
-        return ArgumentsDict(items = final_arguments)
+        return ArgumentDict(items = final_arguments)
 
     def getArgument(self, original_arguments: dict, key: str, val: str | dict) -> Any:
         # Computing value

@@ -1,5 +1,5 @@
 from App.Objects.Act import Act
-from App.Arguments.ArgumentsDict import ArgumentsDict
+from App.Arguments.ArgumentDict import ArgumentDict
 from App.Arguments.Objects.List import List
 from App.Arguments.Objects.Orig import Orig
 from App.Objects.DictList import DictList
@@ -14,8 +14,8 @@ class Run(Act):
     '''
 
     @classmethod
-    def getArguments(cls) -> ArgumentsDict:
-        return ArgumentsDict.fromList([
+    def getArguments(cls) -> ArgumentDict:
+        return ArgumentDict(items=[
             List(
                 name = 'prestart',
                 orig = Orig(
@@ -39,7 +39,7 @@ class Run(Act):
             )
         ])
 
-    async def implementation(self, i: ArgumentsDict):
+    async def implementation(self, i: ArgumentDict):
         queue = Queue()
         queue.output = i.get('output')
 

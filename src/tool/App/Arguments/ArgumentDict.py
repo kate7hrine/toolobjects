@@ -1,33 +1,30 @@
-from App.Objects.Object import Object
 from App.Arguments.Argument import Argument
 from App.Objects.DictList import DictList
-# from App.Arguments.Comparer import Comparer
 from pydantic import Field
 from typing import Any
 
-class ArgumentsDict(Object):
+class ArgumentDict(DictList):
     '''
-    Dict with arguments,
-    [name]: [argument]
-    needs to be refactored cuz of unknown behavior
+    Dict with App.Arguments.Argument items
     '''
-    items: DictList | dict = Field(default= {})
-    original_items: dict = Field(default = {})
+
     missing_args_inclusion: bool = Field(default = False)
 
     def add(self, name: str, argument: Argument):
         '''
         Appends new argument by name
         '''
+
         self.items[name] = argument
 
-    def get(self, name: str, default: str | Any = None):
+    def get(self, name: str, default: str | Any = None) -> Any:
         '''
-        Allows to get value (so it supposed to used as standart dict).
+        Gets value (so it supposed to used as standart dict).
 
         This method can't be annotated, so no syntax highlight :(:(
         '''
-        _out = self.items.get(name)
+
+        _out = super().get(name)
         if _out == None:
             return default
 
@@ -35,26 +32,6 @@ class ArgumentsDict(Object):
             return _out.value
         else:
             return _out
-
-    @staticmethod
-    def fromList(items: list):
-        '''
-        Create ArgumentsDict from list of arguments
-        '''
-        return ArgumentsDict(items = DictList(items = items))
-
-    def toNames(self) -> list:
-        '''
-        Return the names of arguments
-        '''
-        if hasattr(self.items, 'toNames'):
-            return self.items.toNames()
-
-        names = []
-        for key, val in self.items.items():
-            names.append(key)
-
-        return names
 
     def toDict(self, exclude: list = []) -> dict:
         '''
@@ -74,28 +51,28 @@ class ArgumentsDict(Object):
         Checks passed dict and runs it over every Argument's "implementation()" and returns computed arguments
         '''
         
-        from App.Arguments.Comparer import Comparer
+        from App.Arguments.ArgumentValues import ArgumentValues
 
         if check_arguments == True:
-            _c = Comparer(
+            _c = ArgumentValues(
                 compare = self,
                 values = inputs,
                 raise_on_assertions = raise_on_assertions,
                 missing_args_inclusion = self.missing_args_inclusion
             )
-            return _c.toDict()
+            return _c
         else:
-            return ArgumentsDict(items = inputs)
+            return inputs
 
     def join(self, another_dict) -> None:
         '''
-        Appends another ArgumentsDict's items to current ArgumentsDict
+        Appends another ArgumentDict's items to current ArgumentDict
         '''
 
         # WORKAROUNDDD. do not write code when sleepy. I dont know why it returns as 
         _items = another_dict.items
-        if hasattr(_items, 'toList'):
-            _items = _items.items
+        #if hasattr(_items, 'toList'):
+        #    _items = _items.items
 
         for item in _items:
             self.items.append(item)

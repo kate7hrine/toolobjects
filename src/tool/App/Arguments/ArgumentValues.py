@@ -1,33 +1,31 @@
 from App.Objects.Object import Object
-from App.Arguments.ArgumentsDict import ArgumentsDict
-from App.Objects.DictList import DictList
-from .Argument import Argument
+from App.Arguments.ArgumentDict import ArgumentDict
+from App.Arguments.Argument import Argument
 from pydantic import Field
-from App import app
+from typing import Any
 
-class Comparer(Object):
+class ArgumentValues(Object):
     '''
-    Runs every Argument with raw value and returns dict with result
+    class that imitates dict
     '''
 
-    compare: DictList | ArgumentsDict = Field(default=None)
-    values: dict | DictList = Field(default={})
+    compare: ArgumentDict = Field(default=None)
+    values: dict = Field(default={})
+    modified: bool = Field(default = False)
 
     raise_on_assertions: bool = Field(default=False)
     missing_args_inclusion: bool = Field(default=False)
+    check_assertions: bool = Field(default=True)
     default_on_none: bool = Field(default=False)
     default_on_assertion: bool = Field(default=True)
     none_values_skipping: bool = Field(default=True)
 
-    def toDict(self) -> ArgumentsDict:
+    def toDict(self) -> dict:
         if self.compare == None:
             return self.values
 
-        # app.Logger.log(f"comparing {self.compare} and {self.values}", section=["Comparer", "ComparingArrays"])
-
-        table = ArgumentsDict()
+        table = {}
         key_names = []
-
         if getattr(self.values, "toNames", None) != None:
             key_names = self.values.toNames()
         else:
@@ -35,42 +33,35 @@ class Comparer(Object):
                 key_names.append(name)
 
         for name in self.compare.toNames():
-            table.original_items[name] = None
-
             key_names.append(name)
 
         for param_name in key_names:
-            got_value = self.getByName(param_name, missing_args_inclusion = self.missing_args_inclusion)
+            got_value = self.get(param_name)
             if got_value == None and self.none_values_skipping == True:
                 continue
 
-            # todo change
-            try:
-                table.original_items[param_name] = str(self.values.get(param_name))
-            except:
-                pass
-
-            table.add(param_name, got_value)
+            table[param_name] = got_value
 
         return table
 
-    def getByName(self, name, check_assertions: bool = True, missing_args_inclusion: bool = False):
+    def get(self, name: str, default: Any = None):
+        if self.compare == None:
+            return default
+
         inputs = self.values.get(name)
         argument: Argument = self.compare.get(name)
-
         if argument == None:
-            if missing_args_inclusion == True:
+            if self.missing_args_inclusion == True:
                 return inputs
             else:
-                return None
+                return default
 
         fallback = argument.sensitive_default
         value = argument.getValue(original_value = inputs, sets_current = True)
-
         if value == None and self.default_on_none == True:
             value = fallback
 
-        if check_assertions == True:
+        if self.check_assertions == True:
             try:
                 argument.current = value
                 argument.checkAssertions()

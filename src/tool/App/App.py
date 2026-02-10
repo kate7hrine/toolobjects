@@ -1,6 +1,6 @@
 from App.Objects.Object import Object
 from App.Objects.Index.LoadedObject import LoadedObject
-from App.Objects.Section import Section
+from App.Arguments.ArgumentValues import ArgumentValues
 from App.Objects.Increment import Increment
 from App.Objects.Index.Namespace import Namespace
 from pathlib import Path
@@ -49,7 +49,6 @@ class App(Object):
         self.loadObjects()
         view_name = self.argv.get('view', 'App.Console.Console.Console')
         view_class = self.objects.getByName(view_name)
-        print(view_class)
         view: View = view_class.getModule()()
         view.setAsCommon()
         view.setApp(self)
@@ -83,7 +82,7 @@ class App(Object):
         self.objects.load()
 
     async def runView(self, view) -> None:
-        await view.execute(self.argv)
+        await view.execute(ArgumentValues(values = self.argv))
 
     def _parse_argv(self, args):
         '''

@@ -24,10 +24,10 @@ class Interactive(Executable):
             executable = _executable.getModule()()
 
             try:
-                print(await executable.execute(parsed))
+                self.log_raw(await executable.execute(parsed))
             except Exception as e:
                 traceback.print_exc()
 
-            print('-------')
+            self.log_raw('-------')
 
         return NoneResponse()

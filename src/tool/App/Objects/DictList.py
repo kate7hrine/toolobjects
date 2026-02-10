@@ -1,5 +1,6 @@
 from typing import Any
 from App.Objects.Object import Object
+from pydantic import BaseModel
 
 class DictList(Object):
     '''
@@ -25,16 +26,10 @@ class DictList(Object):
 
         return dicts
 
-    @staticmethod
-    def fromDict(dict: dict):
-        items = list()
-        for key, val in dict.items():
-            items.append(val)
-
-        return DictList(items)
-
     def get(self, name: str) -> Any:
-        return self.toDict().get(name)
+        for item in self.toList():
+            if item.name == name:
+                return item
 
     def append(self, item: Any):
         self.items.append(item)

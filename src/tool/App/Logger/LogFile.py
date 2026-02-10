@@ -38,7 +38,7 @@ class LogFile(Object):
             self._updateFile()
             self._saveFile()
             self._updated = 0
-        #print(item.model_dump(mode='json',exclude_computed_fields=True,exclude=['class_name__']))
+        #self.log_raw(item.model_dump(mode='json',exclude_computed_fields=True,exclude=['class_name__']))
 
     def open(self):
         _path = self.getPath()

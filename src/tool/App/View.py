@@ -1,5 +1,4 @@
 from App.Objects.Executable import Executable
-from App.Arguments.ArgumentsDict import ArgumentsDict
 from typing import Any
 from App.App import App
 
@@ -25,5 +24,5 @@ class View(Executable):
 
         app.setView(self)
 
-    def implementation(self, i: ArgumentsDict = {}):
+    def implementation(self, i: dict = {}):
         pass

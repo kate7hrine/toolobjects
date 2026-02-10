@@ -2,13 +2,13 @@ from App.Objects.Extractor import Extractor
 from App.Arguments.Types.Int import Int
 from App.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
 from Data.Number import Number
-from App.Arguments.ArgumentsDict import ArgumentsDict
+from App.Arguments.ArgumentDict import ArgumentDict
 import random
 
 class Random(Extractor):
     @classmethod
     def getArguments(cls):
-        return ArgumentsDict.fromList([
+        return ArgumentDict(items=[
             Int(
                 name = "min",
                 default = 0,

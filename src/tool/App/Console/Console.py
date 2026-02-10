@@ -1,11 +1,9 @@
-from App.View import View
-from App.Arguments.ArgumentsDict import ArgumentsDict
-from App.Objects.DictList import DictList
+from App.Arguments.ArgumentDict import ArgumentDict
 from App.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
 from App.Arguments.Assertions.InputNotInValues import InputNotInValues
 from App.Arguments.Objects.Executable import Executable
-from App.Logger.Log import Log
 from Data.JSON import JSON
+from App.View import View
 
 class Console(View):
     '''
@@ -21,11 +19,11 @@ class Console(View):
             self.log('nothing returned', role = ['empty_response', 'view_message'])
         else:
             self.log(f'{executable.getClassNameJoined()} returned:')
-            print(JSON(data = results.to_json()).dump(indent = 4))
+            self.log_raw(JSON(data = results.to_json()).dump(indent = 4))
 
     @classmethod
-    def getArguments(cls) -> ArgumentsDict:
-        dicts = ArgumentsDict.fromList([
+    def getArguments(cls) -> ArgumentDict:
+        dicts = ArgumentDict(items = [
             Executable(
                 name = 'i',
                 default = 'App.Queue.Run.Run',
@@ -34,7 +32,8 @@ class Console(View):
                     InputNotInValues(values=['App.Console.Console.Console'])
                 ]
             )
-        ])
-        dicts.missing_args_inclusion = True
+        ],
+            missing_args_inclusion = True
+        )
 
         return dicts

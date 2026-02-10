@@ -1,7 +1,7 @@
 from .Test import Test
 from App.Queue.Run import Run
 from App.Queue.Item import Item
-from App.Arguments.ArgumentsDict import ArgumentsDict
+from App.Arguments.ArgumentDict import ArgumentDict
 from App.Arguments.Objects.List import List
 from App.Arguments.Types.Int import Int
 
@@ -10,7 +10,7 @@ class QueueTest(Test):
         self.log('queue test')
 
         runs = Run()
-        args = ArgumentsDict(items = {
+        args = ArgumentDict(items = {
             'prestart': '''
             [{
             "predicate": "App.Arguments.Types.Int.Int", 

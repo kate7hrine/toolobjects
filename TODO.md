@@ -4,7 +4,7 @@
 - [x] Objects list
 - [x] Views
 - [x] Arguments
-- [x] ArgumentsDict
+- [x] ArgumentDict
 - [x] hooks need to be refactored (its impossible to debug this)
 - [x] switchextractor
 - [x] queue
@@ -38,7 +38,7 @@
 - [ ] Web.RSS.GetFeed
 - [ ] DisplayType (?)
 - [x] get rid of saveable
-- [ ] Executable.common_object move to submodule with common name
+- [x] Executable.common_object move to submodule with common name
 - [ ] declare requirements that module uses
 - [ ] allow to replace some field with link
 - [ ] db flush: move links

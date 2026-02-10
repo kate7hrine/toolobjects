@@ -11,4 +11,4 @@ class LinksTest(Test):
             item = txt2,
             role = ['common'],
         ))
-        print(txt.model_dump_json(indent=4))
+        self.log_raw(txt.model_dump_json(indent=4))
