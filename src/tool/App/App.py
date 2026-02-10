@@ -76,6 +76,9 @@ class App(Object):
                     path = 'App\\Objects\\Index\\ObjectsList.py'
                 ),
                 LoadedObject(
+                    path = 'App\\Objects\\Index\\ExecutablesList.py'
+                ),
+                LoadedObject(
                     path = 'App\\Storage\\Storage.py'
                 )
             ]

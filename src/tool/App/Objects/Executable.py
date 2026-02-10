@@ -17,6 +17,8 @@ class Executable(Object, Variableable, Validable):
 
     id: int = 0
     self_name: ClassVar[str] = 'Executable'
+    internal_use: bool = Field(default = True)
+    args: dict = Field(default = {})
 
     @classmethod
     def getClassEventTypes(cls) -> list:
@@ -52,6 +54,10 @@ class Executable(Object, Variableable, Validable):
         else:
             i.modified = True
 
+
+        if app.ExecutablesList != None:
+            app.ExecutablesList.add(self)
+
         args = self.getAllArguments()
         vals = i.toDict()
         passing = args.compareWith(
@@ -59,9 +65,6 @@ class Executable(Object, Variableable, Validable):
             check_arguments = check_arguments,
             raise_on_assertions = raise_on_assertions,
         )
-
-        if i.modified == False:
-            self.args = vals
 
         await self.awaitTriggerHooks('before_execute', i = passing)
 
@@ -71,4 +74,16 @@ class Executable(Object, Variableable, Validable):
 
         await self.awaitTriggerHooks('after_execute', i = passing)
 
+        if app.ExecutablesList != None:
+            app.ExecutablesList.remove(self)
+
         return response
+
+    def integrate(self, args):
+        '''
+        Marks call as non-internal (as created by user).
+        just sets args that can be flushed
+        '''
+
+        self.internal_use = False
+        self.args = args.values

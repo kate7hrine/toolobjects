@@ -16,7 +16,6 @@
 - [x] App.Objects.Submodules
 - [x] App.Objects.Linkable
 - [x] App.Config.Config
-- [ ] Data.Text
 - [x] App.Console.PrintLog
 - [ ] ~~App.Objects.Submodules.Submodule, App.Objects.Configurable.Configurable: MROThing (?)~~
 - [x] move App.Data.DictList to App.Objects.DictList
@@ -27,6 +26,23 @@
 - [ ] ~~App.Executables.Call list~~ List of running executables
 - [x] flushed object: allow to override name (ObjectMeta.object_names)
 - [x] ~~add collections?~ allow override getLinks
+- [x] get rid of saveable
+- [x] Executable.common_object: move to submodule with common name
+- [x] declare requirements that module uses
+- [ ] allow to replace some field with link
+- [x] db flush: move links
+- [ ] db flush: replaced links
+- [ ] ~~custom object can contain "source" and "meta" fields in it and replace the original (?)~~
+- [ ] db flush: when loading from db save the link to db's item and add sync between them
+- [x] objects list: split to Namespace, allow to add another object lists
+- [ ] ~~objects list: fallback to common if module not found~~
+- [x] arguments strangely passes to executable
+- [x] daemon, App.Daemons.StartDaemon, implementation_cycle() (?)
+- [ ] Configurable: role to argument 'env' or 'config'
+- [ ] db flush: export between dbs
+- [ ] objectlist adapter
+- [ ] pathes like {db name}:/{object}/{object id or name}
+- [x] "non-executable" check
 - [ ] Web.DownloadManager.Manager
 - [x] Data.XML
 - [ ] File.FileTypes.Image
@@ -37,20 +53,4 @@
 - [ ] App.ACL.Auth ?
 - [ ] Web.RSS.GetFeed
 - [ ] DisplayType (?) submodule=displayment
-- [x] get rid of saveable
-- [x] Executable.common_object move to submodule with common name
-- [x] declare requirements that module uses
-- [ ] allow to replace some field with link
-- [x] db flush: move links
-- [ ] db flush: replaced links
-- [ ] ~~custom object can contain "source" and "meta" fields in it and replace the original (?)~~
-- [ ] db flush: when loading from db save the link to db's item and add sync between them
-- [x] objects list: split to Namespace, allow to add another object lists
-- [ ] ~~objects list: fallback to common if module not found~~
-- [x] arguments strangely passes to executable
-- [ ] daemon, App.Daemons.StartDaemon, implementation_cycle() (?)
-- [ ] Configurable: role to argumnet 'env' or 'config'
-- [ ] db flush: export between dbs
-- [ ] objectlist adapter
-- [ ] pathes like {db name}:/{object}/{object id or name}
-- [x] "non-executable" check
+- [ ] Data.Text
