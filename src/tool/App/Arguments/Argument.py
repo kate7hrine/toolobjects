@@ -34,6 +34,7 @@ class Argument(Object):
         '''
         Abstract method, must be overriden
         '''
+        ...
         return original_value
 
     def getValue(self, original_value: Any | str, sets_current: bool = True, *args, **kwargs) -> Any:

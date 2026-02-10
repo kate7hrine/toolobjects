@@ -21,6 +21,10 @@ class ExecuteById(Act):
             Boolean(
                 name = 'link',
                 default = True
+            ),
+            Boolean(
+                name = 'sift',
+                default = True
             )
         ])
 
@@ -30,14 +34,18 @@ class ExecuteById(Act):
         obj = _storage.adapter.ObjectAdapter.getById(i.get('uuid'))
         _exec = obj.toPython()
         _args = _exec.args
-        _args.update(i.getValues(exclude = ['storage', 'uuid', 'link']))
+        _args.update(i.getValues(exclude = ['storage', 'uuid', 'link', 'sift']))
 
         assert _exec != None, 'not found object'
         assert _exec.canBeExecuted(), 'object does not contains execute interface'
 
         _res = await _exec.execute(i = _args)
-        if isinstance(_res, ObjectsList) and i.get('link') == True:
-            for item in _res.getItems():
-                _exec.link(item)
+        if i.get('sift') == True:
+            _res = await _exec.sift(_res)
+
+        if isinstance(_res, ObjectsList):
+            if i.get('link') == True:
+                for item in _res.getItems():
+                    _exec.link(item)
 
         return _res

@@ -3,13 +3,15 @@ from .Validable import Validable
 from App.Arguments.ArgumentValues import ArgumentValues
 from App.Responses.Response import Response
 from App.Objects.Variableable import Variableable
+from App.Objects.Siftable import Siftable
 from App.Logger.LogPrefix import LogPrefix
 from typing import ClassVar, Optional
 from pydantic import Field
 from App import app
+from abc import abstractmethod, ABC
 import asyncio
 
-class Executable(Object, Variableable, Validable):
+class Executable(Object, ABC, Siftable, Variableable, Validable):
     '''
     Object that has "execute()" interface, single entrypoint.
     
@@ -34,11 +36,12 @@ class Executable(Object, Variableable, Validable):
             name = 'Executable'
         )
 
+    @abstractmethod
     async def implementation(self, i: dict) -> Response:
         '''
         Entry point, must be overriden in your class
         '''
-        pass
+        ...
 
     async def implementation_wrap(self, i: dict) -> Response:
         '''

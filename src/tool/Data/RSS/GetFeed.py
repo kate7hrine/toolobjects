@@ -2,6 +2,7 @@ from App.Objects.Extractor import Extractor
 from App.Arguments.ArgumentDict import ArgumentDict
 from App.Arguments.Types.String import String
 from App.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Responses.ObjectsList import ObjectsList
 from Data.RSS.Channel import Channel
 from Data.RSS.ChannelItem import ChannelItem
 from pydantic import Field
@@ -41,8 +42,17 @@ class GetFeed(Extractor):
             copyright = _channel.get('copyright'),
             language = _channel.get('language'),
         )
+        self.link(self.channel)
 
         for item in _channel.get('item'):
             _item = ChannelItem.model_validate(item, by_alias = True)
             self.channel.link(_item)
             self.append(_item)
+
+    async def sift(self, response: ObjectsList) -> ObjectsList:
+        _new = ObjectsList()
+        for item in response.getItems():
+            print(item)
+            _new.append(item)
+
+        return _new
