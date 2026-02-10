@@ -96,7 +96,8 @@ class SQLAlchemy(ConnectionAdapter):
                 return _query
 
             def toDB(self, owner, link: CommonLink):
-                assert link.item.hasDb(), 'link item is not flushed.'
+                assert link.item.hasDb(), 'link item is not flushed'
+                assert self._adapter._storage_item.name == link.item._db._adapter._storage_item.name, 'cross db'
 
                 self.owner = owner.uuid
                 self.target = link.item.getDbId()

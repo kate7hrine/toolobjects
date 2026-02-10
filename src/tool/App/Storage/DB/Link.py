@@ -1,13 +1,11 @@
 from App.Objects.Act import Act
 from Data.Int import Int
 from Data.String import String
-from Data.Int import Int
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.LiteralArgument import LiteralArgument
+from App.Objects.Arguments.ListArgument import ListArgument
 from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
-from App.Responses.AnyResponse import AnyResponse
-from App.Storage.StorageItem import StorageItem
 from App.Storage.StorageUUID import StorageUUID
 
 class Link(Act):
@@ -19,28 +17,29 @@ class Link(Act):
                 orig = StorageUUID,
                 assertions = [NotNoneAssertion()]
             ),
-            Argument(
+            ListArgument(
                 name = 'items',
-                orig = Int,
+                orig = StorageUUID,
                 assertions = [NotNoneAssertion()],
                 default = []
             ),
             LiteralArgument(
                 name = 'act',
                 default = 'link',
+                orig = String,
                 values = ['link', 'unlink']
             )
         ])
 
     async def implementation(self, i):
-        _storage = i.get('storage')
-
-        assert _storage != None, f"storage {_storage.name} not found"
-        assert _storage.hasAdapter(), f"storage {_storage.name} does not contains db connection"
-
         # TODO Fix
         link_to = i.get('owner').getItem()
-        items = _storage.adapter.ObjectAdapter.getByIds(i.get('items'))
+        _items = list()
+
+        for item in i.get('items'):
+            _items.append(item.uuid)
+
+        items = link_to._adapter.ObjectAdapter.getByIds(_items)
 
         for item in items:
             _f = link_to.toPython()
@@ -52,4 +51,4 @@ class Link(Act):
                 case 'unlink':
                     _f.unlink(_s)
 
-            self.log(f"{i.get('act')}ed {_f.getDbId()} and {_s.getDbId()}")
+            self.log("{0}ed {1} and {2}".format(i.get('act'), _f.getDbId(), _s.getDbId()))

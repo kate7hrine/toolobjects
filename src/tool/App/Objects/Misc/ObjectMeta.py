@@ -26,3 +26,10 @@ class ObjectMeta(BaseModel):
     created_at: Optional[datetime] = Field(default_factory=lambda: datetime.now())
     declared_created_at: Optional[datetime] = Field(default_factory=lambda: datetime.now())
     edited_at: Optional[datetime] = Field(default=None)
+
+    @property
+    def any_name(self):
+        if self.name == None:
+            return self.original_name
+
+        return self.name

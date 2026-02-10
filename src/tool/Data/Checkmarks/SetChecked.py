@@ -1,0 +1,29 @@
+from App.Objects.Act import Act
+from App.Objects.Arguments.Argument import Argument
+from App.Objects.Arguments.ArgumentDict import ArgumentDict
+from App.Responses.ObjectsList import ObjectsList
+from Data.Checkmarks.Checkmark import Checkmark
+from Data.Boolean import Boolean
+
+class SetChecked(Act):
+    @classmethod
+    def getArguments(cls) -> ArgumentDict:
+        return ArgumentDict(items = [
+            Argument(
+                name = 'item',
+                id_allow = True,
+                orig = Checkmark
+            ),
+            Argument(
+                name = 'state',
+                default = False,
+                orig = Boolean
+            )
+        ])
+    
+    def implementation(self, i):
+        item = i.get('item')
+        item.state = i.get('state')
+        item.save()
+
+        return ObjectsList(items = [item])

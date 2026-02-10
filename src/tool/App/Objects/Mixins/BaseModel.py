@@ -35,6 +35,9 @@ class BaseModel(PydanticBaseModel):
     def constructor(self):
         pass
 
+    def isInstance(self, object: PydanticBaseModel) -> bool:
+        return self.getClassNameJoined() == object.getClassNameJoined()
+
     def to_json(self, 
                 convert_links: Literal['unwrap', 'none'] = 'unwrap', 
                 exclude_internal: bool = False,
@@ -82,6 +85,9 @@ class BaseModel(PydanticBaseModel):
     def asArgument(cls, val: Any):
         if isinstance(val, cls):
             return val
+
+        if val == None:
+            return None
 
         return cls.model_validate(val)
 
@@ -135,7 +141,7 @@ class BaseModel(PydanticBaseModel):
     @classmethod
     def getAllowedViews(cls) -> list:
         '''
-        Get View classes where. If None -> allowed everywhere
+        Get View classes where. if None > allowed everywhere
         '''
         return None
 

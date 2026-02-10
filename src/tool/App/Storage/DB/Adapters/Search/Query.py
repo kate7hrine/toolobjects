@@ -7,6 +7,7 @@ from App.Storage.DB.Adapters.Representation.ObjectAdapter import ObjectAdapter
 class Query(ABC):
     _query: Any = None
     _model: Any = None
+    # conditions: list = []
     operators: ClassVar[dict] = {
         '==': '_op_equals',
         '!=': '_op_not_equals',
@@ -21,6 +22,7 @@ class Query(ABC):
 
     def addCondition(self, condition: Condition) -> Self:
         for key, val in self.operators.items():
+            # self.conditions.append(condition)
             if condition.operator == key:
                 self._query = getattr(self, val)(condition)
 

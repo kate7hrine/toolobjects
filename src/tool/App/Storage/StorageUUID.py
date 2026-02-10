@@ -1,4 +1,5 @@
 from App.Objects.Object import Object
+from typing import Self
 from pydantic import Field
 from App import app
 
@@ -25,6 +26,21 @@ class StorageUUID(Object):
 
         return _storage
 
+    @staticmethod
+    def validate(string: str) -> bool:
+        if isinstance(string, str) == False:
+            return False
+
+        return len(string.split('_')) == 2
+
+    @classmethod
+    def fromString(cls, string: str) -> Self:
+        _ids = string.split('_', 1)
+        return cls(
+            storage = _ids[0],
+            uuid = _ids[1]
+        )
+
     def getId(self):
         return f"{self.storage}_{self.uuid}"
 
@@ -42,4 +58,8 @@ class StorageUUID(Object):
         return _storage.adapter.ObjectAdapter.getById(self.uuid)
 
     def toPython(self):
-        return self.getItem().toPython()
+        _item = self.getItem()
+        if _item == None:
+            return None
+
+        return _item.toPython()

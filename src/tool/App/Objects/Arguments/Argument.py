@@ -1,9 +1,9 @@
-#from App.Documentation.Documentation import Documentation
 from .Assertions.Assertion import Assertion
 from App.Objects.Object import Object
 from typing import Any, List, Literal, Callable, Generator
 from pydantic import Field, computed_field
 from App.Objects.Locale.Documentation import Documentation
+from App.Storage.StorageUUID import StorageUUID
 
 class Argument(Object):
     '''
@@ -13,18 +13,22 @@ class Argument(Object):
     Passes in App.Data.DictList for convenience. So it relays on "name" field
 
     default: What value will be set if nothing passed
+
     assertions: List of App.Objects.Arguments.Assertions.*; post-getValue() checks. So it saves "inputs" and "current" for this
+    
     current: what was got after "getValue()"
+    
     auto_apply: current will be set after constructor()
 
     Argument can be used not only for validation, but for storing, for example, Queue "prestart"
     '''
 
     name: str = Field()
-    orig: Any = Field()
+    orig: list[Any] | Any = Field()
     default: Any | Callable = Field(default = None)
-    inputs: str = Field(default = None) # workaround
+    inputs: str = Field(default = None) # workaround for assertions
     is_sensitive: bool = Field(default = False)
+    id_allow: bool = Field(default = False) # workaround + hardcode
     auto_apply: bool = Field(default = False)
     assertions: List[Assertion] = Field(default=[])
     role: Literal['config', 'env'] = Field(default='config')
@@ -38,6 +42,10 @@ class Argument(Object):
 
         if self.orig == None:
             return original_value
+        
+        if self.id_allow == True:
+            if StorageUUID.validate(original_value):
+                return StorageUUID.fromString(original_value).toPython()
 
         return self.implementation(original_value)
 

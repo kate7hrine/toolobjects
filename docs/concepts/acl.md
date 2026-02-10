@@ -13,9 +13,9 @@ There is authentification system.
     ]
 ```
 
-if `root` not in this list, it will be created anyway with password `root`. Root password can be changed by passing him in config
+if `root` not in this list, it will be created anyway with password `root`. Default password can be changed by passing him in config.
 
-to generate `password_hash`, call `App.ACL.GetHash`:
+Tto generate `password_hash`, call `App.ACL.GetHash`:
 
 ```
 > python tool.py -i App.ACL.GetHash -string 123
@@ -23,9 +23,9 @@ to generate `password_hash`, call `App.ACL.GetHash`:
 
 ### Logging in
 
-`App.ACL.AuthLayer` provides `login` function. In `Console` view, you can pass `-username` and `-password` to log as someone
+`App.ACL.AuthLayer` provides `login` function. In `Console` view, you can pass `-username` and `-password` to log as someone.
 
-There is tokens that are not implemented yet
+There is tokens that are not implemented yet.
 
 ### Permissions
 

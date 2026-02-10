@@ -43,7 +43,12 @@ class Search(Act):
                 name = 'not_linked_to',
                 default = None,
                 orig = StorageUUID
-            )
+            ),
+            ListArgument(
+                name = 'uuids',
+                default = None,
+                orig = StorageUUID
+            ),
         ])
 
     async def implementation(self, i) -> ObjectsList:
@@ -57,7 +62,7 @@ class Search(Act):
         for key in ['linked_to', 'not_linked_to']:
             _operator = {'linked_to': 'in', 'not_linked_to': 'not_in'}[key]
             _ids = list()
-            if i.get(key) == None:
+            if len(i.get(key)) == 0:
                 continue
 
             for link in i.get(key):
@@ -75,6 +80,17 @@ class Search(Act):
                 val1 = 'uuid',
                 operator = _operator,
                 val2 = _ids
+            ))
+
+        if len(i.get('uuids')) > 0:
+            _ids_check = list()
+            for item_id in i.get('uuids'):
+                _ids_check.append(item_id.uuid)
+
+            _query.addCondition(Condition(
+                val1 = 'uuid',
+                operator = 'in',
+                val2 = _ids_check
             ))
 
         for condition in i.get('sort'):

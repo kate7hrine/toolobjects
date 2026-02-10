@@ -72,13 +72,24 @@ class DBInsertable():
                     link.setDb(_common.addLink(link = link))
 
         _common.flush_content(self)
-
         if _set_db == True:
             self.setDb(_common)
 
         self.flush_hook(into)
 
         return _common
+
+    def save(self) -> bool:
+        '''
+        Updates linked db item if exists
+        '''
+
+        if self.hasDb() == False:
+            return True
+
+        self.getDb().flush_content(self)
+
+        return True
 
     def flush_hook(self, into: Type) -> None:
         pass
