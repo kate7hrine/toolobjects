@@ -54,3 +54,13 @@ class BaseModel(Model, Section):
             return self.obj.name
 
         return self._get_name()
+
+    @computed_field
+    @property
+    def any_description(self) -> str:
+        if self.local_obj.description:
+            return self.local_obj.description
+        if self.obj.description:
+            return self.obj.description
+
+        return ''

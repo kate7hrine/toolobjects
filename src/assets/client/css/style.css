@@ -1,7 +1,6 @@
 #content {
     background: #fcfcfc;
-    padding: 10px 30px;
-    width: 73%;
+    padding: 10px 104px 10px 30px;
 }
 
 #upper {
@@ -68,7 +67,8 @@ textarea {
 }
 
 textarea.heighted {
-    height: 100px;
+    min-height: 600px;
+    max-height: unset;
 }
 
 .displayment_back {

@@ -3,6 +3,7 @@ from App.Objects.Object import Object
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.Assertions.NotNone import NotNone
+from App.Objects.Responses.ObjectsList import ObjectsList
 from Data.Types.Int import Int
 from Data.Types.Boolean import Boolean
 from Data.Types.Float import Float
@@ -46,6 +47,11 @@ class ExecuteIterative(Act):
                 name = 'iteration_key',
                 orig = String,
                 default = 'iteration'
+            ),
+            Argument(
+                name = 'return_something',
+                orig = Boolean,
+                default = True
             )
         ])
 
@@ -68,6 +74,8 @@ class ExecuteIterative(Act):
         same_all_time = i.get('same_all_time')
         iteration_key = i.get('iteration_key')
         is_infinite = max_iterations < 1
+        return_this = None
+        return_something = i.get('return_something')
         end_str = '∞'
 
         if is_infinite == False:
@@ -80,13 +88,23 @@ class ExecuteIterative(Act):
             self.log(f"Run {current_iterator}/{end_str}, interval {interval}")
 
             _dict_args[iteration_key] = current_iterator
+            _res = None
 
             if same_all_time == True:
-                await _obj.execute(_dict_args)
+                _res = await _obj.execute(_dict_args)
             else:
-                await _object().execute(_dict_args)
+                _res = await _object().execute(_dict_args)
+
+            if _res and isinstance(_res, ObjectsList) and return_something:
+                if return_this is None:
+                    return_this = ObjectsList(items = [], unsaveable = _res.unsaveable)
+
+                for item in _res.getItems():
+                    return_this.append(item)
 
             if is_infinite == False:
                 reached_end = current_iterator >= max_iterations
 
             await asyncio.sleep(interval)
+
+        return return_this

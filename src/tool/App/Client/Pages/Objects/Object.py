@@ -14,7 +14,8 @@ class Object(Displayment):
         assert len(objs) > 0, 'objects not found'
 
         context.update({
-            'objects': objs
+            'objects': objs,
+            'ref': query.get('ref')
         })
 
         match(act):
@@ -45,8 +46,29 @@ class Object(Displayment):
 
         return aiohttp_jinja2.render_template('Objects/db_object.html', request, context)
 
-    async def render_as_list_item(self, item):
+    async def render_as_list_item(self, item, args):
         self.context.update({
-            'item': item
+            'item': item,
+            'args': args
         })
         return self.render_string('Objects/object_listview.html')
+
+    async def render_as_collection(self, orig_items, args, orig_collection = None):
+        # getting html for each item
+
+        html_items = list()
+        for item in orig_items:
+            try:
+                _d = self.get_for(args.get('display_as'))(request = self.request, context = self.context)
+                _html = await _d.render_as_list_item(item, {})
+
+                html_items.append([item, _html])
+            except Exception as e:
+                self.log_error(e)
+                html_items.append([item, '<div><b class="error">{0}</b></div>'.format(str(e))])
+
+        self.context.update({
+            'items': html_items,
+            'args': args
+        })
+        return self.render_string('Explorer/objects_list.html')

@@ -9,9 +9,9 @@ Search
         <table>
             <tbody>
                 <tr>
-                    <td></td>
+                    <td>Query</td>
                     <td>
-                        <input placeholder="Query" type="text" name="q" value="{{params.get('q') or ''}}">
+                        <textarea style="height: 11px;max-width: 153px;" name="q">{{params.get('q') or ''}}</textarea>
                     </td>
                 </tr>
                 <tr>
@@ -59,6 +59,12 @@ Search
                         <input type="text" name="display_as" value="{{params.get('display_as') or ''}}">
                     </td>
                 </tr>
+                <tr>
+                    <td>Display this page as</td>
+                    <td>
+                        <input type="text" name="display_page_as" value="{{params.get('display_page_as') or ''}}">
+                    </td>
+                </tr>
             </tbody>
         </table>
         <input type="hidden" name="i" value="App.DB.Search">
@@ -73,18 +79,7 @@ Search
 
         <div>
             <div class="search_items">
-                {% for item in items %}
-                    <div class="search_item">
-                        {{item[1]|safe}}
-                    </div>
-
-                    {% if item[0].hasDb() %}
-                        <a href="?i=App.Objects.Object&uuids={{item[0].getDbIds()}}">
-                            <sup>{{ item[0].getDbIds() }}</sup>
-                        </a>
-                    {% endif %}
-                    <hr>
-                {% endfor %}
+                {{search_html|safe}}
             </div>
 
             <div id="pages">

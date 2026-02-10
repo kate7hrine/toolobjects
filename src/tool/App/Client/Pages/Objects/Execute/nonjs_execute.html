@@ -15,7 +15,7 @@
                     <div>
                         <b>{{ argument.name }}</b>
                         <div>
-                            <textarea name="{{argument.name}}">{{argument.get_str_default() or ''}}</textarea>
+                            <textarea name="{{argument.name}}">{{post_data.get(argument.name) or (argument.get_str_default() or '')}}</textarea>
                         </div>
                     </div>
                 {% endfor %}
@@ -31,7 +31,7 @@
                         <div><b>Notice: custom arguments will not be counted.</b></div>
                     {% endif %}
                     <input type="text" id="_add_name">
-                    <input type="button" onclick="_add()" value="Insert argument">
+                    <input type="button" onclick="_add()" value="Insert">
                 </div>
             </div>
         </div>
@@ -58,7 +58,15 @@
         }
     </script>
 
-    {% if data %}
+    {% if data_htmls %}
+        <div>
+            {% for item in data_htmls %}
+                {{item|safe}}
+            {% endfor %}
+
+            <hr>
+        </div>
+    {% elif data %}
         <div>
             <hr>
             <textarea class="heighted" name="results">{{data}}</textarea>

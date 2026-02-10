@@ -13,7 +13,7 @@ class Displayment(Object):
     Representation of object in client (template render of each object)
     '''
 
-    for_object: ClassVar[str] = ''
+    for_object: ClassVar[str | list[str]] = ''
     request: Any = None
     context: Any = {}
     auth: Any = None
@@ -24,7 +24,13 @@ class Displayment(Object):
         ...
 
     # should return "render_string"
-    async def render_as_list_item(self):
+    async def render_as_list_item(self, args):
+        ...
+
+    async def render_as_object(self, item, args):
+        ...
+
+    async def render_as_collection(self, orig_items, args, orig_collection = None):
         ...
 
     @classmethod
@@ -50,6 +56,11 @@ class Displayment(Object):
 
     def render_string(self, template: str):
         return aiohttp_jinja2.render_string(template, self.request, self.context)
+
+    def throw_message(self, message: str, message_type: str = None):
+        self.context.update({
+            'special_message': message
+        })
 
     def get_objs(self, uuids):
         objs = list()
