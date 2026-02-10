@@ -52,9 +52,6 @@ class Server(View):
             )
         ]
 
-    def _get_random_port(self):
-        return random.randint(1024, 49151)
-
     async def _implementation(self, i):
         _host = self.getOption("web.options.host")
         _port = self.getOption("web.options.port")
@@ -92,8 +89,13 @@ class Server(View):
         _http = 'http://'
         self.log("Started server on {0}{1}:{2}".format(_http, self._get_ip(_host), _port))
 
+        asyncio.create_task(app.Autostart.start_them(i.get('pre_i')))
+
         while True:
             await asyncio.sleep(3600)
+
+    def _get_random_port(self):
+        return random.randint(1024, 49151)
 
     def _get_ip(self, host: str):
         if host in ['127.0.0.1', 'localhost']:

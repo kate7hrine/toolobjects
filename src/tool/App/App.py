@@ -106,7 +106,7 @@ class App(Object):
                     path = 'App\\Objects\\Index\\PostRun.py'
                 ),
                 LoadedObject(
-                    path = 'App\\Objects\\Daemons\\List.py'
+                    path = 'App\\Objects\\Autostart\\List.py'
                 ),
                 LoadedObject(
                     path = 'App\\Locale\\Locales.py'
