@@ -1,4 +1,3 @@
-from App.Objects.Displayments.StringDisplayment import StringDisplayment
 from Data.Primitives.Checkmarks.Checkmark import Checkmark
 from App.Objects.Act import Act
 from typing import Generator
@@ -21,24 +20,13 @@ class List(Collection):
             if item.isInstance(Checkmark):
                 yield item
 
-    @classmethod
-    def _displayments(cls):
-        class DisplayAsString(Act):
-            def _implementation(self, i):
-                orig = i.get('orig')
-                _out = f"Checkmarks list \"{str(orig.obj.name)}\""
-                _out += "\n"
+    def _display_as_string(self):
+        _out = f"Checkmarks list \"{str(self.obj.name)}\""
+        _out += "\n"
 
-                for checkmark in orig.getCheckmarks():
-                    _out += checkmark.displayAsString()
+        for checkmark in self.getCheckmarks():
+            _out += checkmark.displayAsString()
 
-                _out += "\n"
+        _out += "\n"
 
-                return _out
-
-        return [
-            StringDisplayment( 
-                role = ['str'],
-                value = DisplayAsString
-            )
-        ]
+        return _out

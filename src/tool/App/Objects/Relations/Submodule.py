@@ -1,9 +1,10 @@
-from App.Objects.Relations.Link import Link
+from App.Objects.Mixins.Model import Model
 from typing import Literal
 from pydantic import Field, field_serializer
 from App.Objects.Index.ModuleData import ModuleData
+from typing import Any
 
-class Submodule(Link):
+class Submodule(Model):
     '''
     Submodule of an object
 
@@ -18,6 +19,7 @@ class Submodule(Link):
     convertation: will be used for convertTo
     '''
 
+    item: Any = Field()
     role: list[Literal['link_allowed', 'usage', 'action', 'object_in', 'object_out', 'object', 'thumbnail', 'common', 'wheel', 'convertation', 'test', 'returns'] | str] = Field(default = ['common'])
 
     @field_serializer('item')

@@ -26,27 +26,6 @@ class Convertable(BaseModel):
         _itm = _conv.item()
         return await _itm.execute(i = {'orig': self})
 
-    @classmethod
-    def _displayments(cls) -> list[BaseModel]:
-        return None
-
-    @classmethod
-    def getDisplayments(cls) -> Generator[BaseModel]:
-        for item in cls.getMRO():
-            if hasattr(item, '_displayments') == True:
-                new = item._displayments()
-                if new == None:
-                    continue
-
-                for item in new:
-                    yield item
-
-    def displayAs(self, as_type: str = 'str') -> str | Any:
-        # It would'nt work with JSComponentDisplayment (change later)
-        for displayment_probaly in self.getDisplayments():
-            if as_type in displayment_probaly.display_type:
-                return displayment_probaly.value()._implementation(i = {'orig': self})
-
     def displayAsString(self, show_id: bool = True) -> str:
         def getIdSign():
             if self.hasDb():
@@ -55,7 +34,7 @@ class Convertable(BaseModel):
             return '[not flushed]'
     
         _ret = "<{0}>".format(self._getClassNameJoined()) # self.__repr_str__(', ')
-        _res = self.displayAs(as_type = 'str')
+        _res = self._display_as_string()
         if _res != None:
             _ret = _res
 
