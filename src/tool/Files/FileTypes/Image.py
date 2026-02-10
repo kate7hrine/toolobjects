@@ -19,7 +19,9 @@ class Image(FileType):
     def _read_file(self):
         from PIL import Image
 
-        return Image.open(str(self.get_file().getPath()))
+        _img = Image.open(str(self.get_file().getPath()))
+
+        return _img
 
     def _set_dimensions(self, data):
         self.width = data.size[0]
@@ -29,7 +31,6 @@ class Image(FileType):
         sizes = (data.size[0], data.size[1])
         new_sizes = (int(sizes[0] * percentage), int(sizes[1] * percentage))
         resized_img = data.resize(new_sizes)
-        #data.convert('RGB')
         resized_img.convert('RGB')
 
         _thumb_image = Image()

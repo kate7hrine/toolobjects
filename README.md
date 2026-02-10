@@ -6,6 +6,7 @@ Experimental data receivation / organization tool / framework / app / toolbox / 
 
 - [How to run (Console view)](docs/guides/running.md)
 - [Some examples](docs/guides/examples.md)
+- [Implementing script](docs/guides/implementing.md)
 <!--- [Example 1: implementing TODO list](docs/guides/todo_list.md)-->
 - [Example 2: RSS channels](docs/guides/rss.md)
 

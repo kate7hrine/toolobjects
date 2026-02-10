@@ -35,7 +35,7 @@ class Download(Extractor):
             ),
             Argument(
                 name = 'make_thumbnail',
-                default = True,
+                default = False,
                 orig = Boolean
             )
         ])
@@ -63,10 +63,13 @@ class Download(Extractor):
             image._set_dimensions(_read)
 
             if i.get('make_thumbnail') == True:
-                thumb = image._make_thumbnail(_read)
+                try:
+                    thumb = image._make_thumbnail(_read)
 
-                image.link(thumb.obj, role = ['thumbnail'])
-                image.obj.add_thumbnail(thumb)
+                    image.link(thumb.obj, role = ['thumbnail'])
+                    image.obj.add_thumbnail(thumb)
+                except Exception as e:
+                    self.log_error(e, role = ['thumbnail'], exception_prefix = 'Error when making thumbnail: ')
 
         image.obj.make_public()
         image.obj.set_common_source(Source(

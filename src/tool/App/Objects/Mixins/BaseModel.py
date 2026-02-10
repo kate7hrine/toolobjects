@@ -175,9 +175,14 @@ class BaseModel(PydanticBaseModel):
             if isinstance(item, PydanticBaseModel):
                 item.__init_subclass__()
 
-    def _serializer(self, value: Any):
+    def _serializer(self, field_name: str, value: Any):
         if isinstance(value, datetime):
             return value.timestamp()
+
+        if True:
+            for key, val in self.__pydantic_decorators__.field_serializers.items():
+                if field_name in val.info.fields:
+                    return val.func(self, value)
 
         return value
 
@@ -234,7 +239,7 @@ class BaseModel(PydanticBaseModel):
                     if BaseModel._dump_options['convert_links'] == True:
                         result.get('field_name').append(item.unwrap())
             else:
-                _val = self._serializer(value)
+                _val = self._serializer(field_name, value)
                 if _val == None and self._dump_options.get('exclude_none') == True:
                     continue
 

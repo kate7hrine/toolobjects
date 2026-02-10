@@ -7,23 +7,6 @@ from App.Storage.StorageUUID import StorageUUID
 from Data.JSON import JSON
 
 class Argument(Object):
-    '''
-    Object that allows to define what arguments something (executable) uses.
-    It takes string on input and can convert it to stated in name value.
-
-    Passes in App.Data.DictList for convenience. So it relays on "name" field
-
-    default: What value will be set if nothing passed
-
-    assertions: List of App.Objects.Arguments.Assertions.*; post-getValue() checks. So it saves "inputs" and "current" for this
-    
-    current: what was got after "getValue()"
-    
-    auto_apply: current will be set after constructor()
-
-    Argument can be used not only for validation, but for storing, for example, Queue "prestart"
-    '''
-
     name: str = Field()
     orig: list[Any] | Any = Field()
     default: Any | Callable = Field(default = None)
