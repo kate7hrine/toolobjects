@@ -9,7 +9,7 @@
     display: block;
     width: fit-content;
     min-width: 136px;
-    background: #dfdddd;
+    background: #f4caff;
     padding: 3px 7px;
 }
 
@@ -19,7 +19,7 @@
     left: 0;
     position: absolute;
     z-index: -1;
-    background: #dfdddd87;
+    background: #c886bd87;
 }
 
 #upper_bar #bookmarks {
@@ -57,7 +57,7 @@
     overflow-y: auto;
     max-height: 96vh;
 
-    background: white;
+    background: #fffcfc85;
 }
 
 .search_items .search_item {
@@ -70,7 +70,7 @@
 .search_items .search_item a {
     text-decoration: none;
     font-size: 12px;
-    width: 145px;
+    width: 100px;
 }
 
 #floating_menu:hover {
@@ -105,6 +105,7 @@ input[type='text'] {
 body {
     word-break: break-word;
     word-wrap: break-word;
+    background: #9f92cd80;
 }
 
 .options_hidden {

@@ -281,7 +281,9 @@ class Model(PydanticBaseModel, Section):
                             # self.log('not converting links')
 
                             assert value.link != None and value.field != None, 'broken link insertion'
-                            assert value.link.hasDb() == True, 'broken link insertion: it did not flushed'
+
+                            if type(value.link) != int:
+                                assert value.link.hasDb() == True, 'broken link insertion: it did not flushed'
 
                             _res = value
                     elif (isinstance(value, list) and value and isinstance(value[0], LinkInsertion)):

@@ -41,7 +41,7 @@ class ByDir(Extractor):
             Argument(
                 name = 'split.collection_type',
                 orig = Object,
-                default = 'Data.Primitives.Collections.Collection'
+                default = 'Media.List.List'
             ),
             Argument(
                 name = 'split.find_covers',
@@ -109,7 +109,7 @@ class ByDir(Extractor):
 
             return False
 
-        def rglob(path, pattern, max_depth, current_depth = 0, old_coll = None) -> Generator:
+        async def rglob(path, pattern, max_depth, current_depth = 0, old_coll = None) -> Generator:
             pathes = {'path': path, 'coll': None, 'old_path': old_coll, 'items': list(), 'name': path.name}
             # Split is enabled, so creating collection for the current level
             coll = None
@@ -121,7 +121,7 @@ class ByDir(Extractor):
                 coll.local_obj.make_public()
                 pathes['coll'] = coll
 
-                self.log('split to new collection ({0})'.format(coll.obj.name))
+                self.log('split to new collection (name: {0})'.format(coll.obj.name))
 
                 #pathes_collections[str(path)] = coll
                 self.append(coll)
@@ -137,7 +137,8 @@ class ByDir(Extractor):
                         covers.append(new_path)
 
                 if new_path.is_dir():
-                    yield from rglob(new_path, pattern, max_depth, current_depth + 1, coll)
+                    async for _y_item in rglob(new_path, pattern, max_depth, current_depth + 1, coll):
+                        yield _y_item
 
                 if check_suffix(new_path) == False:
                     continue
@@ -149,8 +150,8 @@ class ByDir(Extractor):
                     self.log('found cover item {0}'.format(str(cover_item)))
 
                     try:
-                        for _item in i.get('object').get_thumbnail_for_collection(cover_item):
-                            coll.local_obj.add_thumbnail(_item)
+                        for _item in await i.get('object').get_thumbnail_for_collection(cover_item):
+                            coll.add_thumbnail(_item)
                     except Exception as e:
                         self.log_error(e)
 
@@ -161,7 +162,7 @@ class ByDir(Extractor):
             self.log('Path {0}'.format(dir_item))
 
             # Iterating subfolders
-            for item in rglob(dir_item, '*', max_depth):
+            async for item in rglob(dir_item, '*', max_depth):
                 self.log('Subpath {0}'.format(item.get('path')))
 
                 # Getting as ByPath
@@ -177,3 +178,5 @@ class ByDir(Extractor):
                         coll.link(item, role = ['list_item'])
                     else:
                         self.append(item)
+
+                    item.local_obj.make_public()

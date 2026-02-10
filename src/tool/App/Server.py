@@ -171,7 +171,7 @@ class Server(View):
             ('/storage/{storage}/{uuid}/{path:.*}', self._get_storage_unit, 'get'),
             ('/api', self._single_call, ['get', 'post', 'options']),
             ('/rpc', self._ws, 'get'),
-            ('/api/upload/{storage}', self._upload_storage_unit, 'post'),
+            ('/api/upload', self._upload_storage_unit, 'post'),
         ]:
             self._register_route(route)
 
@@ -396,7 +396,7 @@ class Server(View):
         if _user == None:
             raise web.HTTPForbidden(reason="access denied")
 
-        _storage = request.match_info.get('storage', '')
+        _storage = _query.get('storage', '')
         storage = app.Storage.get(_storage)
         if storage == None:
             raise web.HTTPNotAcceptable(text="not found storage")

@@ -27,7 +27,7 @@
                 </div>
             </div>
         {% else %}
-            <a href="{{url_for_object}}{{item.getDbIds()}}">unsupported</a>
+            <a href="{{url_for_object}}{{item.getDbIds()}}">unsupported ({{item.media_type}})</a>
         {% endif %}
     {% endfor %}
 </div>

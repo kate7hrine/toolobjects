@@ -87,7 +87,7 @@ class Media(FileType):
         self.obj.name = path.name
 
     @classmethod
-    def get_thumbnail_for_collection(self, path):
+    async def get_thumbnail_for_collection(self, path):
         return []
 
     @classmethod

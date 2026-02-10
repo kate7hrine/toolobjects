@@ -15,7 +15,10 @@ class Audio(Media):
     performers: list[str] = Field(default = [])
 
     @classmethod
-    def get_thumbnail_for_collection(self, path):
-        #await ByPath().execute({})
-        #_image = Image()
-        return []
+    async def get_thumbnail_for_collection(self, path):
+        _items = await ByPath().execute({
+            'path': path,
+            'object': 'Media.Images.Image'
+        })
+
+        return _items.getItems()
