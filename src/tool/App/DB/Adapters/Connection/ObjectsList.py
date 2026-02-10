@@ -102,6 +102,10 @@ class ObjectsList(ConnectionAdapter):
             role: list[str] = []
             order: int = None
 
+            def reorder(self, order: int = 0):
+                self.order = order
+                self_adapter.commit()
+
             def getTarget(self):
                 _obj = _ObjectAdapter.getById(self.target)
                 if _obj == None:

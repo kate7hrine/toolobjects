@@ -1,5 +1,5 @@
 from App.Objects.Object import Object
-from App.Objects.Misc.Increment import Increment
+from Data.Increment import Increment
 from App.Objects.Arguments.Argument import Argument
 from Web.DownloadManager.Item import Item
 from App.Storage.StorageUnit import StorageUnit

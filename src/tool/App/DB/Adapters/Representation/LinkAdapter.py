@@ -34,5 +34,9 @@ class LinkAdapter(AbstractAdapter):
         return _link
 
     @abstractmethod
+    def reorder(self, order: int):
+        self.order = order
+
+    @abstractmethod
     def deleteFromDB(self, remove_links: bool = False):
         ...

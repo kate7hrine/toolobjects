@@ -8,10 +8,13 @@ from App.Objects.Object import Object
 from App.Objects.Relations.Link import Link as CommonLink
 from App.Objects.Requirements.Requirement import Requirement
 from App.Objects.Misc.UnknownObject import UnknownObject
+from Data.Increment import Increment
 from typing import Any, Generator
 import json
 
 class SQLAlchemy(ConnectionAdapter):
+    _links_count: int = 0
+
     class QueryAdapter(Query):
         _model: Any = None
         _query: Any = None
@@ -68,7 +71,7 @@ class SQLAlchemy(ConnectionAdapter):
             return self
 
         def _applyLimits(self):
-            self._query = self._query.limit(self.limits)
+            self._query = self._query.limit(self.getLimit())
 
             return self._query
 
@@ -109,6 +112,10 @@ class SQLAlchemy(ConnectionAdapter):
             role = Column(String(), nullable = True)
             order = Column(Integer())
 
+            def reorder(self, order: int = 0):
+                self.order = order
+                self_adapter.commit()
+
             def getTarget(self):
                 _obj = _ObjectAdapter.getById(self.target)
                 if _obj == None:
@@ -130,6 +137,7 @@ class SQLAlchemy(ConnectionAdapter):
 
                 self.owner = owner.uuid
                 self.target = link.item.getDbId()
+                self.order = self_adapter._links_count.getIndex()
                 if len(link.role) > 0:
                     self.role = json.dumps(link.role)
 
@@ -169,7 +177,8 @@ class SQLAlchemy(ConnectionAdapter):
 
             # Link functions
             def getLinks(self) -> Generator[CommonLink]:
-                links = _session.query(_LinkAdapter).filter(_LinkAdapter.owner == self.uuid)
+                links = _session.query(_LinkAdapter).filter(_LinkAdapter.owner == self.uuid).order_by(_LinkAdapter.order)
+
                 for link in links:
                     _res = link.toPython()
                     if link == None or _res == None:
@@ -238,6 +247,7 @@ class SQLAlchemy(ConnectionAdapter):
         self._set_id_gen()
         self._get_engine(connection_string)
         self._init_models()
+        self._links_count = Increment(value = self._session.query(self.LinkAdapter).count())
 
     def _get_engine(self, connection_str: str):
         from sqlalchemy import create_engine
