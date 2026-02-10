@@ -1,7 +1,7 @@
 **Getting random number and saving it**
 
 ```
-> python tool.py -i Data.Random.GetRandomInt.GetRandomInt -save_to tmp
+> python tool.py -i Data.Random.GetInt.GetInt -save_to tmp
 ```
 
 **Searching**

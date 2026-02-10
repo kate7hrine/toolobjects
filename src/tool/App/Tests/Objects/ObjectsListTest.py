@@ -1,6 +1,6 @@
 from App.Objects.Test import Test
 from App.Storage.Item.StorageItem import StorageItem
-from Data.Random.GetRandomInt import GetRandomInt
+from Data.Random.GetInt import GetInt
 from App.Objects.Responses.ObjectsList import ObjectsList
 from App import app
 
@@ -18,7 +18,7 @@ class ObjectsListTest(Test):
 
         _vals = ObjectsList(items = [])
         for item in range(0, 200):
-            _vals.join(await GetRandomInt().execute({'min': 0, 'max': max(item - 1, 1)}))
+            _vals.join(await GetInt().execute({'min': 0, 'max': max(item - 1, 1)}))
 
         _i = 0
         for item in _vals.getItems():

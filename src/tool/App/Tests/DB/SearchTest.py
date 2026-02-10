@@ -1,5 +1,5 @@
 from App.Objects.Test import Test
-from Data.Random.GetRandomInt import GetRandomInt
+from Data.Random.GetInt import GetInt
 from App.DB.Search.Search import Search
 from App import app
 from App.DB.Query.Condition import Condition
@@ -12,7 +12,7 @@ class SearchTest(Test):
         '''
         _ids = list()
         for i in range(1, 100):
-            _item = await GetRandomInt().execute({'min': i, 'max': i * 100})
+            _item = await GetInt().execute({'min': i, 'max': i * 100})
             _item.first().flush(_storage)
 
             if i % 10 == 0:
