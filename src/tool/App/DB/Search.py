@@ -5,8 +5,8 @@ from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ListArgument import ListArgument
 from Data.Int import Int
-from App.Storage.DB.Adapters.Search.Condition import Condition
-from App.Storage.DB.Adapters.Search.Sort import Sort
+from App.DB.Adapters.Search.Condition import Condition
+from App.DB.Adapters.Search.Sort import Sort
 from App.Storage.StorageItem import StorageItem
 from App.Storage.StorageUUID import StorageUUID
 

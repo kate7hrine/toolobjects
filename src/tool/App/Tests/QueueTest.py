@@ -41,7 +41,7 @@ class QueueTest(Test):
         }
         '''
             {
-                "predicate": "App.Storage.DB.Save",
+                "predicate": "App.DB.Save",
                 "arguments": {
                     "object": {
                         "direct_value": "#1"

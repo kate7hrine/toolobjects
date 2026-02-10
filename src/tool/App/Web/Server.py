@@ -9,7 +9,7 @@ from Data.JSON import JSON
 from aiohttp import web
 from App import app
 from pathlib import Path
-from App.Storage.DB.Adapters.Search.Condition import Condition
+from App.DB.Adapters.Search.Condition import Condition
 from App.Storage.StorageUnit import StorageUnit
 import asyncio, traceback
 

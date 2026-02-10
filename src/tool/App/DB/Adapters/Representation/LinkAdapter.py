@@ -1,8 +1,8 @@
 from App.Objects.Relations.Link import Link
 from Data.JSON import JSON
 from abc import abstractmethod
-from App.Storage.DB.Adapters.Representation.AbstractAdapter import AbstractAdapter
-from App.Storage.DB.Adapters.Representation.ObjectAdapter import ObjectAdapter
+from App.DB.Adapters.Representation.AbstractAdapter import AbstractAdapter
+from App.DB.Adapters.Representation.ObjectAdapter import ObjectAdapter
 
 class LinkAdapter(AbstractAdapter):
     owner: int = None

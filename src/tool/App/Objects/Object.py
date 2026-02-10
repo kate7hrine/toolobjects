@@ -9,7 +9,7 @@ from .Mixins.Submodulable import Submodulable
 from .Mixins.Saveable import Saveable
 from .Mixins.Updateable import Updateable
 from App.ACL.Limitable import Limitable
-from App.Storage.DB.DBInsertable import DBInsertable
+from App.DB.DBInsertable import DBInsertable
 from typing import ClassVar
 from pydantic import ConfigDict
 from App import app

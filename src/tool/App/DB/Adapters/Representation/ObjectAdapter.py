@@ -4,7 +4,7 @@ from App.Objects.Relations.Link import Link as CommonLink
 from typing import Any, Generator
 from App.Objects.Object import Object
 from abc import ABC, abstractmethod
-from App.Storage.DB.Adapters.Representation.AbstractAdapter import AbstractAdapter
+from App.DB.Adapters.Representation.AbstractAdapter import AbstractAdapter
 from App.Objects.Misc.UnknownObject import UnknownObject
 import json
 

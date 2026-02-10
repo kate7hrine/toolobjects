@@ -1,9 +1,9 @@
 from App.Objects.Test import Test
 from Data.Random import Random
-from App.Storage.DB.Search import Search
+from App.DB.Search import Search
 from App import app
-from App.Storage.DB.Adapters.Search.Condition import Condition
-from App.Storage.DB.Adapters.Search.Sort import Sort
+from App.DB.Adapters.Search.Condition import Condition
+from App.DB.Adapters.Search.Sort import Sort
 
 class SearchTest(Test):
     async def implementation(self, i):

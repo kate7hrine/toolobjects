@@ -49,7 +49,7 @@ db and storage:
 - [x] argument: default env val
 - [x] VirtualPath
 - [x] DisplayType (?) submodule=displayment
-- [x] App.Storage.DB.Search
+- [x] App.DB.Search
 - [ ] App.Storage.Movement.Export and App.Storage.Movement.Import with zip
 - [ ] App.Storage.Movement.ExportAsFiles
 - [ ] objectlist adapter
@@ -116,6 +116,6 @@ others:
 - [ ] App.Objects.View can be imagined as App.Objects.Displayment
 - [ ] App.Object.Paginable
 - [ ] storage unit password & encryption)
-- [ ] App.Storage.Movement* acts logically should belong to App.Storage.DB*
+- [ ] App.Storage.Movement* acts logically should belong to App.DB*
 - [ ] link with parent=None to link to the db (there is `root_uuid` anyway, this solution is ненаглядно)
 - [ ] LinkInsertion must be changed after flushing from db (but i did workaround with self._get() function)

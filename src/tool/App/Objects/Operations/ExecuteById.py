@@ -60,7 +60,7 @@ class ExecuteById(Act):
             ),
             Argument(
                 name = 'link',
-                default = True,
+                default = False,
                 orig = Boolean, 
                 documentation = Documentation(
                     name = Key(

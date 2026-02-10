@@ -1,9 +1,9 @@
-from App.Storage.DB.Adapters.ConnectionAdapter import ConnectionAdapter
-from App.Storage.DB.Adapters.Representation.ObjectAdapter import ObjectAdapter
-from App.Storage.DB.Adapters.Representation.LinkAdapter import LinkAdapter
-from App.Storage.DB.Adapters.Search.Query import Query
-from App.Storage.DB.Adapters.Search.Condition import Condition
-from App.Storage.DB.Adapters.Search.Sort import Sort
+from App.DB.Adapters.ConnectionAdapter import ConnectionAdapter
+from App.DB.Adapters.Representation.ObjectAdapter import ObjectAdapter
+from App.DB.Adapters.Representation.LinkAdapter import LinkAdapter
+from App.DB.Adapters.Search.Query import Query
+from App.DB.Adapters.Search.Condition import Condition
+from App.DB.Adapters.Search.Sort import Sort
 from App.Objects.Object import Object
 from App.Objects.Relations.Link import Link as CommonLink
 from App.Objects.Requirements.Requirement import Requirement

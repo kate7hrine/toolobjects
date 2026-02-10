@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, model_serializer
 from typing import Any
-from App.Storage.DB.DBInsertable import DBInsertable
+from App.DB.DBInsertable import DBInsertable
 from App.Objects.Mixins.Section import Section
 
 class LinkInsertion(BaseModel, DBInsertable, Section):

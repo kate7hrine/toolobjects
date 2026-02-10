@@ -1,6 +1,6 @@
 from typing import Any, Type
 from pydantic import computed_field
-from App.Storage.DB.DBInfo import DBInfo
+from App.DB.DBInfo import DBInfo
 
 class DBInsertable():
     _db: Any = None  # : ObjectAdapter
@@ -59,7 +59,7 @@ class DBInsertable():
         into: StorageItem
 
         Returns:
-        Storage.DB.Adapters.Connection.ObjectAdapter
+        DB.Adapters.Connection.ObjectAdapter
         '''
 
         # We cant annotate this class here, so probaly the StorageItem should have this method? But we have StorageUnit that need to take its files to another dir

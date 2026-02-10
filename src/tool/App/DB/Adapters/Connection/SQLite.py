@@ -1,5 +1,5 @@
-from App.Storage.DB.Adapters.Connection.SQLAlchemy import SQLAlchemy
-from App.Storage.DB.Adapters.Search.Condition import Condition
+from App.DB.Adapters.Connection.SQLAlchemy import SQLAlchemy
+from App.DB.Adapters.Search.Condition import Condition
 from pydantic import Field
 
 class SQLite(SQLAlchemy):

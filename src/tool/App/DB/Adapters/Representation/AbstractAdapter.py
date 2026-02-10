@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from typing import Any
-from App.Storage.DB.Adapters.Search.Condition import Condition
+from App.DB.Adapters.Search.Condition import Condition
 
 class AbstractAdapter():
     _adapter: Any = None
