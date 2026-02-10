@@ -7,7 +7,7 @@ class Displayment(BaseModel):
     '''
 
     role: list[Literal['str', 'js'] | str] = []
-    value: str = None
+    value: str | Any = None # probaly module
 
     def implementation(self, i: dict) -> Any:
         '''

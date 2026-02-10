@@ -44,51 +44,7 @@ Getting from db:
 
 OK, lets add checkmarks list showing:
 
-```
-class Checkmark(Object):
-    @classmethod
-    def getDisplayments(cls):
-        class DisplayAsString(Displayment):
-            role = ['str']
-
-            def implementation(self, i):
-                orig = i.get('orig')
-                _mark = "[ ]"
-                if orig.state:
-                    _mark = "[x]"
-
-                return _mark + " " + orig.label + ' '
-
-        return [DisplayAsString()]
-```
-
-```
-class List(Object):
-    def getCheckmarks(self) -> Generator[Checkmark]:
-        for link in self.getLinked():
-            item = link.item
-            if item.isInstance(Checkmark):
-                yield item
-
-    @classmethod
-    def getDisplayments(cls):
-        class DisplayAsString(Displayment):
-            role = ['str']
-
-            def implementation(self, i):
-                orig = i.get('orig')
-                _out = f"Checkmarks list \"{str(orig.obj.any_name)}\""
-                _out += "\n"
-
-                for checkmark in orig.getCheckmarks():
-                    _out += checkmark.displayAsString()
-
-                _out += "\n"
-
-                return _out
-
-        return [DisplayAsString()]
-```
+...
 
 It's so nested, but it works and shows many ids:
 

@@ -7,8 +7,9 @@ from pathlib import Path
 
 class Item(Object):
     _manager_link: Any = None
-    task: Any = None
-    run_flag: Any = None #asyncio.Event
+    _task: Any = None
+    _run_flag: Any = None #asyncio.Event
+    _request: Any = None
 
     url: str = Field()
     name: str = Field()
@@ -18,37 +19,37 @@ class Item(Object):
     started_at: datetime.datetime = Field(default = None)
     response_iter: int = Field(default = 1024)
     save_to_file: bool = Field(default = True)
-    _unserializable = ['task', 'run_flag']
+    _unserializable = ['_task', '_run_flag']
 
     def _constructor(self):
-        self.run_flag = asyncio.Event()
+        self._run_flag = asyncio.Event()
         self.id = self._manager_link.queue.downloads.getIndex()
 
     def pause(self):
-        self.run_flag.clear()
+        self._run_flag.clear()
 
     def resume(self):
-        self.run_flag.set()
+        self._run_flag.set()
 
     def getPath(self):
         return Path(self.download_dir).joinpath(self.name)
 
     async def start(self) -> asyncio.Task:
-        async with self._manager_link.session as session:
+        async with self._manager_link.getSession() as session:
             self.log(f"started download. URL: {self.url}")
             self.started_at = datetime.datetime.now()
             self.resume()
-            self.task = await asyncio.create_task(self.download(session))
+            self._task = await asyncio.create_task(self.download(session))
 
-            return self.task
+            return self._task
 
     async def download(self, session):
         async with self._manager_link.semaphore:
-            self.request = session.get(self.url,
+            request = session.get(self.url,
                                        allow_redirects=self._manager_link.getOption('download_manager.allow_redirects'), 
                                        headers=self._manager_link.getHeaders())
 
-            async with self.request as response:
+            async with request as response:
                 status = response.status
 
                 assert status not in [404, 403], '404'
@@ -72,7 +73,7 @@ class Item(Object):
 
         with open(self.getPath(), 'wb') as stream:
             async for chunk in response.content.iter_chunked(self.response_iter):
-                await self.run_flag.wait()
+                await self._run_flag.wait()
 
                 stream.write(chunk)
 

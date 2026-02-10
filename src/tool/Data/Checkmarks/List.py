@@ -14,8 +14,6 @@ class List(Object):
     @classmethod
     def getDisplayments(cls):
         class DisplayAsString(Act):
-            role = ['str']
-
             def implementation(self, i):
                 orig = i.get('orig')
                 _out = f"Checkmarks list \"{str(orig.obj.any_name)}\""

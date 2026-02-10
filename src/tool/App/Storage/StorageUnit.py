@@ -72,7 +72,8 @@ class StorageUnit(Object):
 
         try:
             self.copySelf(_hash)
-        except AssertionError:
+        except AssertionError as e:
+            self.log_raw(e)
             pass
 
     def copySelf(self, new_path: Path):

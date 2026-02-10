@@ -105,6 +105,9 @@ class SQLAlchemy(ConnectionAdapter):
                     self.role = str(link.role)
 
                 link.setDb(self)
+                self_adapter.log(f"flushed link with target uuid {link.item.getDbId()}")
+                owner._orig.save()
+
                 _session.add(self)
 
             def fallback(self):
@@ -114,15 +117,20 @@ class SQLAlchemy(ConnectionAdapter):
         class _ObjectAdapter(ObjectAdapter, Base):
             __tablename__ = 'objects'
             _adapter = self_adapter
+            _orig = None
 
             uuid = Column(Integer(), primary_key=True)
             content = Column(String(), nullable=False)
 
             def toDB(self, obj: Object):
                 _session.add(self)
-                self.flush_content(obj)
+                self._orig = obj
+                self.flush_content(self._orig)
 
-            def flush_content(self, obj: Object):
+            def flush_content(self, obj: Object = None):
+                if obj == None:
+                    obj = self._orig
+
                 _data = obj.to_json(
                     exclude_internal = False,
                     exclude = ['links', 'db_info', 'class_name'],

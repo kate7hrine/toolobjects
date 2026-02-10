@@ -24,16 +24,27 @@ class Linkable(BaseModel):
         pass
 
     def addLink(self, link: Link) -> Link:
+        assert hasattr(link, 'item'), 'link to nothing'
+
         if self.hasDb() == True:
             if link.item.hasDb() == False:
                 self.log('addLink: {0} {1} item is flushed, {2} is not, so we will flush item that we link'.format(self.getClassNameJoined(), self.getDbId(), link.item.getClassNameJoined()))
 
                 link.item.setDb(link.item.flush(self.getDb()._adapter._storage_item))
 
+            if self.sameDbWith(link.item) == False:
+                self.log('OK, link item and current item has db, but they are not same, so changing linking item db to current item db')
+
+                link.item.setDb(link.item.flush(self.getDb()._adapter._storage_item))                
+
             self.getDb().addLink(link)
 
             return link
+        else:
+            pass
+            #self.log('current item does not has db!')
 
+        self.log('linked items with classes {0}, {1}'.format(self.getClassNameJoined(), link.item.getClassNameJoined()))
         self.links.append(link)
 
         return link
@@ -87,3 +98,6 @@ class Linkable(BaseModel):
             return _field.unwrap()
 
         return _field
+
+    def _set(self, field, value = None):
+        setattr(self, field, value)

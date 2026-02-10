@@ -64,15 +64,18 @@ class Manager(Object):
         if self.session == None:
             self._constructor()
 
+    def getSession(self):
+        import aiohttp
+
+        return aiohttp.ClientSession(
+            timeout = self.timeout,
+        )
+
     def _constructor(self):
         '''
         bc it loads before loop creates
         '''
-        import aiohttp
-
-        self.session = aiohttp.ClientSession(
-            timeout = self.timeout,
-        )
+        self.session = self.getSession()
 
     @classmethod
     def mount(cls):
@@ -92,7 +95,7 @@ class Manager(Object):
         _headers = Headers()
         _headers.user_agent = self.getOption("download_manager.user_agent")
 
-        return _headers.to_json(by_alias = True)
+        return _headers.minimal_json()
 
     @classmethod
     def getSettings(cls):

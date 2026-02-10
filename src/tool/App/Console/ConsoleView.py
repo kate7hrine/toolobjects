@@ -20,6 +20,8 @@ class ConsoleView(View):
         return await self.execute(_parsed_argv[0])
 
     async def implementation(self, i: ArgumentValues = {}):
+        self.log("Some arguments cannot be passed in console, try to use -view App.Web.Server.Run")
+
         i.set('auth', self._auth(i.get('username'), i.get('password')))
 
         pre_i = i.get('pre_i')()

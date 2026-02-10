@@ -29,6 +29,9 @@ class DBInsertable():
     def hasDb(self):
         return self._db != None
 
+    def sameDbWith(self, item):
+        return self.getDb()._adapter._storage_item.name == item.getDb()._adapter._storage_item.name
+
     def flush(self, 
               into: Type,
               flush_linked: bool = True,
@@ -65,8 +68,10 @@ class DBInsertable():
                     continue
 
                 link.item.flush(into,
+                                flush_linked,
                                 link_current_depth,
-                                link_max_depth)
+                                link_max_depth,
+                                set_db)
 
                 if _set_db == True:
                     link.setDb(_common.addLink(link = link))

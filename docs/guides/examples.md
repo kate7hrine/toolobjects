@@ -1,5 +1,11 @@
 **Getting random number and saving it**
 
 ```
--i Data.Random -save_to tmp
+python tool.py -i Data.Random -save_to tmp
+```
+
+**Searching**
+
+```
+python tool.py -i App.Storage.DB.Search -storage content
 ```

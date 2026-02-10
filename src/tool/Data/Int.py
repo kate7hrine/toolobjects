@@ -8,8 +8,6 @@ class Int(Object):
     @classmethod
     def getDisplayments(cls):
         class DisplayAsString(Act):
-            role = ['str']
-
             def implementation(self, i):
                 orig = i.get('orig')
                 return str(orig.value)

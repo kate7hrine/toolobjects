@@ -2,6 +2,7 @@ from App.Objects.Object import Object
 from pydantic import Field
 from typing import Any, ClassVar
 from snowflake import SnowflakeGenerator
+from App.Logger.LogPrefix import LogPrefix
 
 class ConnectionAdapter(Object):
     '''
@@ -32,3 +33,10 @@ class ConnectionAdapter(Object):
 
     def getQuery(self):
         return self.ObjectAdapter.getQuery()
+
+    @property
+    def append_prefix(self):
+        return LogPrefix(
+            name = 'Storage',
+            id = self._storage_item.name
+        )

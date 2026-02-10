@@ -38,6 +38,9 @@ class BaseModel(PydanticBaseModel):
     def isInstance(self, object: PydanticBaseModel) -> bool:
         return self.getClassNameJoined() == object.getClassNameJoined()
 
+    def minimal_json(self):
+        return self.to_json(only_class_fields=True, by_alias=True)
+
     def to_json(self, 
                 convert_links: Literal['unwrap', 'none'] = 'unwrap', 
                 exclude_internal: bool = False,
@@ -111,7 +114,11 @@ class BaseModel(PydanticBaseModel):
         a.b.c.d.d or something
         '''
 
-        return cls.getName() + [cls.__name__]
+        return cls.getName() + [cls.getModuleName()]
+
+    @classmethod
+    def getModuleName(cls):
+        return cls.__name__
 
     @classmethod
     def getNameJoined(self):

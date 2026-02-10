@@ -20,8 +20,9 @@ Experimental data archivation / receivation / organization tool / framework / ap
 - [Download manager](docs/other/download_manager.md)
 
 - [How to run (Console view)](docs/views/console.md)
-- [Example 1: implementing TODO list](docs/views/todo_list.md)
-- [Example 2: RSS channels](docs/views/rss.md)
+- [Some examples](docs/guides/examples.md)
+- [Example 1: implementing TODO list](docs/guides/todo_list.md)
+- [Example 2: RSS channels](docs/guides/rss.md)
 
 ## API
 

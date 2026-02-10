@@ -7,7 +7,6 @@ class ListArgument(Argument):
     allow_commas_fallback: bool = Field(default = True)
     single_recommended: bool = Field(default = False)
     total_count: int = Field(default=0)
-    allow_commas_fallback: bool = Field(default=True)
 
     def getImplementation(self, val: Any | str) -> Any:
         results = list()
