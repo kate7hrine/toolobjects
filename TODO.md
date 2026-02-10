@@ -98,14 +98,13 @@ modules:
 
 web crawler:
 
-- [ ] images downloading
-- [ ] css assets downloading
-- [ ] css assets downloading: data:base64
-- [ ] removing scripts mode
+- [x] assets downloading
+- [ ] css assets downloading (or do serviceworker)
+- [ ] scripts remover
 - [ ] screenshot taker
-- [ ] href and src replacer
-- [ ] setting every style of element mode
-- [ ] fonts downloading
+- [x] href and src replacer
+- [ ] inline styles mode
+- [ ] relative links replacer
 
 web:
 
@@ -114,14 +113,16 @@ web:
 - [ ] hook functions for thread and variables
 - [x] file uploading
 - [x] file uploading auth
-- [ ] file uploading: after save action
+- [x] file uploading: after save action
 
 client:
 
-- [ ] storage item page
-- [ ] object and linked page
-- [ ] search
-- [ ] execute page
+- [x] storage item page
+- [x] object and linked page
+- [x] search
+- [x] execute page
+- [ ] thumbnails
+- [ ] collection create page
 
 others:
 

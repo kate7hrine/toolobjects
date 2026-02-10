@@ -3,7 +3,7 @@ from App import app
 from App.DB.Query.Condition import Condition
 from App.DB.Query.Values.Value import Value
 from App.Objects.Responses.ObjectsList import ObjectsList
-from Web.Crawler.Webdrivers.Webdriver import Webdriver
+from Web.Pages.Crawler.Webdrivers.Webdriver import Webdriver
 
 class Get(Act):
     def _implementation(self, i):

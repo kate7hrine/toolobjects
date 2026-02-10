@@ -16,6 +16,7 @@ from typing import Any
 from App.DB.Query.Condition import Condition
 from App.DB.Query.Values.Value import Value
 from App.Storage.StorageUnit import StorageUnit
+from Web.Pages.Assets.Asset import Asset
 
 import asyncio, traceback
 import socket
@@ -25,6 +26,8 @@ from typing import Optional, Coroutine, ClassVar
 from aiohttp import web
 from App import app
 from pathlib import Path
+import urllib
+import base64
 
 class Server(View):
     roles: ClassVar[dict] = {
@@ -206,9 +209,8 @@ class Server(View):
             assert static_file.exists() == True and static_file.is_file() == True
             static_file.resolve().relative_to(_assets.resolve())
         except (ValueError, RuntimeError, AssertionError):
-
             self.log(_msg + ", failed.", role = self.roles.get('asset_request'))
-            raise web.HTTPForbidden(reason="Not found / Access denied")
+            raise web.HTTPNotFound(reason="Not found")
 
         self.log(_msg, role = self.roles.get('asset_request'))
 
@@ -226,6 +228,10 @@ class Server(View):
         uuid = int(request.match_info.get('uuid', ''))
         _storage = request.match_info.get('storage', '')
         path = request.match_info.get('path', '')
+        path = urllib.parse.unquote(path)
+        decode_path = request.query.get('d') == '1'
+        if decode_path:
+            path = base64.urlsafe_b64decode(path.encode('utf-8')).decode()
 
         storage = app.Storage.get(_storage)
 

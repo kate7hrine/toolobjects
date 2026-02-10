@@ -1,10 +1,13 @@
 from App.Objects.Object import Object
 from typing import Any
+from Web.Pages.Crawler.Webdrivers.GotRequest import GotRequest
 from urllib.parse import urlparse
+from pydantic import Field
 import asyncio
 
 class WebdriverPage(Object):
     url_override: str = None
+    got_assets: list[GotRequest] = Field(default = [])
     _page: Any = None
     _unserializable = ['_page']
 
@@ -12,7 +15,12 @@ class WebdriverPage(Object):
         await self._page.set_viewport_size(viewport)
 
     async def goto(self, url: str, wait_until: str = 'domcontentloaded'):
-        await self._page.goto(url, wait_until = wait_until)
+        try:
+            _res = await self._page.goto(url, wait_until = wait_until)
+        except TimeoutError as e:
+            self.log_error(e)
+
+        return _res
         #page.wait_for_load_state('networkidle')
 
     async def close(self):

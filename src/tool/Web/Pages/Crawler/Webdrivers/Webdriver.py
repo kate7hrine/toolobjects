@@ -15,6 +15,10 @@ class Webdriver(Object):
     async def start(self, i):
         ...
 
+    @abstractmethod
+    async def new_page(self, crawler):
+        pass
+
     def get_useragent(self) -> str:
         _passed = self.getOption('web.crawler.user_agent')
         if _passed == None:

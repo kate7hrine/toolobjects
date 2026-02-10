@@ -32,7 +32,7 @@ class Object(Displayment):
                     _class = self.get_for(_as)
                     if _class == None:
                         htmls.append(
-                            (item, aiohttp_jinja2.render_string('Components/message.html', request, {'message': 'not found displayment for ' + _as}))
+                            (item, aiohttp_jinja2.render_string('Components/message.html', self.request, {'message': 'not found displayment for ' + _as}))
                         )
                         continue
                     else:

@@ -54,12 +54,7 @@ class Get(Wheel):
 
         pages = await extract.execute(i)
 
-        crawler = i.get('mode')()
-        do_crawl = i.get('crawl')
         for page in pages.getItems():
-            if do_crawl:
-                await crawler.process_page(page, i)
-
             await page.clear()
 
         return pages
