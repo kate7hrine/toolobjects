@@ -91,6 +91,9 @@ class ArgumentValues(Object):
 
         return value
 
+    def getCompare(self, name: str):
+        return self.compare.get(name)
+
     def diff(self):
         diff_value = 0
 

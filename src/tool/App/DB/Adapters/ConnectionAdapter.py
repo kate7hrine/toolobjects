@@ -16,6 +16,7 @@ class ConnectionAdapter(Object):
     protocol: str = Field(default = 'none')
     delimiter: str = Field(default = ':///')
     name: str = Field(default = 'objects')
+    auto_commit: bool = Field(default = True)
 
     _storage_item: Any = None # Storage item DI
     _id_gen: Any = None
@@ -30,6 +31,9 @@ class ConnectionAdapter(Object):
         unit.toDB(item)
 
         return unit
+
+    def commit(self):
+        pass
 
     def getQuery(self):
         return self.ObjectAdapter.getQuery()

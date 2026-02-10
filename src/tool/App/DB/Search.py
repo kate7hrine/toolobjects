@@ -32,7 +32,7 @@ class Search(Act):
             Argument(
                 name = 'limit',
                 orig = Int,
-                default = -1
+                default = 30
             ),
             ListArgument(
                 name = 'linked_to',
@@ -56,6 +56,9 @@ class Search(Act):
         _storage = i.get('storage')
 
         _query = _storage.adapter.getQuery()
+        if i.get('limit') > 0:
+            _query.limit(i.get('limit'))
+
         for condition in i.get('conditions'):
             _query.addCondition(condition)
 
@@ -95,9 +98,6 @@ class Search(Act):
 
         for condition in i.get('sort'):
             _query.addSort(condition)
-
-        if i.get('limit') > 0:
-            _query.limit(i.get('limit'))
 
         for item in _query.getAll():
             try:

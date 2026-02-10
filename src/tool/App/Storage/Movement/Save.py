@@ -44,9 +44,10 @@ class Save(Act):
         for item in i.get('link_to'):
             link_to.append(item.toPython())
 
+        _i = 0
         for storage in i.get('storage'):
-            # i can't get name to display that its not found !!!!
-            assert storage != None, "storage not founb" #f"storage {storage.name} not found"
+            _storage_name = i.getCompare('storage').inputs[_i]
+            assert storage != None, f"storage {_storage_name} not found"
             assert storage.hasAdapter(), f"storage {storage.name} does not contains db connection"
 
             for item in i.get('items').getItems():
@@ -59,5 +60,11 @@ class Save(Act):
                     link_item.link(item)
 
                     self.log(f"saving: linked {item.getDbId()} to {link_item.getDbId()}")
+
+            if storage.adapter.auto_commit == False:
+                self.log('{0}: commit'.format(_storage_name))
+                storage.adapter.commit()
+
+            _i += 1
 
         return AnyResponse(data = results)

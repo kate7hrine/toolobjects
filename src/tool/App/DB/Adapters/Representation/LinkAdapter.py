@@ -14,11 +14,14 @@ class LinkAdapter(AbstractAdapter):
     def getTarget(self) -> ObjectAdapter:
         pass
 
-    def toPython(self) -> Link:
-        _role = []
+    def _parseRoles(self) -> list:
         if self.role != None:
-            _role = JSON().fromText(self.role)
+            return JSON().fromText(self.role)
 
+        return []
+
+    def toPython(self) -> Link:
+        _role = self._parseRoles()
         _target = self.getTarget()
         if _target == None:
             return None

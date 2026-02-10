@@ -63,6 +63,7 @@ db and storage:
 - [x] link to storageunit file (StorageUnitLink)
 - [ ] remove console and to_json differences
 - [ ] advanced Conditions (val1 % val2 > 0 or smth)
+- [ ] storage item.commit()
 
 - [ ] VirtualPath
 

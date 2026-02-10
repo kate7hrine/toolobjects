@@ -96,7 +96,7 @@ class Manager(Object):
         _headers = Headers()
         _headers.user_agent = self.getOption("download_manager.user_agent")
 
-        return _headers.minimal_json()
+        return _headers.to_minimal_json()
 
     @classmethod
     def _settings(cls):

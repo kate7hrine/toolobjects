@@ -6,6 +6,9 @@ class AbstractAdapter():
     _adapter: Any = None
     uuid: int = None
 
+    def getStorageItemName(self) -> str:
+        return self._adapter._storage_item.name
+
     @classmethod
     @abstractmethod
     def getQuery(self):

@@ -1,6 +1,6 @@
 ### toolobjects
 
-Experimental data receivation / organization tool / framework / app / toolbox / toolkit / plugin system
+Experimental framework with object organization
 
 ### Documentation
 
@@ -24,14 +24,4 @@ Experimental data receivation / organization tool / framework / app / toolbox / 
 - [Queue](docs/other/queue.md)
 - [Daemons](docs/other/daemons.md)
 - [Download manager](docs/other/download_manager.md)
-
-## Objects
-
-- [App.Objects.Object](docs/api/App.Objects.Object.md)
-- [App.Objects.Index.PostRun](docs/api/App.Objects.Index.PostRun.md)
-- [App.Objects.Mixins.BaseModel](docs/api/App.Objects.Mixins.BaseModel.md)
-- [App.Objects.Wheel](docs/api/App.Objects.Wheel.md)
-- [Media.Images.Download](docs/api/Media.Images.Download.md)
-- [Media.Images.List](docs/api/Media.Images.List.md)
-- [Media.Images.Image](docs/api/Files.FileTypes.Image.md)
-- [Files.FileType](docs/api/Files.FileType.md)
+- [Objects](docs/api)

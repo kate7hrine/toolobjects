@@ -33,7 +33,7 @@ class LogFile(Object):
 
     def log(self, item: Log):
         try:
-            self.items.append(item.minimal_json())
+            self.items.append(item.to_minimal_json())
         except Exception as e:
             self.log_error(e)
 

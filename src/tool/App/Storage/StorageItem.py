@@ -18,7 +18,8 @@ class StorageItem(Object):
 
     name: str = Field()
     directory: str = Field(default = None)
-    db: dict = Field(default = None) # "adapter" and any other params. sorry but not annotated >_<
+    db_type: str = Field(default = None)
+    db: dict = Field(default = None)
     root_uuid: int = Field(default = None)
 
     # display_name: str = Field(default = None)
@@ -53,8 +54,8 @@ class StorageItem(Object):
 
     def init_hook(self):
         self._initStorage()
-        if self.db != None:
-            self.adapter = self.getDBAdapterByName(self.db.get('adapter'))
+        if self.db_type != None:
+            self.adapter = self.getDBAdapterByName(self.db_type)
 
     def _initStorage(self):
         if self.directory != None:

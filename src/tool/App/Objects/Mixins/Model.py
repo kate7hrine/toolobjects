@@ -93,8 +93,18 @@ class Model(PydanticBaseModel):
         '''
         return None
 
-    def minimal_json(self):
+    def to_minimal_json(self):
         return self.to_json(only_class_fields=True, by_alias=True)
+
+    def to_extended_json(self):
+        return self.to_json(
+            exclude_internal = False,
+            exclude = ['links', 'db_info', 'class_name'],
+            convert_links = False,
+            exclude_none = True,
+            exclude_defaults = True,
+            only_class_fields = False
+        )
 
     def to_json(self, 
                 convert_links: Literal['unwrap', 'none'] = 'unwrap', 

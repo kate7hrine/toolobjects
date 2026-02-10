@@ -7,7 +7,7 @@ from App.DB.Adapters.Representation.ObjectAdapter import ObjectAdapter
 class Query(ABC):
     conditions: list[Condition] = []
     sorts: list[Sort] = []
-    limits: int = None
+    _limit: int = None
     operators: ClassVar[dict] = {
         '==': '_op_equals',
         '!=': '_op_not_equals',
@@ -49,7 +49,10 @@ class Query(ABC):
         ...
 
     def limit(self, limit: int) -> Self:
-        self.limits = limit
+        self._limit = limit
+
+    def getLimit(self) -> int:
+        return self._limit
 
     def addCondition(self, condition: Condition) -> Self:
         self.conditions.append(condition)

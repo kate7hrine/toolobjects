@@ -31,14 +31,17 @@ class ObjectAdapter(AbstractAdapter):
     def deleteFromDB(self, remove_links: bool = True):
         ...
 
+    def _parseJson(self) -> dict:
+        return JSON().fromText(self.content).data
+
     def toPython(self):
         _object_name = None
 
         try:
-            _content = JSON().fromText(self.content)
-            _object_name = _content.data.get('obj').get('saved_via').get('object_name')
+            _content = self._parseJson()
+            _object_name = _content.get('obj').get('saved_via').get('object_name')
             _class = app.ObjectsList.getByName(_object_name).getModule()
-            _item = _class.model_validate(_content.data, strict = False)
+            _item = _class.model_validate(_content, strict = False)
             _item.setDb(self)
 
             return _item

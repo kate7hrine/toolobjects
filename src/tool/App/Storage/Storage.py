@@ -23,17 +23,19 @@ class Storage(Object):
         dbs_dir = app.app.storage.joinpath('dbs')
         dbs_dir.mkdir(exist_ok=True)
 
+        for item in self.getOption('storage.items'):
+            self.append(item)
+
         default_items = [
             StorageItem(
                 name = 'common',
-                db = {
-                    'adapter': 'sqlite',
-                }
+                db_type = 'sqlite',
+                db = {}
             ),
             StorageItem(
                 name = 'tmp',
+                db_type = 'sqlite',
                 db = {
-                    'adapter': 'sqlite',
                     'content': ':memory:'
                 }
             ),
@@ -61,7 +63,7 @@ class Storage(Object):
     def _settings(cls):
         return [
             ListArgument(
-                name = 'storage.dbs',
+                name = 'storage.items',
                 default = [],
                 orig = StorageItem
             ),

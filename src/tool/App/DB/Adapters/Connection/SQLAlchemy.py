@@ -23,6 +23,9 @@ class SQLAlchemy(ConnectionAdapter):
         def _op_equals(self, condition):
             return self._query.filter(self._getComparement(condition) == condition.getLast())
 
+        def _op_not_equals(self, condition):
+            return self._query.filter(self._getComparement(condition) != condition.getLast())
+
         def _op_in(self, condition):
             return self._query.filter(self._getComparement(condition).in_(condition.getLast()))
 
@@ -83,13 +86,18 @@ class SQLAlchemy(ConnectionAdapter):
             for item in self._query:
                 yield item
 
-    # we have to put this into function(
+    # we have to put this into function :(to have links to the connection class and session)
     def _init_models(self_adapter):
         from sqlalchemy.ext.declarative import declarative_base
         from sqlalchemy import Column, Integer, event, String
 
         Base = declarative_base()
         _session = self_adapter._session
+
+        def _commit():
+            _session.commit()
+
+        self_adapter.commit = _commit
 
         class _LinkAdapter(LinkAdapter, Base):
             __tablename__ = 'links'
@@ -118,7 +126,7 @@ class SQLAlchemy(ConnectionAdapter):
 
             def toDB(self, owner, link: CommonLink):
                 assert link.item.hasDb(), 'link item is not flushed'
-                assert self._adapter._storage_item.name == link.item._db._adapter._storage_item.name, 'cross db'
+                assert self.getStorageItemName() == link.item._db.getStorageItemName(), 'cross db'
 
                 self.owner = owner.uuid
                 self.target = link.item.getDbId()
@@ -154,16 +162,10 @@ class SQLAlchemy(ConnectionAdapter):
                 if obj == None:
                     obj = self._orig
 
-                _data = obj.to_json(
-                    exclude_internal = False,
-                    exclude = ['links', 'db_info', 'class_name'],
-                    convert_links = False,
-                    exclude_none = True,
-                    exclude_defaults = True,
-                    only_class_fields = False
-                )
-                self.content = json.dumps(_data)
-                _session.commit()
+                self.content = json.dumps(obj.to_extended_json())
+
+                if self_adapter.auto_commit == True:
+                    self_adapter.commit()
 
             # Link functions
             def getLinks(self) -> Generator[CommonLink]:
@@ -189,20 +191,24 @@ class SQLAlchemy(ConnectionAdapter):
             def addLink(self, link: CommonLink):
                 _link = _LinkAdapter()
                 _link.toDB(self, link)
-                _session.commit()
+
+                if self_adapter.auto_commit == True:
+                    self_adapter.commit()
 
                 return _link
 
             def removeLink(self, link: CommonLink):
-                pass
+                link.delete()
 
             def deleteFromDB(self, remove_links: bool = True):
                 from sqlalchemy import delete
-                for item in self.getLinks():
-                    item.delete()
+
+                if remove_links == True:
+                    for item in self.getLinks():
+                        item.delete()
+
                 _session.delete(self)
 
-        # Automatically sets snowflake id
         @event.listens_for(_ObjectAdapter, 'before_insert', propagate=True)
         @event.listens_for(_LinkAdapter, 'before_insert', propagate=True)
         def receive_before_insert(mapper, connection, target):
