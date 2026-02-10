@@ -69,7 +69,7 @@ class Downloader(Object):
             ),
             Argument(
                 name = 'webdriver.sizes',
-                default = '1920,1200',
+                default = None,
                 orig = String
             ),
             Argument(

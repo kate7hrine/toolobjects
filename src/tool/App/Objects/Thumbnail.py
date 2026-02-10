@@ -16,6 +16,6 @@ class Thumbnail(Act):
             Argument(
                 name = 'object',
                 orig = cls.thumb_for,
-                assertions = [NotNone()]
+                #assertions = [NotNone()]
             )
         ])

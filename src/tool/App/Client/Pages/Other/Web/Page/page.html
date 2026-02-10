@@ -11,16 +11,8 @@
                 #___to_insert_page > #___to_inserted_page_banner {
                     position: fixed;
                     z-index: 9999;
-                    width: 100%;
-                    height: 34px;
-                    padding-left: 20px;
                     top: 0;
                     left: 0;
-                    display: flex;
-                    align-items: center;
-                    box-sizing: border-box;
-                    background: #ffffff85;
-                    opacity: 1;
                 }
 
                 #___to_insert_page > #___to_inserted_page_banner > * {
@@ -30,14 +22,14 @@
                     color: unset !important;
                     width: unset;
                 }
-
-                #___to_insert_page {
-                    padding-top: 34px;
-                }
             </style>
             <div id="___to_inserted_page_banner">
                 <a href="{{url_for_object}}{{item.getDbIds()}}">
                     <<< back
+                </a>
+                |
+                <a href="{{options_url}}">
+                    options
                 </a>
             </div>
         {% endif %}

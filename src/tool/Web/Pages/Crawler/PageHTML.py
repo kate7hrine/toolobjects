@@ -67,8 +67,7 @@ class PageHTML(Object):
 
     def get_downloadable_links(self, orig_page: Page):
         for item in self.get_links(orig_page):
-            print('downloadable link', item)
-            if item.rel in ['alternate']:
+            if item.should_download() == False:
                 continue
 
             yield item

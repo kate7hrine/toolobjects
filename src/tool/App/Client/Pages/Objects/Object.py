@@ -50,6 +50,17 @@ class Object(Displayment):
                 self.context['htmls'] = htmls
 
                 return self.render_template('Objects/displayments.html')
+            case 'show_thumbnails':
+                thumbs = list()
+                for item in objs:
+                    for thumb in item.get_thumbnails():
+                        thumbs.append(thumb)
+
+                self.context.update({
+                    'thumbnails': thumbs,
+                    'ref': query.get('ref')
+                })
+                return self.render_template('Objects/thumbnails.html')
 
         return self.render_template('Objects/db_object.html')
 

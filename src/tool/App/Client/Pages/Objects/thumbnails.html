@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+Thumbnails
+{% endblock %}
+
+{% block body %}
+    <style>
+        img {
+            width: 100%;
+        }
+    </style>
+    {% for thumb in thumbnails %}
+        <div>
+            {% if 'image' in thumb.role %}
+                <div>
+                    <a target="_blank" href="{{thumb._get('obj').get_url(True)}}">
+                        <img src="{{thumb._get('obj').get_url(True)}}">
+                    </a>
+                </div>
+            {% else %}
+                <span>unknown role</span>
+            {% endif %}
+        </div>
+
+        <hr>
+    {% endfor %}
+{% endblock %}

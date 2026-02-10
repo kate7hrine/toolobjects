@@ -22,6 +22,3 @@ class URL(Object):
             return None
 
         return _name
-
-    async def download_function(self, dir: str):
-        pass

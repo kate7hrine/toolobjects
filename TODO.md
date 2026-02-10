@@ -105,13 +105,13 @@ media:
 web crawler:
 
 - [x] assets downloading
-- [ ] css assets downloading (or do serviceworker)
-- [ ] scripts remover
-- [ ] screenshot taker
+- [ ] css assets replacer (or make serviceworker that do this)
+- [x] scripts remover
+- [x] screenshot taker
 - [x] href and src replacer
 - [ ] inline styles mode
-- [ ] relative links replacer
-- [ ] redirected assets
+- [x] relative links replacer
+- [x] redirected assets
 - [x] tampermonkey script
 
 web:
@@ -129,8 +129,8 @@ client:
 - [x] object and linked page
 - [x] search
 - [x] execute page
-- [ ] thumbnails
-- [ ] collection create page
+- [x] thumbnails
+- [x] collection create page
 
 others:
 

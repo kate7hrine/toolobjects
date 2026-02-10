@@ -18,7 +18,9 @@ class Chromedriver(Webdriver):
     #_service: Any = None
 
     async def start(self, i):
-        size = i.get('webdriver.sizes').split(',')
+        size = None
+        if i.get('webdriver.sizes') != None:
+            size = i.get('webdriver.sizes').split(',')
 
         self._playwright = await async_playwright().start()
 
@@ -31,7 +33,11 @@ class Chromedriver(Webdriver):
             user_agent = self.get_useragent(),
         )
 
-        self.viewport = {"width": int(size[0]), "height": int(size[1])}
+        try:
+            if size != None:
+                self.viewport = {"width": int(size[0]), "height": int(size[1])}
+        except Exception as e:
+            self.log_error(e)
 
     async def _launch_browser(self, i):
         args = [

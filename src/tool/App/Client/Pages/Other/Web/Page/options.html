@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}
+Options
+{% endblock %}
+
+{% block body %}
+    <div>
+        <a href="{{back}}"><<< {{_("client.web_pages.back")}}</a>
+    </div>
+
+    <div>
+
+    <div>
+        <form method="get">
+            <input type="hidden" name="i", value="App.Objects.Object">
+            <input type="hidden" name="uuids", value="{{item.getDbIds()}}">
+            <input type="hidden" name="act" value="display">
+            <input type="hidden" name="as" value="Web.Pages.Page">
+
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Encoding</td>
+                        <td>
+                            <input type="text" name="encoding" value="{{item.html.encoding}}">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="submit" value="Show">
+        </form>
+    </div>
+{% endblock %}

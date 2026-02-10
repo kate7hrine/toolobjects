@@ -2,11 +2,10 @@ from typing import Any
 from App.Objects.Misc.ObjectMeta import ObjectMeta
 from App.Objects.Misc.LocalObjectMeta import LocalObjectMeta
 from App.Objects.Misc.SavedVia import SavedVia
-from App.Objects.Mixins.Section import Section
 from App.Objects.Mixins.Model import Model
 from pydantic import Field, model_validator, computed_field
 
-class BaseModel(Model, Section):
+class BaseModel(Model):
     obj: ObjectMeta = Field(default = ObjectMeta())
     local_obj: LocalObjectMeta = Field(default = LocalObjectMeta())
 
@@ -64,3 +63,9 @@ class BaseModel(Model, Section):
             return self.obj.description
 
         return ''
+
+    def get_thumbnails(self):
+        for thumb in self.local_obj.thumbnail:
+            thumb.setDb(self.getDb())
+
+            yield thumb

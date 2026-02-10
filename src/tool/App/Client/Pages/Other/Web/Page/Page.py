@@ -9,6 +9,7 @@ class Page(Displayment):
 
     async def render_as_page(self, args = {}):
         query = self.request.rel_url.query
+
         act = query.get('act')
         item = args.get('item')
         if item == None:
@@ -16,21 +17,31 @@ class Page(Displayment):
 
         assert item != None, 'not found page'
 
+        if act in ['url', 'options']:
+            self.context.update({
+                'item': item,
+                'back': '/?i=App.Objects.Object&uuids={0}&act=display&as=Web.Pages.Page'.format(item.getDbIds()),
+            })
+
         match (act):
             case 'url':
                 url = query.get('url')
                 self.context.update({
-                    'item': item,
                     'url': Asset.get_decoded_url(url),
-                    'back': '/?i=App.Objects.Object&uuids={0}&act=display&as=Web.Pages.Page'.format(item.getDbIds())
                 })
+                return self.render_template('Other/Web/Page/page_url.html')
+            case 'options':
+                return self.render_template('Other/Web/Page/options.html')
 
-                return self.render_template('Other/Web/page_url.html')
+        encoding = item.html.encoding
+        encoding = 'utf-8'
+        if query.get('encoding') != None:
+            encoding = query.get('encoding')
 
         hide_banner = query.get('hide_banner') == '1'
         html_path = item._get('html').get_main()
 
-        html = html_path.read_text(encoding = item.html.encoding)
+        html = html_path.read_text(encoding = encoding)
 
         html = PageHTML.from_html(html)
         html.make_correct_links(item)
@@ -40,7 +51,8 @@ class Page(Displayment):
             'item': item,
             'head_html': head_html,
             'html': html.prettify(),
-            'hide_banner': hide_banner
+            'hide_banner': hide_banner,
+            'options_url': '/?i=Web.Pages.Page&item={0}&act=options'.format(item.getDbIds())
         })
 
-        return self.render_template('Other/Web/page.html')
+        return self.render_template('Other/Web/Page/page.html')

@@ -44,8 +44,11 @@ class AssetMixin(BaseModel):
     async def download(self, dir: str):
         await self.download_function(dir)
 
-    async def download_function(self, dir):
-        _item = app.DownloadManager.addURL(self.url, dir, self.get_encoded_url())
+    async def download_function(self, dir, name: str = None):
+        if name == None:
+            name = self.get_encoded_url()
+
+        _item = app.DownloadManager.addURL(self.url, dir, str(name))
         await _item.start()
 
     def get_encoded_url(self):
