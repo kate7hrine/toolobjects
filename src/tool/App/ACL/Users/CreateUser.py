@@ -2,7 +2,7 @@ from App.Objects.Act import Act
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
-from App.ACL.Acts.GetHash import GetHash
+from App.ACL.GetHash import GetHash
 from App.ACL.User import User
 from App import app
 

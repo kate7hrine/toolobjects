@@ -1,0 +1,46 @@
+from App.Objects.Act import Act
+from App.Objects.Arguments.ArgumentDict import ArgumentDict
+from App.Objects.Arguments.Argument import Argument
+from App.Objects.Arguments.Assertions.NotNoneAssertion import NotNoneAssertion
+from App.Objects.Responses.ObjectsList import ObjectsList
+from App.ACL.Tokens.Token import Token
+from Data.String import String
+from App import app
+import datetime
+
+class Auth(Act):
+    @classmethod
+    def _arguments(cls) -> ArgumentDict:
+        return ArgumentDict(items = [
+            Argument(
+                name = 'username',
+                orig = String,
+                assertions = [NotNoneAssertion()]
+            ),
+            Argument(
+                name = 'password',
+                orig = String,
+                assertions = [NotNoneAssertion()]
+            )
+        ])
+
+    def implementation(self, i):
+        _user = app.AuthLayer.login(
+            name = i.get('username'),
+            password = i.get('password')
+        )
+
+        _token = Token(
+            value = Token.get_hash(),
+            user = _user.name,
+            expires_at = Token.get_expired()
+        )
+
+        _token.flush(app.Storage.get('users'))
+
+        return ObjectsList(items = [String(value = _token.value)], unsaveable = True)
+
+    @classmethod
+    def canBeUsedBy(cls, user):
+        return True
+        #return user.name == 'root' or user == None

@@ -1,0 +1,33 @@
+from App.Objects.Object import Object
+from App.ACL.User import User
+from datetime import datetime
+from pydantic import Field
+import secrets
+from App import app
+
+class Token(Object):
+    value: str = Field()
+    user: str = Field()
+    expires_at: datetime = Field()
+
+    def is_expired(self):
+        return datetime.now().timestamp() > self.expires_at.timestamp()
+
+    def can_be_refreshed(self):
+        return app.AuthLayer.getOption('app.auth.token.refresh_limit') + datetime.now().timestamp() > self.expires_at.timestamp()
+
+    @staticmethod
+    def get_hash():
+        return secrets.token_urlsafe(64)
+
+    @staticmethod
+    def get_expired():
+        lifetime = app.AuthLayer.getOption('app.auth.token.life')
+
+        assert lifetime > 0, 'Invalid token lifetime'
+
+        _now = datetime.now().timestamp()
+        return _now + lifetime
+
+    def to_user(self) -> User:
+        return app.AuthLayer.getUserByName(self.user)

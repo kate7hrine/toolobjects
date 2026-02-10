@@ -241,6 +241,8 @@ class SQLAlchemy(ConnectionAdapter):
                         item.delete()
 
                 self_adapter.getSession().delete(self)
+                if self_adapter.auto_commit == True:
+                    self_adapter.commit()
 
         @event.listens_for(_ObjectAdapter, 'before_insert', propagate=True)
         @event.listens_for(_LinkAdapter, 'before_insert', propagate=True)

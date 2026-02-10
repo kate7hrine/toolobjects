@@ -3,11 +3,12 @@ from App.Objects.Arguments.ListArgument import ListArgument
 from App.Objects.Arguments.Argument import Argument
 from pydantic import Field
 from typing import Generator
-from Data.Boolean import Boolean
 from App.ACL.User import User
 from App.ACL.Permissions.Permission import Permission
 from App.DB.Query.Condition import Condition
 from App import app
+from Data.Boolean import Boolean
+from Data.Float import Float
 
 class AuthLayer(Object):
     def getUserByName(self, name: str) -> User:
@@ -22,13 +23,38 @@ class AuthLayer(Object):
         _usr = user.auth(password)
         assert _usr, 'invalid username or password'
 
-        _role = ['auth_as']
+        _role = ['auth']
         if login_from != None:
-            _role.append('auth_from_' + login_from)
+            _role.append('auth.from_' + login_from)
 
         self.log(f"logged as {name}", role = _role)
 
         return user
+
+    def byToken(self, token: str):
+        _storage = app.Storage.get('users')
+        _query = _storage.adapter.getQuery()
+        _query.addCondition(Condition(
+            val1 = 'content',
+            operator = '==',
+            val2 = 'App.ACL.Tokens.Token',
+            json_fields = ['obj', 'saved_via', 'object_name']
+        ))
+        _query.addCondition(Condition(
+            val1 = 'content',
+            operator = '==',
+            val2 = token,
+            json_fields = ['value']
+        ))
+
+        _item = _query.first()
+        if _item != None:
+            _token = _item.toPython()
+            assert _token.is_expired() == False, 'token has expired'
+            _user = _token.to_user()
+            self.log(f"logged as {_user.name}", role = ['auth', 'auth.by_token'])
+
+            return _user
 
     def getUsers(self) -> Generator[User]:
         _storage = app.Storage.get('users')
@@ -63,5 +89,15 @@ class AuthLayer(Object):
                 name = 'app.auth.every_call_permission_check',
                 default = False,
                 orig = Boolean
+            ),
+            Argument(
+                name = 'app.auth.token.life',
+                default = 7199,
+                orig = Float
+            ),
+            Argument(
+                name = 'app.auth.token.refresh_limit',
+                default = 86400,
+                orig = Float
             )
         ]
