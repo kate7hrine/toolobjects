@@ -1,6 +1,5 @@
 from App.Client.Displayment import Displayment
 from Web.Pages.Crawler.PageHTML import PageHTML
-import aiohttp
 
 class Page(Displayment):
     for_object = 'Web.Pages.Page'

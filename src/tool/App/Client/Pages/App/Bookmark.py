@@ -1,5 +1,5 @@
 from App.Client.Displayment import Displayment
-from App.Client.Bookmark import Bookmark as RealBookmark
+from Web.Bookmarks.Bookmark import Bookmark as RealBookmark
 from App import app
 
 class Bookmark(Displayment):

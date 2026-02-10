@@ -13,7 +13,7 @@ from App.Client.Pages.App.Index import Index as PageIndex
 from App.Objects.Arguments.Argument import Argument
 from App.Storage.StorageUUID import StorageUUID
 from Data.Primitives.Collections.Collection import Collection
-from App.Client.Bookmark import Bookmark
+from Web.Bookmarks.Bookmark import Bookmark
 
 class Client(Server):
     displayments: dict = {}
@@ -69,7 +69,7 @@ class Client(Server):
                 if link.item.isInstance(Bookmark):
                     yield link.item
         except Exception as e:
-            self.log_error(e, exception_prefix="You've Fucked up")
+            self.log_error(e, exception_prefix="Error getting bookmarks: ")
 
     def _get_template_context(self, request):
         categories = {

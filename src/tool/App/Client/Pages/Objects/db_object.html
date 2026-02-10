@@ -105,12 +105,6 @@
                 <hr>
                 <div>
                     <div>
-                        <a href="?i=App.DB.Search&storage={{item.getDbName()}}&only_object={{item._getNameJoined()}}">Show familiar</a>
-                    </div>
-                </div>
-                <hr>
-                <div>
-                    <div>
                         <a href="?i=App.DB.Search&storage={{item.getDbName()}}&linked_to={{item.getDbIds()}}">Show links</a>
                     </div>
                     <div>
@@ -118,6 +112,12 @@
                     </div>
                     <div>
                         <a href="?i=App.DB.Link&item={{item.getDbIds()}}&act=to">Link to...</a>
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <div>
+                        <a href="?i=App.DB.Search&storage={{item.getDbName()}}&only_object={{item._getNameJoined()}}">Show familiar</a>
                     </div>
                 </div>
 
