@@ -1,6 +1,7 @@
 from typing import Any, Generator, Self, ClassVar
 from abc import ABC, abstractmethod
 from App.Storage.DB.Adapters.Search.Condition import Condition
+from App.Storage.DB.Adapters.Search.Sort import Sort
 from App.Storage.DB.Adapters.Representation.ObjectAdapter import ObjectAdapter
 
 class Query(ABC):
@@ -30,11 +31,15 @@ class Query(ABC):
         return self
 
     @abstractmethod
+    def addSorting(self, sort: Condition):
+        ...
+
+    @abstractmethod
     def _op_equals(self, condition: Condition):
         ...
 
     @abstractmethod
-    def addSorting(self, condition: Condition) -> Self:
+    def addSorting(self, condition: Sort) -> Self:
         ...
 
     @abstractmethod

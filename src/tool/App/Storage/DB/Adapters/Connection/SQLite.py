@@ -11,7 +11,8 @@ class SQLite(SQLAlchemy):
             from sqlalchemy import func
 
             if condition.json_fields != None:
-                return func.json_extract(getattr(self._model, condition.getFirst()), condition.json_fields)
+                _fields = '.'.join(condition.json_fields)
+                return func.json_extract(getattr(self._model, condition.getFirst()), '$.' + _fields)
 
             return getattr(self._model, condition.getFirst())
 

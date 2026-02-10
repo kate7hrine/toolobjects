@@ -41,7 +41,14 @@ class SQLAlchemy(ConnectionAdapter):
             return self._query.filter(self._getComparement(condition).contains(condition.getLast()))
 
         def addSorting(self, sort: Sort):
-            pass
+            from sqlalchemy import desc
+
+            if sort.descend == True:
+                self._query = self._query.order_by(self._getComparement(sort.condition))
+            else:
+                self._query = self._query.order_by(desc(self._getComparement(sort.condition)))
+
+            return self
 
         def first(self):
             return self._query.first()

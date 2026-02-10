@@ -9,12 +9,12 @@ import xml.etree.ElementTree as ET
 class Channel(Object):
     title: str = Field(default = None)
     description: str = Field(default = None)
-    url: str = Field(default = None)
+    url: str | None = Field(default = None)
     channel_link: str = Field(default = None, alias='link')
-    generator: str = Field(default = None)
-    copyright: str = Field(default = None)
-    language: str = Field(default = None)
-    ttl: int = Field(default = None)
+    generator: str | None = Field(default = None)
+    copyright: str | None = Field(default = None)
+    language: str | None = Field(default = None)
+    ttl: int | None = Field(default = None)
     image: Optional[ChannelImage] = Field(default = None)
 
     def update_data(self, channel: dict):

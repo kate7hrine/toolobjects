@@ -6,6 +6,7 @@ from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ListArgument import ListArgument
 from Data.Int import Int
 from App.Storage.DB.Adapters.Search.Condition import Condition
+from App.Storage.DB.Adapters.Search.Sort import Sort
 from App.Storage.StorageItem import StorageItem
 
 class Search(Act):
@@ -21,6 +22,11 @@ class Search(Act):
                 name = 'conditions',
                 default = [],
                 orig = Condition
+            ),
+            ListArgument(
+                name = 'sort',
+                default = [],
+                orig = Sort
             ),
             Argument(
                 name = 'limit',
@@ -42,6 +48,9 @@ class Search(Act):
         _query = _storage.adapter.getQuery()
         for condition in i.get('conditions'):
             _query.addCondition(condition)
+
+        for condition in i.get('sort'):
+            _query.addSorting(condition)
 
         if i.get('limit') > 0:
             _query.limit(i.get('limit'))

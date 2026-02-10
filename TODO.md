@@ -29,6 +29,7 @@ core:
 - [x] name of object required twice
 - [ ] App.ReloadModules
 - [x] namespace: load submodules
+- [ ] remove Optional required by model_validate
 
 db and storage:
 

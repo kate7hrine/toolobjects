@@ -3,6 +3,7 @@ from Data.Random import Random
 from App.Storage.DB.Search import Search
 from App import app
 from App.Storage.DB.Adapters.Search.Condition import Condition
+from App.Storage.DB.Adapters.Search.Sort import Sort
 
 class SearchTest(Test):
     async def implementation(self, i):
@@ -19,14 +20,23 @@ class SearchTest(Test):
         _srch = Search()
         _res = await _srch.execute({
             'storage': _storage,
-            'conditions': [
-                Condition(
-                    val1 = 'content',
-                    operator = '==',
-                    val2 = 'Data.Int',
-                    json_fields = '$.obj.saved_via.object_name'
+            'sort': [
+                Sort(
+                    condition = Condition(
+                        val1 = 'content',
+                        json_fields = ['pubDate']
+                    ),
+                    descend = False,
                 )
             ],
+            ''''conditions': [
+                Condition(
+                    val1 = 'content',
+                    json_fields = ['obj', 'saved_via', 'object_name'],
+                    operator = '==',
+                    val2 = 'Data.RSS.ChannelItem',
+                )
+            ],'''
             'limit': 9
         })
 
