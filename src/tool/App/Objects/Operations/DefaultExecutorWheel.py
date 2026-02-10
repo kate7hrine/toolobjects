@@ -78,13 +78,15 @@ class DefaultExecutorWheel(Act):
                 save_to = i.get('save_to')
                 if save_to != None and len(save_to) > 0:
                     try:
-                        await Save().execute({
+                        _new = i.toDict()
+                        _new.update({
                             'items': results,
                             'storage': save_to,
-                            'ignore_flush_hooks': i.get('ignore_flush_hooks', results.ignore_flush_hooks),
-                            'link_to': i.get('link_to'),
-                            'auth': i.get('auth')
+                            'auth': i.get('auth'),
+                            'ignore_flush_hooks': i.get('ignore_flush_hooks', results.ignore_flush_hooks)
                         })
+
+                        await Save().execute(_new)
                     except Exception as e:
                         self.log_error(e)
             else:

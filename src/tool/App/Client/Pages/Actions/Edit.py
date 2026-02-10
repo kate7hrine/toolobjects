@@ -14,8 +14,13 @@ class Edit(Displayment):
 
         assert item != None, 'not found'
 
+        custom_saved_via = list()
+        for object_name in item.local_obj.saved_via:
+            custom_saved_via.append(object_name.object_name)
+
         context.update({
             'item': item,
+            'custom_saved_via': custom_saved_via
         })
 
         if self.request.method == 'POST':

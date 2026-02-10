@@ -213,7 +213,7 @@ class SQLAlchemy(ConnectionAdapter):
                         )
                     ))
 
-                _items = _query.getAll()
+                _items = list(_query.getAll())
                 self_adapter.log('links remover: found {0} items'.format(len(_items)))
 
                 for item in _items:

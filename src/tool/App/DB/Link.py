@@ -1,4 +1,5 @@
 from App.Objects.Act import Act
+from App.Objects.Object import Object
 from Data.Types.Int import Int
 from Data.Types.String import String
 from App.Objects.Arguments.ArgumentDict import ArgumentDict
@@ -14,12 +15,14 @@ class Link(Act):
         return ArgumentDict(items = [
             Argument(
                 name = 'owner',
-                orig = StorageUUID,
+                orig = Object,
+                by_id = True,
                 assertions = [NotNone()]
             ),
             ListArgument(
                 name = 'items',
-                orig = StorageUUID,
+                orig = Object,
+                by_id = True,
                 assertions = [NotNone()],
                 default = []
             ),
@@ -41,24 +44,13 @@ class Link(Act):
         ])
 
     async def _implementation(self, i):
-        # TODO Fix
-        link_to = i.get('owner').getItem()
-        _items = list()
-
-        for item in i.get('items'):
-            _items.append(item.uuid)
-
-        items = link_to._adapter.ObjectAdapter.getByIds(_items)
+        link_to = i.get('owner')
         _role = i.get('role')
-
-        for item in items:
-            _f = link_to.toPython()
-            _s = item.toPython()
-
+        for item in i.get('items'):
             match (i.get('act')):
                 case 'link':
-                    _f.link(_s, _role)
+                    link_to.link(item, _role)
                 case 'unlink':
-                    _f.unlink(_s, _role)
+                    link_to.unlink(item, _role)
 
-            self.log("{0}ed {1} and {2}".format(i.get('act'), _f.getDbId(), _s.getDbId()))
+            self.log("{0}ed {1} and {2}".format(i.get('act'), link_to.getDbId(), item.getDbId()))

@@ -6,6 +6,7 @@ from App.Objects.Object import Object
 from App.Objects.Responses.ObjectsList import ObjectsList
 from Data.Types.String import String
 from Data.Types.Boolean import Boolean
+from App.Objects.Misc.SavedVia import SavedVia
 
 class Local(Act):
     @classmethod
@@ -31,14 +32,19 @@ class Local(Act):
             Argument(
                 name = 'public',
                 orig = Boolean
+            ),
+            ListArgument(
+                name = 'saved_via',
+                orig = String
             )
         ])
 
     async def _implementation(self, i):
         items = ObjectsList(items = [], unsaveable = True)
+        another_objs = ['object', 'saved_via']
         for obj in i.get('object'):
             for key in i.compare.toNames():
-                if key in ['object']:
+                if key in another_objs:
                     continue
 
                 new = i.get(key)
@@ -46,6 +52,14 @@ class Local(Act):
                     continue
 
                 setattr(obj.local_obj, key, new)
+
+            if len(i.get('saved_via')) > 0:
+                obj.local_obj.saved_via = []
+
+                for name in i.get('saved_via'):
+                    obj.local_obj.saved_via.append(SavedVia(
+                        object_name = name
+                    ))
 
             obj.local_obj.set_edited()
             obj.save()

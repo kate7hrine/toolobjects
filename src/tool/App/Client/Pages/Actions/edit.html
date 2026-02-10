@@ -5,31 +5,44 @@ Edit
 {% endblock %}
 
 {% block body %}
+    <a href="/?i=App.Objects.Object&uuids={{item.getDbIds()}}"><<< back</a>
+
     <form method="post">
-        <div>
-            <span>Name</span>
-            <div>
-                <input type="text" name="name" value="{{item.local_obj.name or ''}}">
-            </div>
-        </div>
-        <div>
-            <span>Description</span>
-            <div>
-                <textarea name="description" id="">{{item.local_obj.description or ''}}</textarea>
-            </div>
-        </div>
-        <div>
-            <span>Collection</span>
-            <div>
-                <input value="1" type="checkbox" name="collection" {% if item.local_obj.collection %}checked{% endif %}>
-            </div>
-        </div>
-        <div>
-            <span>Public</span>
-            <div>
-                <input value="1" type="checkbox" name="public" {% if item.local_obj.public %}checked{% endif %}>
-            </div>
-        </div>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Name</td>
+                    <td>
+                        <input type="text" name="name" value="{{item.local_obj.name or ''}}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>
+                        <textarea name="description" id="">{{item.local_obj.description or ''}}</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Collection</td>
+                    <td>
+                        <input value="1" type="checkbox" name="collection" {% if item.local_obj.collection %}checked{% endif %}>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Public</td>
+                    <td>
+                        <input value="1" type="checkbox" name="public" {% if item.local_obj.public %}checked{% endif %}>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Pseudo objects</td>
+                    <td>
+                        <input type="text" name="saved_via" value="{{','.join(custom_saved_via)}}">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
         <input type="submit" value="Save">
     </form>
 {% endblock %}

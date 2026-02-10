@@ -4,6 +4,7 @@ from typing import ClassVar, Any
 from abc import abstractmethod
 from App.Storage.StorageUUID import StorageUUID
 from Data.Types.JSON import JSON
+from App import app
 import aiohttp_jinja2
 import aiohttp
 
@@ -18,8 +19,21 @@ class Displayment(Object):
     auth: Any = None
     self_name = 'ClientDisplayment'
 
-    def render_as_page(self, request, context):
+    # should return "render_template"
+    async def render_as_page(self, request, context):
         ...
+
+    # should return "render_string"
+    async def render_as_list_item(self):
+        ...
+
+    @classmethod
+    def get_for(cls, name: str):
+        _item = app.app.view.displayments.get(name)
+        if _item == None:
+            return None
+
+        return _item[0]
 
     @classmethod
     def get_menu(self) -> Item:

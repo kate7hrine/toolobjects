@@ -102,15 +102,7 @@ class Server(View):
         runner = web.AppRunner(self._app)
         await runner.setup()
 
-        async def _log_ws(to_print, check_categories):
-            for connection in self.ws_connections:
-                await connection.send_str(JSON(data={
-                    'type': 'log',
-                    'event_index': 0,
-                    'payload': to_print.to_json()
-                }).dump())
-
-        app.Logger.addHook('log', _log_ws)
+        self._register_ws()
 
         site = web.TCPSite(
             runner,
@@ -158,6 +150,17 @@ class Server(View):
     def _register_routes(self, i):
         for route in self._getCustomRoutes():
             self._register_route(route)
+
+    def _register_ws(self):
+        async def _log_ws(to_print, check_categories):
+            for connection in self.ws_connections:
+                await connection.send_str(JSON(data={
+                    'type': 'log',
+                    'event_index': 0,
+                    'payload': to_print.to_json()
+                }).dump())
+
+        app.Logger.addHook('log', _log_ws)
 
     def _register_default_routes(self, i):
         for route in [

@@ -10,3 +10,10 @@ class Image(Displayment):
         })
 
         return self.render_string('Other/Media/image.html')
+
+    async def render_as_list_item(self, item):
+        self.context.update({
+            'items': [item],
+        })
+
+        return self.render_string('Other/Media/image.html')

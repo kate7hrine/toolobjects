@@ -127,6 +127,13 @@ class DBInsertable():
         if self.hasDb() == False:
             return
 
+        if remove_links:
+            for item in self.getLinksRecurisvely():
+                try:
+                    item.item.delete()
+                except Exception as e:
+                    self.log_error(e)
+
         self.getDb().deleteFromDB(remove_links = remove_links)
         self.deletion_hook()
         if commit == True and self._db._adapter.auto_commit == False:

@@ -8,7 +8,7 @@ class Search(Displayment):
     for_object = 'App.DB.Search'
 
     async def render_as_page(self, request, context):
-        bad = ['', None]
+        bad = ['', None, 0]
         query = request.rel_url.query
         per_page = query.get('per_page', 30)
         storage = query.get('storage')
@@ -25,24 +25,26 @@ class Search(Displayment):
         except:
             prev = 0
 
-        invert = query.get('invert') == 'on'
-        operator = '>'
+        ascend = query.get('ascend') == 'on'
+        operator = '<'
         params = {'q': query.get('q'), 
                   'storage': storage,
                   'show_unlisted': query.get('show_unlisted'),
                   'only_public': query.get('show_unlisted') != 'on',
                   'q.in_description': query.get('q.in_description') == 'on',
                   'limit': per_page,
+                  'display_as': query.get('display_as'),
                   'conditions': [],
                   'offset_conditions': [],
+                  'ascend': ascend,
                   'sort': []
         }
 
         if linked_to not in bad:
             params['linked_to'] = linked_to
 
-        if invert:
-            operator = '<'
+        if ascend:
+            operator = '>'
             params['invert'] = True
 
         if after not in bad:
@@ -62,7 +64,7 @@ class Search(Displayment):
                     column = 'uuid'
                 )
             ),
-            descend = invert
+            descend = ascend == False
         ))
 
         if query.get('only_object', '') != '':
@@ -72,17 +74,27 @@ class Search(Displayment):
         _val = await _e.execute(params)
         objs = list(_val.getItems())
         last_uuid = None
+        _items = list()
+        display_as = 'App.Objects.Object'
+        if params.get('display_as'):
+            display_as = params.get('display_as')
 
         if len(objs) > 0:
-            if invert:
-                #last_uuid = objs[0].getDbId()
-                last_uuid = objs[-1].getDbId()
-            else:
-                last_uuid = objs[-1].getDbId()
+            last_uuid = objs[-1].getDbId()
+            #last_uuid = objs[0].getDbId()
+
+        for item in objs:
+            try:
+                _d = self.get_for(display_as)(request = self.request, context = self.context)
+                _html = await _d.render_as_list_item(item)
+
+                _items.append([item, _html])
+            except Exception as e:
+                _items.append([item, '<div><b class="error">{0}</b></div>'.format(str(e))])
 
         self.context.update({
             'total_count': _val.getTotalCount(),
-            'items': objs,
+            'items': _items,
             'last_uuid': last_uuid,
             'per_page': per_page,
             'params': params
