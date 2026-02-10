@@ -5,7 +5,7 @@ Experimental framework that provides object system.
 **I**
 
 * [Overview](./docs/src/concepts/1.overview.md)
-* Objects
+* [Objects](./docs/src/concepts/2.objects.md)
 * Links
 * ObjectsList + Namespaces
 * Validation
@@ -17,7 +17,6 @@ Experimental framework that provides object system.
 
 **II**
 
-* Executable types
 * Responses
 * Requirements
 * Convertations

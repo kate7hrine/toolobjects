@@ -5,6 +5,7 @@ from App.Objects.Misc.Thumbnail import Thumbnail
 from typing import Optional
 from datetime import datetime
 from App.Objects.Relations.Link import Link
+from App.Objects.Misc.Geo import Geo
 
 class LocalObjectMeta(Model):
     saved_via: Optional[list[SavedVia]] = Field(default = [])
@@ -12,11 +13,14 @@ class LocalObjectMeta(Model):
 
     name: Optional[str] = Field(default=None)
     description: Optional[str] = Field(default=None)
+    collection: Optional[bool] = Field(default=False)
 
     created_at: Optional[datetime] = Field(default_factory=lambda: datetime.now())
     edited_at: Optional[datetime] = Field(default=None)
     updated_at: Optional[datetime] = Field(default=None)
+    # accessed_at: Optional[datetime] = Field(default=None)
 
+    geo: Optional[list[Geo]] = Field(default = None)
     public: Optional[bool] = Field(default=False)
     role: Optional[list[str]] = Field(default = [])
     thumbnail: Optional[list[Thumbnail]] = Field(default = [])

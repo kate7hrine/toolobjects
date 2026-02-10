@@ -1,11 +1,10 @@
-from App.Objects.Mixins.Model import Model
 from pydantic import Field, field_serializer
+from App.Objects.Misc.CommonContainable import CommonContainable
 from typing import Any
 from App import app
 
-class Source(Model):
+class Source(CommonContainable):
     obj: Any = Field()
-    is_common: bool = Field(default = False)
 
     # Very unoptimized>__<
     @field_serializer('obj')

@@ -2,10 +2,9 @@ from App.Objects.Mixins.Model import Model
 from App.DB.DBInsertable import DBInsertable
 from pydantic import Field, computed_field
 from typing import Literal
-from enum import Enum
 
 class LinkData(Model, DBInsertable):
-    role: list[Literal['object', 'thumbnail', 'common', 'revision', 'list_item'] | str] = Field(default = ['object'])
+    role: list[Literal['object', 'thumbnail', 'common', 'external', 'revision', 'list_item'] | str] = Field(default = ['object'])
 
     @computed_field
     @property
