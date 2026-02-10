@@ -25,12 +25,11 @@ class Section:
             return app.Logger.log(*args, **kwargs)
         except ViewNotLoadedYetError:
             pass
+        except AttributeError:
+            pass
+            #print("logger not initialized; ", args[0])
         except Exception as e:
-            print_before_init = False
-            print(e)
-
-            if print_before_init == True:
-                print(args[0])
+            print("logger error; ", args[0])
 
     def log_error(self, *args, **kwargs):
         from App.Logger.LogKind import LogKindEnum

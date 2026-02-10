@@ -35,13 +35,20 @@ class Comparer(Object):
                 key_names.append(name)
 
         for name in self.compare.toNames():
+            table.original_items[name] = None
+
             key_names.append(name)
 
         for param_name in key_names:
             got_value = self.getByName(param_name, missing_args_inclusion = self.missing_args_inclusion)
-
             if got_value == None and self.none_values_skipping == True:
                 continue
+
+            # todo change
+            try:
+                table.original_items[param_name] = str(self.values.get(param_name))
+            except:
+                pass
 
             table.add(param_name, got_value)
 

@@ -1,6 +1,7 @@
 from App.Objects.Object import Object
 from pydantic import Field
 from App.Logger.Log import Log
+from typing import Literal
 
 class HideCategory(Object):
     '''
@@ -19,7 +20,7 @@ class HideCategory(Object):
 
     section: list = Field(default = [])
     kind: list = Field(default = None)
-    where: list[str] = Field(default = None)
+    where: list[Literal['console', 'file']] = Field(default = None)
     wildcard: bool = Field(default = False)
     unused: bool = Field(default = False)
 
@@ -33,10 +34,16 @@ class HideCategory(Object):
         if self.unused == True:
             return False
 
+        section_from_log = ".".join(log.section.value)
+        section_from_config = ".".join(self.section)
+
         if self.wildcard == False:
-            section_meets = ".".join(log.section.value) == ".".join(self.section)
+            section_meets = section_from_log == section_from_config
         else:
-            section_meets = ".".join(log.section).startswith(".".join(self.section))
+            if section_from_config == '':
+                section_meets = True
+            else:
+                section_meets = ".".join(log.section).startswith(section_from_config)
 
         if self.where != None and context not in self.where:
             context_meets = False

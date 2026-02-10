@@ -1,5 +1,6 @@
 from App.Objects.Object import Object
 from App.Objects.Section import Section
+from App.Data.Increment import Increment
 from pathlib import Path
 from pydantic import ConfigDict
 from typing import Any
@@ -18,6 +19,7 @@ class App(Object):
     loop: Any = None
     objects: ObjectsList = None
     hook_thread: Any = None
+    executables_id: Increment = None
 
     def _constructor(self):
         self.argv = self._parse_argv(sys.argv)
@@ -26,6 +28,7 @@ class App(Object):
         self.storage = self.src.joinpath('storage')
         self.storage.mkdir(exist_ok = True)
         self.loop = asyncio.new_event_loop()
+        self.executables_id = Increment()
 
         self.hook_thread = HookThread()
 

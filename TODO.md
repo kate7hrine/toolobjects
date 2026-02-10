@@ -24,4 +24,5 @@
 - [ ] object that can contain self subtypes (?)
 - [x] Files.FileManager.Navigate
 - [x] logger: section skips
-- [ ] logger: output to file
+- [x] logger: output to file
+- [ ] App.Executables.Call

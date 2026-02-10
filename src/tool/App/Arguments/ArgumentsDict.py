@@ -9,9 +9,10 @@ class ArgumentsDict(Object):
     '''
     Dict with arguments,
     [name]: [argument]
-    Probaly needs to be refactored cuz of unknown behavior
+    needs to be refactored cuz of unknown behavior
     '''
     items: DictList | dict = Field(default= {})
+    original_items: dict = Field(default = {})
     missing_args_inclusion: bool = Field(default = False)
 
     def add(self, name: str, argument: Argument):

@@ -5,7 +5,10 @@ from .classproperty import classproperty
 from .Outer import Outer
 
 class BaseModel(PydanticBaseModel):
-    class_name: str = Field(default = '', alias = '__class_name__')
+    @computed_field
+    @property
+    def class_name__(self) -> str:
+        return self.meta.class_name_joined
 
     # we can't use __init__ because of fields initialization, so we creating second constructor
     def __init__(self, *args, **kwargs):
@@ -18,12 +21,16 @@ class BaseModel(PydanticBaseModel):
         pass
 
     # model_dump alias
-    def to_json(self):
-        return self.model_dump(mode='json',by_alias=True)
+    def to_json(self, exclude_classname: bool = False):
+        # todo remove
+        exclude = []
+        if exclude_classname == True:
+            exclude.append('class_name__')
+
+        return self.model_dump(mode='json',exclude=exclude)
 
     def init_subclass(cls):
         cls.meta = cls.Meta(cls)
-        cls.class_name = cls.meta.class_name_joined
 
         # cls.submodules = cls.Submodules(cls)
 

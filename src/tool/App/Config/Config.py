@@ -64,7 +64,7 @@ class Config(Object):
         try:
             self.comparer.values = json.load(self._stream)
         except json.JSONDecodeError as __exc:
-            self._stream.write("{}")
+            self.reset()
 
     def updateFile(self) -> None:
         self._stream.seek(0)

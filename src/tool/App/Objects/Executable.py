@@ -1,9 +1,11 @@
 from .Object import Object
 from .Validable import Validable
+from App.Executables.Call import Call
 from App.Arguments.ArgumentsDict import ArgumentsDict
 from App.Responses.Response import Response
 from App.Objects.Variableable import Variableable
 from typing import ClassVar
+from pydantic import Field
 
 class Executable(Variableable, Validable, Object):
     '''
@@ -13,6 +15,7 @@ class Executable(Variableable, Validable, Object):
     '''
 
     self_name: ClassVar[str] = 'Executable'
+    call: Call = Field(default = None)
 
     @classmethod
     def getClassEventsTypes(cls) -> list:
@@ -45,6 +48,14 @@ class Executable(Variableable, Validable, Object):
             check_arguments = check_arguments,
             raise_on_assertions = raise_on_assertions,
         )
+
+        self.call = Call()
+        self.call.predicate = self.meta.class_name_joined
+
+        if hasattr(i, 'toOriginalDict') == False:
+            self.call.arguments = i
+        else:
+            self.call.arguments = i.original_items
 
         await self.awaitTriggerHooks('before_execute', i = passing)
 

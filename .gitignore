@@ -6,7 +6,6 @@ build/
 env/
 venv/
 src/venv/
-src/tool/Custom*
 storage/*
 src/storage/*
 *node_modules*
