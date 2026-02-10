@@ -66,16 +66,39 @@ class Server(View):
                 name = 'ignore_autostart',
                 orig = Boolean,
                 default = False
+            ),
+            Argument(
+                name = 'port',
+                orig = String,
+                default = False
+            ),
+            Argument(
+                name = 'host',
+                orig = String,
+                default = False
             )
         ])
 
-    async def _implementation(self, i):
-        _host = self.getOption("web.options.host")
-        _port = self.getOption("web.options.port")
+    def _get_host(self, i):
+        _host = i.get('host')
+        if _host == None:
+            _host = self.getOption("web.options.host")
 
+        return _host
+
+    def _get_port(self, i):
+        _port = i.get('port')
         if _port == None:
-            self.log('port is not passed, so it will be chosen randomly')
+            _port = self.getOption("web.options.port")
+        if _port == None:
+            self.log('port is not passed anywhere, so it will be chosen randomly')
             _port = self._get_random_port()
+
+        return _port
+
+    async def _implementation(self, i):
+        _host = self._get_host(i)
+        _port = self._get_port(i)
 
         self._app = web.Application()
         self._pre_i = i.get('pre_i')
