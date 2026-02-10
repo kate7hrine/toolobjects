@@ -6,9 +6,8 @@ build/
 env/
 venv/
 src/venv/
+src/tool/Custom*
 storage/*
 src/storage/*
-*/Custom/*
-*/Secret/*
 *node_modules*
 *package-lock.json

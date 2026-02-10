@@ -1,6 +1,7 @@
 from App.Objects.Object import Object
 from typing import Any
 from pathlib import Path
+from App import app
 import importlib
 
 class NotAnObjectError(Exception):
@@ -77,6 +78,13 @@ class LoadedObject(Object):
         try:
             # Hook cannot be triggered for all class, so ive added "mount" hack
             #common_object.triggerHooks('loaded')
+
+            if app.Config != None:
+                # or getAllSettings
+                _settings = common_object.getSettings()
+                if _settings != None:
+                    for item in _settings:
+                        app.Config.comparer.compare.append(item)
 
             common_object.mount()
         except Exception as e:

@@ -22,4 +22,5 @@
 - [ ] ~~App.Objects.Submodules.Submodule, App.Objects.Configurable.Configurable: MROThing~~
 - [ ] ~~move App.Data.DictList to App.Objects.DictList~~
 - [ ] object that can contain self subtypes (?)
-- [ ] Files.FileManager.Navigate
+- [x] Files.FileManager.Navigate
+- [x] logger: section skips

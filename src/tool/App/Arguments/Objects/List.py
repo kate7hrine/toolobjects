@@ -3,8 +3,7 @@ from pydantic import Field, computed_field
 
 class List(Argument):
     '''
-    Argument that can get multiple values
-    "orig" allows to convert to another argument type
+    Argument that can return multiple values and converts to another argument ("orig")
     '''
 
     orig: Argument = Field(default = None)
