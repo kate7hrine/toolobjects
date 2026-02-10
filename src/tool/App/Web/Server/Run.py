@@ -106,7 +106,10 @@ class Run(View):
         async def _call_shortcut(pre_i, args):
             _json = JSON(data = {})
             results = None
-            args['auth'] = app.AuthLayer.users[-1]
+            args['auth'] = app.AuthLayer.login(
+                name = args.get('username'),
+                password = args.get('password')
+            )
 
             try:
                 results = await pre_i.execute(args)
@@ -198,7 +201,7 @@ class Run(View):
             ('/', _spa, 'get'),
             ('/static/{path:.*}', _get_asset, 'get'),
             ('/storage/{storage}/{uuid}/{path:.*}', _get_storage_unit, 'get'),
-            ('/storage/js/', _get_js_lib, 'post')
+            ('/storage/js/', _get_js_lib, 'post'),
             ('/api', _single_call, 'get'),
             ('/rpc', _ws, 'get'),
             ('/api/upload/{storage}', _upload_storage_unit, 'post'),

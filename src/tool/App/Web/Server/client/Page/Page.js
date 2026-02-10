@@ -1,6 +1,5 @@
 import { LogicalBlock } from "/static/Page/LogicalBlock.js"
 import { default_page_styles } from "/static/Page/Styles.js"
-import { LoadedObjectsComponent } from "/static/Page/LoadedObjectsComponent.js"
 
 export class Page {
     blocks = []
@@ -34,7 +33,6 @@ export class Page {
         this._block_names.forEach(name => {
             this.blocks.push(new LogicalBlock(name, document.querySelector(`#app .logical-block[data-id='${name}']`)))
         })
-        console.log(LoadedObjectsComponent)
     }
 }
 

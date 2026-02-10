@@ -4,7 +4,7 @@ from typing import Any
 from pathlib import Path
 from App import app
 from functools import cached_property
-import importlib
+import importlib, sys
 
 class NotAnObjectError(Exception):
     pass
@@ -86,6 +86,14 @@ class LoadedObject(Object):
             raise NotAnObjectError(f"{module_name} is not a class")
 
         return common_object
+
+    def unloadModule(self):
+        if self._module == None:
+            return
+
+        _name = self._module.getClassNameJoined()
+        if _name in sys.modules:
+            sys.modules.pop(_name)
 
     def integrateModule(self, module) -> None:
         if app.Config != None:

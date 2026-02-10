@@ -65,6 +65,10 @@ class Namespace(Object):
 
             self.items.append(item)
 
+    def unload(self) -> bool:
+        for item in self.items.toList():
+            item.unloadModule()
+
     def scan(self) -> Generator[LoadedObject]:
         '''
         Scans self.root and returns as Generator
