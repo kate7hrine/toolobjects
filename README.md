@@ -1,6 +1,6 @@
-### Orgtool
+### toolobjects
 
-Experimental data archivation / receivation / organization tool / framework / app / toolbox / toolkit / plugin system
+Experimental data receivation / organization tool / framework / app / toolbox / toolkit / plugin system
 
 ### Documentation
 
@@ -24,7 +24,13 @@ Experimental data archivation / receivation / organization tool / framework / ap
 - [Example 1: implementing TODO list](docs/guides/todo_list.md)
 - [Example 2: RSS channels](docs/guides/rss.md)
 
-## API
+## Objects
 
 - [App.Objects.Object](docs/api/App.Objects.Object.md)
+- [App.Objects.Index.PostRun](docs/api/App.Objects.Index.PostRun.md)
+- [App.Objects.Mixins.BaseModel](docs/api/App.Objects.Mixins.BaseModel.md)
 - [App.Objects.Wheel](docs/api/App.Objects.Wheel.md)
+- [Data.Gallery.Download](docs/api/Data.Gallery.Download.md)
+- [Data.Gallery.Gallery](docs/api/Data.Gallery.Gallery.md)
+- [Files.FileTypes.FileType](docs/api/Files.FileTypes.FileType.md)
+- [Files.FileTypes.Image](docs/api/Files.FileTypes.Image.md)

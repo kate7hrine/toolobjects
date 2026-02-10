@@ -10,7 +10,7 @@ class StorageLinkTest(Test):
         storage = app.Storage.get('content')
         '''
 
-        _url = "https://i.ibb.co/4gZHtNKL/image.png"
+        _url = ""
         _unit = storage.getStorageUnit()
 
         item = app.DownloadManager.addURL(_url, _unit, 'image.png')

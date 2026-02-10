@@ -30,9 +30,16 @@ export class Page {
                 <div class="logical-block" data-id="footer"></div>
             </div>
         `
+        this.load_head()
         this._block_names.forEach(name => {
             this.blocks.push(new LogicalBlock(name, document.querySelector(`#app .logical-block[data-id='${name}']`)))
         })
+    }
+
+    load_head() {
+        document.querySelector('head').innerHTML = `
+            <link rel="icon" href="/static/images/ico.png">
+        `
     }
 }
 

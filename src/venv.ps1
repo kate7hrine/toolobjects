@@ -1,7 +1,6 @@
 $location = (Get-Location).Path
 $path = $location + "\venv"
 $update = $location + "\update.ps1"
-$tool = $location + "\tool"
 $script = $location + "\venv\Scripts\Activate.ps1"
 $command = (Get-Command pip)
 
@@ -19,5 +18,3 @@ Invoke-Expression $script
 if ($do_update -eq $true) {
     pip install -e .
 }
-
-Set-Location $tool

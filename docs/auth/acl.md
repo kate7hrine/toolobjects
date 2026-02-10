@@ -25,8 +25,6 @@ Tto generate `password_hash`, call `App.ACL.GetHash`:
 
 `App.ACL.AuthLayer` provides `login` function. In `Console` view, you can pass `-username` and `-password` to log as someone.
 
-There is tokens that are not implemented yet.
-
 ### Permissions
 
 **App.ACL.Permissions.ObjectPermission**

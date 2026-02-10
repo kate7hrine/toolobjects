@@ -261,7 +261,7 @@ class Server(View):
             ),
             Argument(
                 name = 'app.name',
-                default = 'orgtool',
+                default = 'toolobjects',
                 orig = String
             )
         ]
