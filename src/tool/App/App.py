@@ -126,6 +126,11 @@ class App(Object):
                     object_name = 'Web.Pages.Page',
                     create = 'Web.Pages.Get'
                 ),
+                CreationItem(
+                    name = 'Text',
+                    object_name = 'Media.Text.Text',
+                    create = 'Media.Text.Get'
+                ),
             ]
         )
         self.objects.load()

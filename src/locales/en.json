@@ -33,6 +33,7 @@
         "client.index.logged_as": "Logged as <span>{0}</span>.",
         "client.index.logout": "Logout",
         "client.index.content": "Objects",
+        "client.objects": "Objects",
         "client.index.custom": "Custom",
         "client.namespaces.all": "All",
         "client.namespaces.by_name": "By name",

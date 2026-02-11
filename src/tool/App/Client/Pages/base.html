@@ -12,15 +12,14 @@
     <div id="upper_bar">
         <div id="bookmarks"></div>
     </div>
+    <div id="shadows">
+        <div id="main_shadow"></div>
+    </div>
 
-    {% if is_index %}
-        <div></div>
-    {% else %}
-        {% if global_app_categories %}
-        <div id="floating_menu">
-            {% include "Components/menu.html" %}
-        </div>
-        {% endif %}
+    {% if global_app_categories %}
+    <div id="floating_menu">
+        {% include "Components/menu.html" %}
+    </div>
     {% endif %}
 
     {% if app_name %}

@@ -64,6 +64,10 @@ class BaseModel(Model):
 
         return ''
 
+    @classmethod
+    def get_creations(cls) -> list:
+        return []
+
     def add_thumbnail(self, item: Model):
         self.link(item, role = ['thumbnail'])
 

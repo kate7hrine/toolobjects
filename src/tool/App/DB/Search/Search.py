@@ -12,15 +12,17 @@ from App.DB.Query.Values.Value import Value
 from App.DB.Query.Sort import Sort
 from App.Storage.Item.StorageItem import StorageItem
 from App.Storage.StorageUUID import StorageUUID
+from App import app
 
 class Search(Act):
     @classmethod
     def _arguments(cls) -> ArgumentDict:
         return ArgumentDict(items = [
-            Argument(
+            ListArgument(
                 name = 'storage',
-                orig = StorageItem,
-                assertions = [NotNone()]
+                orig = String,
+                #orig = StorageItem,
+                #assertions = [NotNone()]
             ),
             Argument(
                 name = 'q',
@@ -82,8 +84,29 @@ class Search(Act):
     async def _implementation(self, i) -> ObjectsList:
         _objects = ObjectsList(items = [], unsaveable = True)
         _storage = i.get('storage')
+        storages = list()
+        if _storage == None:
+            storages = app.Storage.items
+        else:
+            storages.append(app.Storage.get(_storage))
 
-        _query = _storage.adapter.getQuery()
+        for storage in storages:
+            try:
+                _query = self._search_in_storage(i, storage)
+                _objects.total_count += _query.count()
+
+                for item in _query.getAll():
+                    try:
+                        _objects.append(item.toPython())
+                    except Exception as e:
+                        self.log_error(e, exception_prefix = f"{item.uuid} not printing: ")
+            except Exception as e:
+                self.log_error(e)
+
+        return _objects
+
+    def _search_in_storage(self, i, storage):
+        _query = storage.adapter.getQuery()
         for condition in i.get('conditions'):
             _query.addCondition(condition)
 
@@ -198,18 +221,10 @@ class Search(Act):
         for condition in i.get('sort'):
             _query.addSort(condition)
 
-        _objects.total_count = _query.count()
-
         for condition in i.get('offset_conditions'):
             _query.addCondition(condition)
 
         if i.get('limit') > 0:
             _query.limit(i.get('limit'))
 
-        for item in _query.getAll():
-            try:
-                _objects.append(item.toPython())
-            except Exception as e:
-                self.log_error(e, exception_prefix = f"{item.uuid} not printing: ")
-
-        return _objects
+        return _query

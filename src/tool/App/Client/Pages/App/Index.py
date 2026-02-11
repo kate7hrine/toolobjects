@@ -8,7 +8,20 @@ class Index(Displayment):
     async def render_as_page(self, args = {}):
         self.context.update({
             'is_index': True,
+            'namespaces': app.ObjectsList.namespaces,
+            'storages': app.Storage.getAll()
         })
+
+        menu_collections = self.getOption('web.index.collection')
+        if menu_collections:
+            generators = list()
+            for item in menu_collections:
+                for link in item.toPython().getLinked():
+                    generators.append(link)
+
+            self.context.update({
+                'generators': generators
+            })
 
         return self.render_template('index.html')
 

@@ -96,8 +96,17 @@ class ObjectsList(Object):
 
     def get_creations(self):
         for item in self.namespaces:
+            # getting creations (whatever they are), firstly getting them from namespaces 
             for obj in item.get_creation_items():
                 yield obj
+
+            for obj in item.getItems():
+                if obj.is_inited:
+                    try:
+                        for creation in obj.getModule().get_creations():
+                            yield creation
+                    except Exception as e:
+                        self.log_error(e)
 
     def sort(self, items: list[str], show_only: str = None) -> dict:
         _items = dict()

@@ -38,17 +38,6 @@ Objects list
     {% endif %}
 
     <div>
-        <form action="/">
-            <input type="hidden" name="i", value="App.Objects.Index.Get">
-
-            <span>{{_("client.namespaces.by_name")}}: </span>
-            <input type="text" name="name">
-
-            <input type="submit" value="{{_("client.index.find")}}">
-        </form>
-    </div>
-
-    <div>
         <b>{{ _("client.index.total_count", total_count)}}</b>
     </div>
     <div id='objects'>

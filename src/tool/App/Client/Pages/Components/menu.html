@@ -1,4 +1,15 @@
 <div id="menu">
+    <div>
+        <div>
+            <a id="storage_menu_item" href="/?i=App.Storage.Item.List">{{_("client.storages")}}</a>
+        </div>
+        <div>
+            <a id="namespaces_menu_item" href="/?i=App.Objects.Index.GetList">{{_("client.namespaces")}}</a>
+        </div>
+    </div>
+
+    <hr>
+
     {% for _key_, _category_item_list in global_app_categories.items() %}
         {% if len(_category_item_list) > 0 %}
             <b>{{ _(_key_) }}</b>

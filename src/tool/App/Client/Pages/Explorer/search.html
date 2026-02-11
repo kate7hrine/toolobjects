@@ -43,12 +43,16 @@ Search
             {% endif %}
 
         </div>
-        
-        <div>
-            <a href="javascript:_toggle_options()">Toggle params</a>
-        </div>
 
-        <form class="options_hidden">
+        {% if show_search %}
+            <div></div>
+        {% else %}
+            <div>
+                <a href="javascript:_toggle_options()">Toggle params</a>
+            </div>
+        {% endif %}
+
+        <form {% if show_search %}class="options_shown"{% else %}class="options_hidden"{% endif %}>
             <input type="hidden" name="act" value="{{current_url.query.get('act') or ''}}">
             <input type="hidden" name="linked_to_type" value="{{current_url.query.get('linked_to_type') or ''}}">
             <table>

@@ -111,3 +111,58 @@ body {
 .options_hidden {
     display: none;
 }
+
+#shadows {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: -2;
+}
+
+#shadows #main_shadow {
+    height: 100px;
+    background: #bdc1ca;
+    position: relative;
+}
+
+#index_container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 15px 4px;
+}
+
+#index_container .title {
+    font-size: 18px;
+}
+
+#index_container > div {
+    width: 45%;
+}
+
+#index_container .index_container_item {
+    padding: 2px 16px;
+    display: block;
+    background: #eae9f1;
+}
+
+#index_container .index_container_item:hover {
+    background: white;
+}
+
+#index_container #storages #storages_create {
+    padding: 7px 4px;
+    display: block;
+}
+
+#index_container .namespaces_search {
+    padding: 5px 5px;
+    background: #ecdcdc;
+}
+
+#index_container .namespaces_search form {
+    display: flex;
+    padding: 10px 10px;
+}

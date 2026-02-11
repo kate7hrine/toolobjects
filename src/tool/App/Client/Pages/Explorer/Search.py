@@ -107,7 +107,8 @@ class Search(Displayment):
             'last_uuid': last_uuid,
             'per_page': per_page,
             'params': params,
-            'act': act
+            'act': act,
+            'show_search': query.get('q') != ''
         })
 
         if act == 'linked_to':

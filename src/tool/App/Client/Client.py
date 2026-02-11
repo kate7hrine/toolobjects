@@ -11,17 +11,23 @@ from urllib.parse import quote
 
 from App.Client.Pages.App.Index import Index as PageIndex
 from App.Objects.Arguments.Argument import Argument
+from App.Objects.Arguments.ListArgument import ListArgument
 from App.Storage.StorageUUID import StorageUUID
 from Data.Primitives.Collections.Collection import Collection
 from Web.Bookmarks.Bookmark import Bookmark
+from pathlib import Path
 
 class Client(Server):
     displayments: dict = {}
 
     def _before_run(self, i):
-        _templates = str(app.app.src.joinpath('tool').joinpath('App').joinpath('Client').joinpath('Pages'))
+        pathes = list()
+        namespaces = app.ObjectsList.namespaces
+        for item in namespaces:
+            pathes.append(Path(item.root).joinpath('App').joinpath('Client').joinpath('Pages'))
+
         aiohttp_jinja2.setup(self._app, 
-                             loader=jinja2.FileSystemLoader(_templates),
+                             loader=jinja2.FileSystemLoader(pathes),
                              auto_reload = True)
 
     @classmethod
@@ -220,4 +226,9 @@ class Client(Server):
                 default = None,
                 orig = StorageUUID
             ),
+            ListArgument(
+                name = 'web.index.collection',
+                default = None,
+                orig = StorageUUID
+            )
         ]

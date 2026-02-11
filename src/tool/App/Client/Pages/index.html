@@ -5,7 +5,58 @@
 {% endblock %}
 
 {% block body %}
-    <div>
-        {% include "Components/menu.html" %}
+    <div id="index_container">
+        <div id="search">
+            <b class="title">Search</b>
+            <div>
+                <form>
+                    <input type="hidden" name="i" value="App.DB.Search">
+                    <input type="text" name="q">
+                    <input type="submit" value="Find">
+                </form>
+
+                <div>
+                    {% for item in generators %}
+                        <div>
+                            <a href="/?i=App.Objects.Object&uuids={{item.item.getDbIds()}}">{{item.item.any_name}}</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div id="storages">
+            <b class="title">{{_("client.storages")}}</b>
+            <div id="storages_create">
+                <a href="?i=App.Storage.Item.Create">+ {{_("client.storages.add")}}</a>
+            </div>
+            <div>
+                {% for item in storages %}
+                    <a href="/?i=App.Storage.Item.Get&name={{item.name}}" class="index_container_item">
+                        <span>{{item.name}}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div id="namespaces">      
+            <b class="title">{{_("client.objects")}}</b>
+            <div class="namespaces_search">
+                <form action="/">
+                    <input type="hidden" name="i", value="App.Objects.Index.Get">
+
+                    <input type="text" name="name">
+
+                    <input type="submit" value="{{_("client.index.find")}}">
+                </form>
+            </div>
+
+            <div>
+                {% for item in namespaces %}
+                    <a href="/?i=App.Objects.Index.Namespaces.Get&name={{item.name}}" class="index_container_item">
+                        <span>{{item.name}}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 {% endblock %}

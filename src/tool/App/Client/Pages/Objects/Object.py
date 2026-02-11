@@ -9,7 +9,6 @@ class Object(Displayment):
         query = self.request.rel_url.query
         act = query.get('act')
         objs = self.get_objs(query.get('uuids', '').split(','))
-        include_nones = query.get('include_none') == '1'
 
         assert len(objs) > 0, 'objects not found'
 
@@ -20,6 +19,7 @@ class Object(Displayment):
 
         match(act):
             case 'view_json':
+                include_nones = query.get('include_none') == '1'
                 _json = list()
                 for item in objs:
                     _json.append(item.to_json(exclude_none = include_nones, exclude_defaults = include_nones))

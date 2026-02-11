@@ -104,8 +104,12 @@ class Storage(Object):
         if item in self.items and item.name not in self.default_names:
             self.items.remove(item)
 
-    def getAll(self) -> Generator[StorageItem]:
+    def getAll(self, show_internal: bool = True) -> Generator[StorageItem]:
         for item in self.items:
+            if show_internal == False:
+                if item.is_internal:
+                    continue
+
             yield item
 
     def get(self, name: str) -> StorageItem:

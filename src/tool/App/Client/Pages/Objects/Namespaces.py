@@ -15,11 +15,3 @@ class Namespaces(Displayment):
         })
 
         return self.render_template('Objects/namespaces.html')
-
-    @classmethod
-    def get_menu(cls) -> Item:
-        return Item(
-            url = cls.for_object,
-            name = "client.namespaces",
-            category_name = 'client.index.content'
-        )
