@@ -85,10 +85,11 @@ class Search(Act):
         _objects = ObjectsList(items = [], unsaveable = True)
         _storage = i.get('storage')
         storages = list()
-        if _storage == None:
+        if len(_storage) == 0:
             storages = app.Storage.items
         else:
-            storages.append(app.Storage.get(_storage))
+            for _item in i.get('storage'):
+                storages.append(app.Storage.get(_item))
 
         for storage in storages:
             try:

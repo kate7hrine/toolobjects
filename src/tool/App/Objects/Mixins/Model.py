@@ -136,7 +136,7 @@ class Model(PydanticBaseModel, Section):
             exclude_internal = False,
             exclude = ['links', 'db_info', 'class_name'],
             exclude_output_values = False,
-            convert_links = False,
+            convert_links = 'none',
             exclude_none = True,
             exclude_defaults = True,
             only_class_fields = False

@@ -9,10 +9,19 @@ class Namespace(Displayment):
         query = self.request.rel_url.query
         namespace = app.ObjectsList.get_namespace_with_name(query.get('name'))
 
-        assert namespace != None, 'not found namespace'
+        _items = None
+        if namespace:
+            _items = namespace.getItems()
+        else:
+            _items = app.ObjectsList.getItems().toList()
+
+        categories, total_count = app.ObjectsList.sort(_items)
 
         self.context.update({
-            'namespace': namespace
+            'namespace': namespace,
+            'categories': categories,
+            'hasattr': hasattr,
+            'total_count': total_count
         })
 
         return self.render_template('Objects/namespace.html')

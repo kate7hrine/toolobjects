@@ -6,7 +6,15 @@ class Create(Displayment):
 
     async def render_as_page(self, args = {}):
         query = self.request.rel_url.query
+        item = self.get_link_item()
+
+        assert item != None
+
         creates = app.ObjectsList.get_creations()
+        object_creations = item.get_creations()
+        if len(object_creations) > 0:
+            creates = object_creations
+
         self.context.update({
             'creations': creates,
             'ref': query.get('ref'),

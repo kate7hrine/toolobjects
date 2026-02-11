@@ -3,6 +3,7 @@ from App.Client.Menu.Item import Item
 from typing import ClassVar, Any, Literal
 from abc import abstractmethod
 from App.Storage.StorageUUID import StorageUUID
+from App.Storage.Item.StorageItem import StorageItem
 from Data.Types.JSON import JSON
 from App import app
 import aiohttp_jinja2
@@ -78,6 +79,7 @@ class Displayment(Object):
 
     def get_link_item(self):
         query = self.request.rel_url.query
+        _item = query.get('item') or query.get('db_item')
         if query.get('storage'):
             storage = app.Storage.get(query.get('storage'))
 
@@ -89,11 +91,25 @@ class Displayment(Object):
 
             return storage
 
-        if query.get('item'):
-            item = StorageUUID.fromString(query.get('item')).toPython()
+        if _item:
+            item = StorageUUID.fromString(_item).toPython()
 
             self.context.update({
                 'db_item': item,
             })
 
             return item
+
+    def _flush_creation(self, origin_item, new_item):
+        new_item.local_obj.make_public()
+        if origin_item.isInstance(StorageItem):
+            root = origin_item.get_root_collection()
+            new_item.flush(origin_item)
+            if root:
+                root.link(new_item)
+        else:
+            origin_item.link(new_item)
+
+        new_item.save()
+
+        return '/?i=App.Objects.Object&uuids=' + new_item.getDbIds()

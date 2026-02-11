@@ -1,6 +1,5 @@
 from App.Client.Displayment import Displayment
 from Data.Primitives.Collections.Create import Create as RealCreate
-from App.Storage.Item.StorageItem import StorageItem
 from App import app
 
 class Create(Displayment):
@@ -22,17 +21,8 @@ class Create(Displayment):
                 'collection_type': data.get('prototype'),
             })
             new_item = new_items.items[0]
-            new_item.local_obj.make_public()
 
-            if item.isInstance(StorageItem):
-                root = item.get_root_collection()
-                new_item.flush(item)
-                if root:
-                    root.link(new_item)
-            else:
-                item.link(new_item)
-
-            new_item.save()
+            self._flush_creation(item, new_item)
 
             return self.redirect('/?i=App.Objects.Object&uuids=' + new_item.getDbIds())
 

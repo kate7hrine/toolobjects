@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}
+Text
+{% endblock %}
+
+{% block body %}
+    <div>
+        <form method="POST">
+            <textarea name="text"></textarea>
+
+            <div>
+                <input type="submit" value="Create">
+            </div>
+        </form>
+    </div>
+{% endblock %}

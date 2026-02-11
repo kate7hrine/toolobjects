@@ -166,3 +166,7 @@ body {
     display: flex;
     padding: 10px 10px;
 }
+
+#index_container #search > div {
+    padding: 8px 8px;
+}
