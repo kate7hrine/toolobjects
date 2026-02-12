@@ -1,0 +1,27 @@
+{% macro recursive_list(items) %}
+    {% for item in items %}
+        <div class="recursed_object">
+            <div class="recursed_object_line" onclick="collapse(event)"></div>
+            <div class="recursed_object_title">
+                <a href="/?i=App.Objects.Object&uuids={{item.get('item').getDbIds()}}">
+                    <span>{{item.get('item').any_name}}</span>
+                </a>
+                <a href="{{this_relative_url}}&storage={{item.get('item').getDbName()}}&act=linked_to&show_unlisted=on&linked_to={{item.get('item').getDbIds()}}">></a>
+            </div>
+
+            <div class="recursed_object_links">
+                {{recursive_list(item.get('links'))}}
+            </div>
+        </div>
+    {% endfor %}
+{% endmacro %}
+
+<script>
+    function collapse(event) {
+        event.target.parentNode.classList.toggle('hidden')
+    }
+</script>
+
+<div id="recursive_objects">
+    {{recursive_list(items)}}
+</div>

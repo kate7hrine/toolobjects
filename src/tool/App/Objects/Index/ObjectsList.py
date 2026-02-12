@@ -101,7 +101,7 @@ class ObjectsList(Object):
                 yield obj
 
             for obj in item.getItems():
-                if obj.is_inited:
+                if obj.is_inited and obj.object_name != 'ObjectsList':
                     try:
                         for creation in obj.getModule().get_creations():
                             yield creation

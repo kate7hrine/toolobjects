@@ -48,13 +48,23 @@
                     <tr>
                         <td>Submodules</td>
                         <td>
-                            {% for item in obj_module.getSubmodules() %}
-                                <div>
-                                    <a href="?i=App.Objects.Index.Get&name={{ item.item._getNameJoined() }}">{{ item.item._getNameJoined() }}</a>
+                            <div>
+                                <table>
+                                    <tbody>
+                                    {% for item in obj_module.getSubmodules() %}
+                                        <tr>
+                                            <td>
+                                                <a href="?i=App.Objects.Index.Get&name={{ item.item._getNameJoined() }}">{{ item.item._getNameJoined() }}</a>
+                                            </td>
 
-                                    <span>{{ ", ".join(item.role) }}</span>
-                                </div>
-                            {% endfor %}
+                                            <td>
+                                                <span>{{ ", ".join(item.role) }}</span>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

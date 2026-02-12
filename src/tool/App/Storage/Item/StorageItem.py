@@ -69,10 +69,13 @@ class StorageItem(Object):
 
     def get_root_collection(self):
         if self.root_uuid != None:
-            if self.name in self.root_uuid:
-                return StorageUUID.fromString(self.root_uuid).toPython()
-            else:
-                return StorageUUID(storage = self.name, uuid = self.root_uuid).toPython()
+            try:
+                if self.name in self.root_uuid:
+                    return StorageUUID.fromString(self.root_uuid).toPython()
+                else:
+                    return StorageUUID(storage = self.name, uuid = self.root_uuid).toPython()
+            except Exception as e:
+                self.log_error(e)
 
     def _init_hook(self):
         if self.storage_type != None:

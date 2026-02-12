@@ -36,6 +36,6 @@ class Text(Displayment):
             item.value = new_text
             item.save()
 
-            return self.redirect_to_object(item)
+            return self.redirect_to_object(item, as_self = True)
 
         return self.render_template('Other/Media/text.html')

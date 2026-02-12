@@ -17,8 +17,8 @@ class Get(Displayment):
         if query.get('get_settings') == '1':
             return self.return_json(item.db)
 
-        if self.request.method == 'POST' and query.get('clear') == '1':
-            item.storage_adapter.clear()
+        #if self.request.method == 'POST' and query.get('clear') == '1':
+        #    item.storage_adapter.clear()
 
         self.context.update({
             'item': item,

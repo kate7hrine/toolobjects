@@ -75,7 +75,7 @@ class Atom(FeedProtocol):
             "%Y-%m-%dT%H:%M:%S",
         ]:
             try:
-                _val = datetime.strptime(val, fmt)
+                _val = datetime.strptime(val, fmt).astimezone(timezone.utc)
                 return _val
             except ValueError:
                 continue

@@ -59,6 +59,11 @@ class Search(Act):
                 orig = Boolean,
                 default = True
             ),
+            Argument(
+                name = 'storage_root_if_no_collection',
+                orig = Boolean,
+                default = True
+            ),
             ListArgument(
                 name = 'only_object',
                 orig = String,
@@ -111,12 +116,16 @@ class Search(Act):
         for condition in i.get('conditions'):
             _query.addCondition(condition)
 
+        in_root = True
         for key in ['linked_to', 'not_linked_to']:
             _operator = {'linked_to': 'in', 'not_linked_to': 'not_in'}[key]
             _ids = list()
             _val = i.get(key)
             if len(_val) == 0:
                 continue
+
+            if key == 'linked_to':
+                in_root = False
 
             for link in _val:
                 _item = link.getItem()
@@ -139,6 +148,24 @@ class Search(Act):
                     value = _ids
                 )
             ))
+
+        if in_root and i.get('storage_root_if_no_collection'):
+            _2_uuids = list()
+            root_collection = storage.get_root_collection()
+
+            if root_collection:
+                for link in root_collection.getLinked():
+                    _2_uuids.append(link.item.getDbId())
+
+                _query.addCondition(Condition(
+                    val1 = Value(
+                        column = 'uuid'
+                    ),
+                    operator = 'in',
+                    val2 = Value(
+                        value = _2_uuids
+                    )
+                ))
 
         if len(i.get('uuids')) > 0:
             _ids_check = list()

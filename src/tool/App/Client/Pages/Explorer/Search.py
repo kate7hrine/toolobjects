@@ -85,7 +85,7 @@ class Search(Displayment):
 
         display_page_as = params.get('display_page_as')
         if display_page_as in bad:
-            display_page_as = _fallback
+            display_page_as = 'App.DB.Search.Cascade'
 
         if len(objs) > 0:
             last_uuid = objs[-1].getDbId()

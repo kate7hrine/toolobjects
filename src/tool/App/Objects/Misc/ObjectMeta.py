@@ -21,10 +21,14 @@ class ObjectMeta(Model):
     updated_at: Optional[datetime] = Field(default=None)
 
     # other fields
-    geo: Optional[list[Geo]] = Field(default = None) # Why?????? Why not
+    geo: Optional[list[Geo]] = Field(default = None)
     width: Optional[float] = Field(default = None)
     height: Optional[float] = Field(default = None)
     duration: Optional[float] = Field(default = None)
+
+    # other 2
+    is_tmp: Optional[bool] = Field(default = False)
+    is_forced: Optional[bool] = Field(default = False)
 
     def set_common_source(self, source: Source):
         source.is_common = True

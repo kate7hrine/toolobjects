@@ -27,7 +27,7 @@ class Copy(Displayment):
                 })
 
                 return self.redirect('/?i=App.Storage.Item.Get&name='+to.name)
-        else:
-            self.throw_message(app.Locale.get('client.storage.move.errors.no_storage'))
+            else:
+                self.throw_message(app.Locale.get('client.storage.move.errors.no_storage'))
 
         return self.render_template('Actions/copy.html')

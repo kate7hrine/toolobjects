@@ -124,6 +124,7 @@ class Linkable():
         '''
         Returns linked items. This method can be overriden
         '''
+
         return self.getLinkedItems()
 
     def getLinked(self, ignore_virtual: bool = False, with_role: str = None) -> Generator[Link]:

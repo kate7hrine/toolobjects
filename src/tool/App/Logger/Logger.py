@@ -102,6 +102,7 @@ class Logger(Object):
 
             if self._shouldPrint(to_print, check_categories, 'db') == True:
                 try:
+                    to_print.local_obj.make_public()
                     to_print.flush(app.Storage.get('logs'))
                 except Exception as e:
                     pass

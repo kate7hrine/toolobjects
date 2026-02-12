@@ -63,7 +63,9 @@ class Storage(Object):
                 name = 'logs',
                 allowed_objects = ['App.Logger.Log'],
                 db_type = 'App.DB.Adapters.SQLite',
-                db = {}
+                db = {
+                    'auto_commit': True
+                }
             ),
             StorageItem(
                 name = 'bin',

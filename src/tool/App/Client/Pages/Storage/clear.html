@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{_("client.storage.clear")}}
+{% endblock %}
+
+{% block body %}
+    <div>
+        <div>
+            <form method="POST">
+                <input type="hidden" name="act" value="storage">
+                <input type="submit" value="{{_('client.storage.clear.storage')}}">
+            </form>
+        </div>
+        <div>
+            <form method="POST">
+                <input type="hidden" name="act" value="tmp">
+                <input type="submit" value="{{_('client.storage.clear.tmp')}}">
+            </form>
+        </div>
+    </div>
+{% endblock %}

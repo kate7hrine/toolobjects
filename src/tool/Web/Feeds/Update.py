@@ -5,6 +5,7 @@ from App.Objects.Arguments.Argument import Argument
 from Web.Feeds.Elements.Channel import Channel
 from Web.Feeds.Elements.Feed import Feed
 from App.Logger.LogPrefix import LogPrefix
+from datetime import timezone
 
 class Update(Act):
     prefix: LogPrefix = None
@@ -39,17 +40,18 @@ class Update(Act):
         assert _type != None, 'unknown type of feed'
 
         _count = 0
-        _old_time = _channel.local_obj.updated_at.replace(tzinfo=None)
+        _old_time = _channel.local_obj.updated_at.astimezone(timezone.utc)
         _new_time = _old_time
         protocol = _type()
 
         async for entry in protocol._get_entries(_channel, root, i):
             # If found newer items
-            _created_at = entry.obj.created_at.replace(tzinfo=None)
+            _created_at = entry.obj.created_at.astimezone(timezone.utc)
             if _created_at > _old_time:
                 entry.local_obj.make_public()
                 if _created_at > _new_time:
-                    _new_time = entry.obj.created_at
+                    _new_time = _created_at
+
                 _channel.link(entry)
 
                 _count += 1
@@ -57,4 +59,4 @@ class Update(Act):
         _channel.local_obj.updated_at = _new_time
 
         _channel.save()
-        self.log('totally {0} new items; old time is {1}, new time is {2}'.format(_count, _old_time, _channel.local_obj.updated_at))
+        self.log('totally {0} new items; old time is {1}, new time is {2}'.format(_count, _old_time, _new_time))

@@ -122,5 +122,9 @@ class Displayment(Object):
 
         return '/?i=App.Objects.Object&uuids=' + new_item.getDbIds()
 
-    def redirect_to_object(self, object_item):
-        return self.redirect('/?i=App.Objects.Object&uuids=' + object_item.getDbIds())
+    def redirect_to_object(self, object_item: Object, as_self: bool = False):
+        url = '/?i=App.Objects.Object&uuids=' + object_item.getDbIds()
+        if as_self:
+            url += '&act=display&as=' + object_item._getNameJoined()
+
+        return self.redirect(url)

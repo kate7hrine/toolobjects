@@ -178,3 +178,32 @@ body {
 #index_container #search > div {
     padding: 8px 8px;
 }
+
+#recursive_objects .recursed_object {
+    padding: 9px 9px;
+    border-left: 1px solid #9b8888;
+    background: white;
+}
+
+#recursive_objects .recursed_object .recursed_object_title {
+    background: white;
+}
+
+#recursive_objects .recursed_object .recursed_object_line {
+    height: 1px;
+    width: 11px;
+    background: gray;
+    margin-bottom: -10px;
+    margin-left: -9px;
+    cursor: pointer;
+}
+
+#recursive_objects .recursed_object .recursed_object_links {
+    padding: 0px 0px 0px 4px;
+    margin-left: -9px;
+    background: #dddddd;
+}
+
+#recursive_objects .recursed_object.hidden .recursed_object_links {
+    display: none;
+}

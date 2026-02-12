@@ -47,7 +47,9 @@
 
         <div id="page">
             {% if ref %}
-                <a href="{{ref}}"><<< back</a>
+                <div>
+                    <a href="{{ref}}"><<< back</a>
+                </div>
             {% endif %}
 
             {% block body %} {% endblock %} 
