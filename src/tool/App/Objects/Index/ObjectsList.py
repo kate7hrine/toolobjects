@@ -4,6 +4,7 @@ from App.Objects.Index.LoadedObject import LoadedObject
 from App.Objects.Index.Namespaces.Namespace import Namespace
 from App.Objects.Arguments.Argument import Argument
 from App.Objects.Arguments.ListArgument import ListArgument
+from App.Storage.StorageUUID import StorageUUID
 from Data.Types.Dict import Dict
 from Data.Types.String import String
 from typing import Generator
@@ -53,6 +54,9 @@ class ObjectsList(Object):
 
     def has_namespace_with_name(self, name: str):
         return self.get_namespace_with_name(name) != None
+
+    def clear_cache(self):
+        self._last_current = None
 
     def getItems(self, check_namespaces: bool = True) -> DictList:
         if self._last_current != None and self._last_current == self.current:
@@ -175,5 +179,10 @@ class ObjectsList(Object):
                 name = 'objects.index.redirects',
                 default = {},
                 orig = Dict
+            ),
+            ListArgument(
+                name = 'objects.index.custom.objects',
+                orig = StorageUUID,
+                default = [],
             )
         ]

@@ -17,7 +17,7 @@ class LoadedObject(NameContainable):
     Filepath that may contain module
     '''
 
-    path: str = Field()
+    path: str = Field(default = None)
     root: str = Field(default = None)
 
     title: str = None

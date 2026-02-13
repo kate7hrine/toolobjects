@@ -40,6 +40,6 @@ class Validable:
 
         if include_usage == True:
             for submodule in cls.getSubmodules(with_role = ['usage']):
-                _list.join(submodule.getArguments())
+                _list.join(submodule.getItem().getArguments())
 
         return _list

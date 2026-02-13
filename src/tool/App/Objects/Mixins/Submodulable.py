@@ -24,7 +24,7 @@ class Submodulable:
                 continue
 
             for submodule in _items:
-                if submodule.item._getNameJoined() in _names:
+                if submodule.getItem()._getNameJoined() in _names:
                     continue
 
                 if with_role != None:
@@ -37,6 +37,6 @@ class Submodulable:
                         continue
 
                 modules.append(submodule)
-                _names.append(submodule.item._getNameJoined())
+                _names.append(submodule.getItem()._getNameJoined())
 
         return modules

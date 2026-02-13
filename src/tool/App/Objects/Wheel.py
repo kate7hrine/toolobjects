@@ -55,7 +55,7 @@ class Wheel(Executable):
 
         if i.get('__wheel_select'):
             for item in modules:
-                if item.item._getNameJoined() == i.get('__wheel_select'):
+                if item.getItem()._getNameJoined() == i.get('__wheel_select'):
                     return item
 
         _submodule = self.__class__.compareAndGetFirstSuitableSubmodule(modules, i)
@@ -72,7 +72,7 @@ class Wheel(Executable):
 
         max_index, max_value = 0, 0
         for item in items:
-            decl = ArgumentValues(compare = item.item.getArguments(), values = values.getValues())
+            decl = ArgumentValues(compare = item.getItem().getArguments(), values = values.getValues())
             _vals.append(decl.diff())
 
         # Find more compare values

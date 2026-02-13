@@ -41,7 +41,6 @@ class Cascade(Displayment):
 
             rel_url += '&' + key + '=' + val
 
-        #print(objects)
         self.context.update({
             'items': objects,
             'args': args,

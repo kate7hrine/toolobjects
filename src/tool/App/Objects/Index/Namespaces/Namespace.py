@@ -19,7 +19,7 @@ class Namespace(Object):
 
     _names: list[str] = []
     name: str = Field()
-    root: str = Field()
+    root: str = Field(default = None)
     load_before: list = Field(default = [])
     load_after: list = Field(default = [])
     ignore_dirs: list = Field(default = [])
@@ -30,6 +30,9 @@ class Namespace(Object):
     items: DictList = Field(default = None)
 
     _unserializable = ['items', '_names']
+
+    def has_root(self):
+        return self.root != None
 
     def init_hook(self):
         self.items = DictList(items=[])
@@ -125,7 +128,7 @@ class Namespace(Object):
                         root = self.root
                     )
                     _modl.is_submodule = True
-                    _modl._module = item.item
+                    _modl._module = item.getItem()
                     yield _modl
 
         for plugin in self.load_after:

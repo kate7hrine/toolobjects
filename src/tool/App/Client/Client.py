@@ -26,7 +26,8 @@ class Client(Server):
         pathes = list()
         namespaces = app.ObjectsList.namespaces
         for item in namespaces:
-            pathes.append(Path(item.root).joinpath('App').joinpath('Client').joinpath('Pages'))
+            if item.has_root():
+                pathes.append(Path(item.root).joinpath('App').joinpath('Client').joinpath('Pages'))
 
         aiohttp_jinja2.setup(self._app, 
                              loader=jinja2.FileSystemLoader(pathes),
