@@ -26,6 +26,9 @@ class ObjectsList(Response):
     def count(self) -> int:
         return len(self.items)
 
+    def set_total_count(self, count: int):
+        self.total_count = count
+
     def append(self, item: Object):
         self.items.append(item)
 

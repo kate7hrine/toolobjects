@@ -81,8 +81,8 @@ other with objects:
 - [x] autostart items
 - [ ] allowed_objects that allowed to link to item
 - [ ] documentation of the fields
-- [ ] custom objects
-- [ ] dynamic links
+- [x] custom objects
+- [x] dynamic links
 
 auth:
 
@@ -96,7 +96,7 @@ modules:
 - [x] Data.XML
 - [x] Media.Files.FileManager.Navigate
 - [x] move File.FileTypes.Image
-- [ ] App.Config.Set
+- [x] App.Config.Set
 - [x] App.Config.Get
 - [x] Web.RSS.GetFeed
 - [x] Web.RSS Atom support
