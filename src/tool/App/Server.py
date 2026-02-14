@@ -60,7 +60,7 @@ class Server(View):
             ),
             Argument(
                 name = 'app.name',
-                default = 'toolobjects',
+                default = 'escapysm',
                 orig = String
             )
         ]
